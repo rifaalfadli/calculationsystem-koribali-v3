@@ -1,4 +1,4 @@
-# Pole Structural Analyzer (KORI BALI)
+# Pole Structural Analyzer (CV. KORI BALI)
 
 A web-based structural analysis system designed to calculate mechanical loads, material specifications, and structural integrity for utility poles with high precision and automation.
 
