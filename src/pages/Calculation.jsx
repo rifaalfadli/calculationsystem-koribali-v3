@@ -1,4 +1,5 @@
 import { PoleStructuralAnalyzer } from "../components/PoleStructuralAnalyzer";
+import CalculationSelection from "../components/CalculationSelection";
 import { Helmet } from "react-helmet";
 
 export default function Calculation() {
@@ -14,7 +15,7 @@ export default function Calculation() {
         </Helmet>
 
         <div className="min-h-screen bg-gray-50 border border-gray-250">
-          <PoleStructuralAnalyzer />
+          <CalculationSelection />
         </div>
       </div>
     </>

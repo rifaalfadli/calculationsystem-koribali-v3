@@ -1,38 +1,45 @@
 import { RotateCcw, ChevronDown } from "lucide-react";
 
-export function ConditionInput({ condition, onUpdate, onNext, errors }) {
+export function ConditionInput({
+  projectType,
+  condition,
+  onUpdate,
+  onNext,
+  errors,
+}) {
   // Reset all condition fields
   const handleReset = () => {
     onUpdate({
       designStandard: "",
       windSpeed: "",
-      projectType: "",
     });
   };
 
-  const projectTypeOptions = {
-    act: [{ value: "acemast", label: "Acemast" }],
-    v60: [
-      { value: "acemast", label: "Acemast" },
-      { value: "signboard", label: "Signboard" },
-      { value: "multiple", label: "Multiple" },
-      { value: "lightingPole", label: "Lighting Pole" },
-      { value: "gantri", label: "Gantri" },
+  const designStandardOptions = {
+    acemast: [
+      { value: "act", label: "Standard Acts. (Law)" },
+      { value: "v60", label: "V60" },
+      { value: "tower", label: "Tower Standard" },
+      { value: "haiden", label: "Haiden" },
     ],
-    tower: [{ value: "acemast", label: "Acemast" }],
-    jil: [
-      { value: "multiple", label: "Multiple" },
-      { value: "lightingPole", label: "Lighting Pole" },
-      { value: "cameraPole", label: "Camera Pole" },
-    ],
-    haiden: [
-      { value: "acemast", label: "Acemast" },
-      { value: "multiple", label: "Multiple" },
-      { value: "lightingPole", label: "Lighting Pole" },
-    ],
-    signboard: [{ value: "signboard", label: "Signboard" }],
-  };
 
+    "lighting-pole": [
+      { value: "v60", label: "V60" },
+      { value: "jil", label: "JIL" },
+      { value: "haiden", label: "Haiden" },
+    ],
+
+    signboard: [
+      { value: "v60", label: "V60" },
+      { value: "signboard", label: "Signboard" },
+    ],
+
+    multiple: [
+      { value: "v60", label: "V60" },
+      { value: "jil", label: "JIL" },
+      { value: "haiden", label: "Haiden" },
+    ],
+  };
   // Function to helper class input
   const inputClass = (hasError) =>
     `w-full px-4 py-2.5 rounded-lg outline-none transition-all border text-sm pr-12
@@ -55,7 +62,7 @@ export function ConditionInput({ condition, onUpdate, onNext, errors }) {
       {/* FORM CARD WRAPPER */}
       <div className="p-6 shadow-sm hp:p-4">
         {/* 2-Column Grid (Responsive) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-8 hp:gap-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8 hp:gap-y-6">
           {/* FIELD : Design Standard Dropdown */}
           <div className="relative">
             <label className="block text-sm text-gray-700 mb-2 hp:text-xs hp:mb-1">
@@ -63,20 +70,18 @@ export function ConditionInput({ condition, onUpdate, onNext, errors }) {
             </label>
             <select
               value={condition.designStandard}
-              onChange={(e) =>
-                onUpdate({ designStandard: e.target.value, projectType: "" })
-              }
+              onChange={(e) => onUpdate({ designStandard: e.target.value })}
               className={`${inputClass(errors.designStandard)} min-h-[42px]`}
             >
               <option value="" disabled>
                 Select Design Standard
               </option>
-              <option value="act">Standard Acts. (Law)</option>
-              <option value="v60">V60</option>
-              <option value="tower">Tower Standard</option>
-              <option value="jil">JIL</option>
-              <option value="haiden">Haiden</option>
-              <option value="signboard">Signboard</option>
+
+              {(designStandardOptions[projectType] || []).map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
             </select>
             <ErrorText show={errors.designStandard} text="Required field" />
           </div>
@@ -99,40 +104,6 @@ export function ConditionInput({ condition, onUpdate, onNext, errors }) {
               </span>
             </div>
             <ErrorText show={errors.windSpeed} text="Required field" />
-          </div>
-
-          {/* FIELD : Project Type Dropdown */}
-          <div className="relative">
-            <label className="block text-sm text-gray-700 mb-2 hp:text-xs hp:mb-1">
-              Project Type
-            </label>
-
-            <select
-              value={condition.projectType}
-              onChange={(e) => onUpdate({ projectType: e.target.value })}
-              className={`${inputClass(errors.projectType)} disabled:opacity-60 min-h-[42px]`}
-              disabled={!condition.designStandard}
-            >
-              <option value="" disabled>
-                Select Project Type
-              </option>
-
-              {(projectTypeOptions[condition.designStandard] || []).map(
-                (item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
-                  </option>
-                ),
-              )}
-            </select>
-
-            {!condition.designStandard && (
-              <p className="absolute right-0 -bottom-4 text-[11px] text-gray-500 hp:text-[9px]">
-                Please select a design standard first.
-              </p>
-            )}
-
-            <ErrorText show={errors.projectType} text="Required field" />
           </div>
         </div>
 

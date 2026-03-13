@@ -409,4 +409,5 @@ export const deleteReport = (
   sessionStorage.removeItem("resultsArm");
   sessionStorage.removeItem("method");
   sessionStorage.removeItem("poleBasic");
+  sessionStorage.removeItem("projectType");
 };

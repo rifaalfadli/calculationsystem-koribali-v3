@@ -15,6 +15,7 @@ import {
 export function ReportPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const projectType = sessionStorage.getItem("projectType");
 
   // Ambil data cover, condition, results, sections dari state router
   // Jika tidak ada, fallback ke array kosong untuk mencegah error
@@ -35,6 +36,14 @@ export function ReportPage() {
   // Tombol kembali ke calculation page
   const onBack = () => navigate("/calculation");
 
+  const onBackCalculation = () => {
+    if (projectType) {
+      navigate(`/calculation/${projectType}`);
+    } else {
+      navigate("/calculation");
+    }
+  };
+
   // State pop-up delete confirmation
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   // Flag apakah report masih ada atau sudah dihapus
@@ -53,13 +62,16 @@ export function ReportPage() {
     setHasReport(false);
     setShowDeleteConfirm(false);
 
-    navigate("/calculation", { state: { deleteReport: true } });
+    // navigate("/calculation", { state: { deleteReport: true } });
+    navigate(`/calculation/${projectType}`, {
+      state: { deleteReport: true },
+    });
   };
 
   // Render report component based on selected project type
   const renderReport = () => {
-    switch (condition?.projectType) {
-      case "lightingPole":
+    switch (projectType) {
+      case "lighting-pole":
         return (
           <div id="report-a4">
             <LightingPoleReport
@@ -238,7 +250,7 @@ export function ReportPage() {
           <div className="flex items-center justify-between">
             {/* LEFT - BACK */}
             <button
-              onClick={onBack}
+              onClick={onBackCalculation}
               className="
                 flex items-center gap-2
                 px-5 py-2.5 text-sm

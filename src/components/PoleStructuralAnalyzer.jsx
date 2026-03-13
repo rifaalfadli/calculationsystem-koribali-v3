@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import {
+  useNavigate,
+  useLocation,
+  useParams,
+  Navigate,
+} from "react-router-dom";
 
 // COMPONENTS: Feature-specific components
 import { HeaderCalculationPage } from "./pole-analyzer/PoleAnalyzerHeader";
@@ -38,6 +43,9 @@ import { PoleBasicForm } from "./pole-analyzer/StandardLightingPoleInput";
 export function PoleStructuralAnalyzer() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { type: projectType } = useParams();
+
+  const validTypes = ["lighting-pole", "acemast", "signboard", "multiple"];
 
   //
   // ==========================================================================
@@ -63,9 +71,7 @@ export function PoleStructuralAnalyzer() {
   // STATE: Condition for calculation
   const [condition, setCondition] = useState(() => {
     const saved = sessionStorage.getItem("condition");
-    return saved
-      ? JSON.parse(saved)
-      : { designStandard: "", windSpeed: "", projectType: "" };
+    return saved ? JSON.parse(saved) : { designStandard: "", windSpeed: "" };
   });
   const [conditionErrors, setConditionErrors] = useState({});
 
@@ -215,11 +221,11 @@ export function PoleStructuralAnalyzer() {
 
   // PERSISTENCE: Sections/Step input, each section represents one pole
   useEffect(() => {
-    if (condition.projectType !== "lightingPole") {
+    if (projectType !== "lighting-pole") {
       setMethod(null);
       sessionStorage.removeItem("method");
     }
-  }, [condition.projectType]);
+  }, [projectType]);
 
   useEffect(() => {
     sessionStorage.setItem("sections", JSON.stringify(sections));
@@ -275,10 +281,10 @@ export function PoleStructuralAnalyzer() {
     if (location.state?.deleteReport) {
       handleDeleteReport();
 
-      // Hapus state navigate supaya tidak jalan dua kali
-      navigate(location.pathname, { replace: true, state: {} });
+      // setelah delete selesai, pindah ke halaman calculation utama
+      navigate("/calculation", { replace: true });
     }
-  }, [location.pathname, navigate, location.state?.deleteReport]);
+  }, [location.state?.deleteReport, navigate]);
 
   //
   // ==========================================================================
@@ -436,6 +442,11 @@ export function PoleStructuralAnalyzer() {
   // 5. ACTION HANDLERS & FEATURE LOGIC
   // ==========================================================================
   //
+
+  if (!validTypes.includes(projectType)) {
+    return <Navigate to="/calculation" />;
+  }
+
   // ------------------------ Function for CoverInput ------------------------
   // FUNCTION: Update cover data
   const handleCoverUpdate = (updates) => {
@@ -820,7 +831,7 @@ export function PoleStructuralAnalyzer() {
   // FUNCTION: Perform calculation for all form
   const calculateResults = () => {
     // =========================
-    // RESET ALL PREVIOUS ERRORS (UX CLEAN)
+    // RESET ALL PREVIOUS ERRORS
     // =========================
     setConditionErrors({});
     setStructuralDesignErrors({});
@@ -1073,6 +1084,7 @@ export function PoleStructuralAnalyzer() {
       setIsExpandedOhw,
       setIsExpandedArm,
     );
+    navigate("/calculation");
   };
 
   // FUNCTION: Trigger toast notification with specific message and type.
@@ -1082,7 +1094,7 @@ export function PoleStructuralAnalyzer() {
 
   // FUNCTION: Conditional form calculation input (custom or standard)
   const isCustomPoleMode =
-    condition.projectType !== "lightingPole" || method === "custom";
+    projectType !== "lighting-pole" || method === "custom";
 
   return (
     <div className="min-h-screen">
@@ -1132,6 +1144,7 @@ export function PoleStructuralAnalyzer() {
           }`}
         >
           <ConditionInput
+            projectType={projectType}
             condition={condition}
             onUpdate={handleConditionUpdate}
             onNext={handleConditionNext}
@@ -1198,7 +1211,7 @@ export function PoleStructuralAnalyzer() {
             </div>
 
             {/* Input Mode Selection (Only for Lighting Pole) */}
-            {condition.projectType === "lightingPole" && (
+            {projectType === "lighting-pole" && (
               <div className="border-b border-gray-200 mx-6 pt-6 pb-6 hp:mx-4 hp:pt-4">
                 <div className="flex items-center justify-between mb-4 hp:mb-2">
                   <div>
@@ -1213,14 +1226,13 @@ export function PoleStructuralAnalyzer() {
               </div>
             )}
 
-            {condition.projectType === "lightingPole" &&
-              method === "standard" && (
-                <PoleBasicForm
-                  poleBasic={poleBasic}
-                  onUpdate={handleUpdatePoleBasic}
-                  handleStepNext={handleStepNext}
-                />
-              )}
+            {projectType === "lighting-pole" && method === "standard" && (
+              <PoleBasicForm
+                poleBasic={poleBasic}
+                onUpdate={handleUpdatePoleBasic}
+                handleStepNext={handleStepNext}
+              />
+            )}
 
             {isCustomPoleMode && (
               <>

@@ -1,6 +1,7 @@
 // App.js
 import { Routes, Route, Navigate } from "react-router-dom";
 import Calculation from "./pages/Calculation";
+import { PoleStructuralAnalyzer } from "./components/PoleStructuralAnalyzer";
 import Report from "./pages/Report";
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
@@ -12,8 +13,8 @@ function App() {
   return (
     <>
       <ScrollToTop />
-      <Routes>  
-        <Route path="/entry" element={<Entry/>}/>
+      <Routes>
+        <Route path="/entry" element={<Entry />} />
         <Route path="/login" element={<Login />} />
 
         {/* Rute Terproteksi: Harus login & pakai Layout */}
@@ -24,6 +25,10 @@ function App() {
               <Layout>
                 <Routes>
                   <Route path="/calculation" element={<Calculation />} />
+                  <Route
+                    path="/calculation/:type"
+                    element={<PoleStructuralAnalyzer />}
+                  />
                   <Route path="/report" element={<Report />} />
                 </Routes>
               </Layout>
