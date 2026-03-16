@@ -1,8 +1,22 @@
 import { ArrowLeft, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { ConfirmSaveDraftModal } from "./PoleAnalyzerModal";
 
 export function HeaderCalculationPage({ onResetAll }) {
   const navigate = useNavigate();
+  const [showDraftModal, setShowDraftModal] = useState(false);
+
+  // klik back
+  const handleBackClick = () => {
+    setShowDraftModal(true);
+  };
+
+  // save draft
+  const handleSaveDraft = () => {
+    sessionStorage.removeItem("projectType");
+    navigate("/calculation");
+  };
 
   return (
     <div
@@ -10,14 +24,14 @@ export function HeaderCalculationPage({ onResetAll }) {
         bg-gradient-to-r from-[#0d3b66] to-[#0d3b66]
         shadow-lg
         sticky top-[64px] z-30 
-        px-12 py-[18px]
+        px-6 py-[18px]
         hp:px-4 hp:py-3 hp:top-[64px]
       "
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 hp:gap-2">
           <button
-            onClick={() => navigate("/calculation")}
+            onClick={handleBackClick}
             className="
               flex items-center gap-2
               bg-none
@@ -60,6 +74,12 @@ export function HeaderCalculationPage({ onResetAll }) {
           <span className="hidden hp:inline">Reset</span>
         </button>
       </div>
+      <ConfirmSaveDraftModal
+        confirmSaveDraft={showDraftModal}
+        onClose={() => setShowDraftModal(false)}
+        onSaveDraft={handleSaveDraft}
+        onDiscard={onResetAll}
+      />
     </div>
   );
 }

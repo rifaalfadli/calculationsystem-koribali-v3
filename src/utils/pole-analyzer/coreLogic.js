@@ -288,6 +288,7 @@ export const makeReport = (
 // FUNCTIONS: Completely reset all calculation data, UI states, and storage
 // ===============================================================================
 export const deleteReport = (
+  projectType,
   setResults,
   setResultsDo,
   setResultsOhw,
@@ -394,18 +395,22 @@ export const deleteReport = (
   setIsExpandedArm(false);
 
   // Hapus semua sessionStorage
-  // sessionStorage.clear();
-  sessionStorage.removeItem("cover");
-  sessionStorage.removeItem("condition");
-  sessionStorage.removeItem("structuralDesign");
-  sessionStorage.removeItem("sections");
-  sessionStorage.removeItem("directObjects");
-  sessionStorage.removeItem("overheadWires");
+  const keys = [
+    "cover",
+    "condition",
+    "structuralDesign",
+    "sections",
+    "directObjects",
+    "overheadWires",
+    "results",
+    "resultsDo",
+    "resultsOhw",
+  ];
+
+  keys.forEach((key) => sessionStorage.removeItem(`${projectType}_${key}`));
+
   sessionStorage.removeItem("arms");
   sessionStorage.removeItem("armObjects");
-  sessionStorage.removeItem("results");
-  sessionStorage.removeItem("resultsDo");
-  sessionStorage.removeItem("resultsOhw");
   sessionStorage.removeItem("resultsArm");
   sessionStorage.removeItem("method");
   sessionStorage.removeItem("poleBasic");

@@ -20,21 +20,29 @@ export function ReportPage() {
   // Ambil data cover, condition, results, sections dari state router
   // Jika tidak ada, fallback ke array kosong untuk mencegah error
   const reportData = location.state || {
-    results: JSON.parse(sessionStorage.getItem("results") || "[]"),
-    resultsDo: JSON.parse(sessionStorage.getItem("resultsDo") || "[]"),
-    resultsOhw: JSON.parse(sessionStorage.getItem("resultsOhw") || "[]"),
-    cover: JSON.parse(sessionStorage.getItem("cover") || "{}"),
-    condition: JSON.parse(sessionStorage.getItem("condition") || "{}"),
+    results: JSON.parse(
+      sessionStorage.getItem(`${projectType}_results`) || "[]",
+    ),
+    resultsDo: JSON.parse(
+      sessionStorage.getItem(`${projectType}_resultsDo`) || "[]",
+    ),
+    resultsOhw: JSON.parse(
+      sessionStorage.getItem(`${projectType}_resultsOhw`) || "[]",
+    ),
+    cover: JSON.parse(sessionStorage.getItem(`${projectType}_cover`) || "{}"),
+    condition: JSON.parse(
+      sessionStorage.getItem(`${projectType}_condition`) || "{}",
+    ),
     structuralDesign: JSON.parse(
-      sessionStorage.getItem("structuralDesign") || "{}",
+      sessionStorage.getItem(`${projectType}_structuralDesign`) || "{}",
     ),
   };
 
   const { results, resultsDo, resultsOhw, cover, condition, structuralDesign } =
     reportData;
 
-  // Tombol kembali ke calculation page
-  const onBack = () => navigate("/calculation");
+  // // Tombol kembali ke calculation page
+  // const onBack = () => navigate("/calculation");
 
   const onBackCalculation = () => {
     if (projectType) {
@@ -115,7 +123,7 @@ export function ReportPage() {
   };
 
   // Empty State - No Report
-  if (!hasReport || results.length === 0) {
+  if (!hasReport || results.length === 0 || !projectType) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-250">
         {/* Empty State Content */}
@@ -220,7 +228,7 @@ export function ReportPage() {
 
               {/* CTA */}
               <button
-                onClick={onBack}
+                onClick={onBackCalculation}
                 className="
                   w-full sm:w-auto
                   inline-flex items-center justify-center

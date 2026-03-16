@@ -48,6 +48,123 @@ export const CoverInputModal = ({
 };
 
 // ====================================================
+// DELETE ARM CONFIRMATION MODAL
+// ====================================================
+export const ConfirmSaveDraftModal = ({
+  confirmSaveDraft,
+  onClose,
+  onSaveDraft,
+  onDiscard,
+}) => {
+  if (!confirmSaveDraft) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
+      <div
+        className="
+          w-full max-w-xs
+          bg-white border border-gray-200
+          rounded-xl shadow-xl
+          p-4
+          sm:max-w-md sm:p-8 sm:rounded-2xl
+        "
+      >
+        {/* Icon */}
+        <div
+          className="
+            mx-auto mb-3
+            flex items-center justify-center
+            w-10 h-10 sm:w-16 sm:h-16
+            bg-yellow-100 rounded-full
+          "
+        >
+          <AlertCircle className="w-5 h-5 sm:w-8 sm:h-8 text-yellow-500" />
+        </div>
+
+        {/* Title */}
+        <h2
+          className="
+            text-center font-bold
+            text-sm sm:text-base
+            text-gray-900
+            mb-1 sm:mb-2
+          "
+        >
+          Unsaved Changes
+        </h2>
+
+        {/* Description */}
+        <p
+          className="
+            text-center text-gray-600
+            text-xs sm:text-sm
+            mb-4 sm:mb-6
+            leading-relaxed
+          "
+        >
+          You have unsaved calculation data. Do you want to save this
+          configuration as a draft before leaving?
+        </p>
+
+        {/* Buttons */}
+        <div className="flex gap-2 sm:gap-3">
+          {/* Cancel */}
+          <button
+            onClick={onClose}
+            className="
+              flex-1
+              py-2 sm:py-3 font-bold
+              text-xs sm:text-sm
+              bg-slate-100 text-slate-600
+              rounded-md sm:rounded-lg
+              hover:bg-slate-200 transition
+            "
+          >
+            Cancel
+          </button>
+
+          {/* Discard */}
+          <button
+            onClick={() => {
+              onDiscard();
+              onClose();
+            }}
+            className="
+              flex-1
+              py-2 sm:py-3 font-bold
+              text-xs sm:text-sm
+              bg-red-500 text-white
+              rounded-md sm:rounded-lg
+              hover:bg-red-600 transition
+            "
+          >
+            Discard
+          </button>
+
+          {/* Save Draft */}
+          <button
+            onClick={() => {
+              onSaveDraft();
+              onClose();
+            }}
+            className="
+              flex-1
+              py-2 sm:py-3 font-bold
+              text-xs sm:text-sm
+              bg-green-600 text-white
+              rounded-md sm:rounded-lg
+              hover:bg-green-700 transition
+            "
+          >
+            Save Draft
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ====================================================
 // RESET ALL CONFIRMATION MODAL
 // ====================================================
 export const ConfirmResetAllModal = ({

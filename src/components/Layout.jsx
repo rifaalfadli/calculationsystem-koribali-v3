@@ -38,9 +38,33 @@ export default function Layout({ children }) {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
+  const formatProjectType = (type) => {
+    if (!type) return null;
+
+    return (
+      type
+        .split("-")
+        .map((word) => word[0].toUpperCase() + word.slice(1))
+        .join(" ") + " Type"
+    );
+  };
+
+  const projectType = sessionStorage.getItem("projectType");
+
+  const formattedProjectType = formatProjectType(projectType);
+
   const currentTitle =
-    menuItems.find((item) => item.path === location.pathname)?.name ||
-    "Project";
+    location.pathname.startsWith("/calculation") && formattedProjectType
+      ? formattedProjectType
+      : menuItems.find((item) => location.pathname.startsWith(item.path))
+          ?.name || "Project";
+
+  const getMenuPath = (path) => {
+    if (path === "/calculation" && projectType) {
+      return `/calculation/${projectType}`;
+    }
+    return path;
+  };
 
   // Load User Session
   useEffect(() => {
@@ -194,11 +218,13 @@ export default function Layout({ children }) {
               </div>
               <nav className="flex-1 p-3 space-y-1 mt-4 relative">
                 {menuItems.map((item) => {
-                  const isActive = location.pathname === item.path;
+                  const path = getMenuPath(item.path);
+                  const isActive = location.pathname.startsWith(item.path);
+
                   return (
                     <NavLink
                       key={item.path}
-                      to={item.path}
+                      to={path}
                       className={`relative flex items-center justify-between px-3 h-11 rounded-lg transition-colors duration-300 ${
                         isActive
                           ? "text-white"
@@ -277,11 +303,13 @@ export default function Layout({ children }) {
           </div>
           <nav className="flex-1 p-3 space-y-2 mt-4 relative">
             {menuItems.map((item) => {
-              const isActive = location.pathname === item.path;
+              const path = getMenuPath(item.path);
+              const isActive = location.pathname.startsWith(item.path);
+
               return (
                 <NavLink
                   key={item.path}
-                  to={item.path}
+                  to={path}
                   className={`relative flex items-center rounded-lg h-11 transition-colors duration-300 ${
                     isCollapsed ? "justify-center px-0" : "justify-between px-3"
                   } ${isActive ? "text-white" : "text-white/60 hover:text-white"}`}

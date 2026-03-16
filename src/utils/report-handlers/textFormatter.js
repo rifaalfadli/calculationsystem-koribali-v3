@@ -50,10 +50,8 @@ export function NameCell({ text }) {
 // Function to return the corresponding design standard text based on the given key
 export const getDesignStandardText = (value) => {
   switch (value) {
-    case "act":
-      return "Standard Acts. (Law)";
-    case "tower":
-      return "Tower Standard";
+    case "v60":
+      return "V60";
     case "jil":
       return "JIL日本照明器具工業会規格等に準拠する。";
     case "haiden":

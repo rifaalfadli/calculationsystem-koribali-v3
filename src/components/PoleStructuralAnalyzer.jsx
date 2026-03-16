@@ -16,6 +16,7 @@ import { OverheadWireInput } from "./pole-analyzer/OverheadWireInput";
 import { ResultsTable } from "./pole-analyzer/ResultsTable";
 import { ArmObjectInput } from "./pole-analyzer/ArmObjectInput";
 import { ArmInput } from "./pole-analyzer/ArmInput";
+import { useProjectStorage } from "./pole-analyzer/hooks/useProjectStorage";
 import STANDARD_POLE_DATA from "../data/specStandardPole.json";
 
 // UTILS & MODALS: Shared logic and overlays
@@ -53,55 +54,50 @@ export function PoleStructuralAnalyzer() {
   // ==========================================================================
   //
   // STATE: Cover information
-  const [cover, setCover] = useState(() => {
-    const saved = sessionStorage.getItem("cover");
-    return saved
-      ? JSON.parse(saved)
-      : {
-          managementMark: "",
-          calculationNumber: "",
-          projectName: "",
-          contentr2: "",
-          contentr3: "",
-          date: "",
-        };
+  const [cover, setCover] = useProjectStorage(projectType, "cover", {
+    managementMark: "",
+    calculationNumber: "",
+    projectName: "",
+    contentr2: "",
+    contentr3: "",
+    date: "",
   });
   const [coverErrors, setCoverErrors] = useState({});
 
   // STATE: Condition for calculation
-  const [condition, setCondition] = useState(() => {
-    const saved = sessionStorage.getItem("condition");
-    return saved ? JSON.parse(saved) : { designStandard: "", windSpeed: "" };
-  });
+  const [condition, setCondition] = useProjectStorage(
+    projectType,
+    "condition",
+    {
+      designStandard: "",
+      windSpeed: "",
+    },
+  );
   const [conditionErrors, setConditionErrors] = useState({});
 
   // STATE: Structural Design of pole
-  const [structuralDesign, setStructuralDesign] = useState(() => {
-    const saved = sessionStorage.getItem("structuralDesign");
-    return saved ? JSON.parse(saved) : { lowestStep: "", overDesign: "" };
-  });
+  const [structuralDesign, setStructuralDesign] = useProjectStorage(
+    projectType,
+    "structuralDesign",
+    { lowestStep: "", overDesign: "" },
+  );
   const [structuralDesignErrors, setStructuralDesignErrors] = useState({});
 
   // STATE: Sections input, each section represents one pole
-  const [sections, setSections] = useState(() => {
-    const saved = sessionStorage.getItem("sections");
-    return saved
-      ? JSON.parse(saved)
-      : [
-          {
-            id: "1", // unique section ID
-            name: "", // pole name or description
-            material: "STK400", // default material
-            poleType: "Straight", // Taper or Straight
-            diameterLower: "", // lower diameter
-            diameterUpper: "", // upper diameter (Taper only)
-            thicknessLower: "", // lower thickness
-            thicknessUpper: "", // upper thickness (Taper only)
-            height: "", // pole height
-            quantity: "1", // number of poles
-          },
-        ];
-  });
+  const [sections, setSections] = useProjectStorage(projectType, "sections", [
+    {
+      id: "1",
+      name: "",
+      material: "STK400",
+      poleType: "Straight",
+      diameterLower: "",
+      diameterUpper: "",
+      thicknessLower: "",
+      thicknessUpper: "",
+      height: "",
+      quantity: "1",
+    },
+  ]);
   const [sectionsErrors, setSectionsErrors] = useState({});
 
   // STATE: Method for calculation pole
@@ -123,17 +119,19 @@ export function PoleStructuralAnalyzer() {
   });
 
   // STATE: Direct Object input
-  const [directObjects, setDirectObjects] = useState(() => {
-    const saved = sessionStorage.getItem("directObjects");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [directObjects, setDirectObjects] = useProjectStorage(
+    projectType,
+    "directObjects",
+    [],
+  );
   const [doErrors, setDoErrors] = useState({});
 
   // STATE: Overhead Wire input
-  const [overheadWires, setOverheadWires] = useState(() => {
-    const saved = sessionStorage.getItem("overheadWires");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [overheadWires, setOverheadWires] = useProjectStorage(
+    projectType,
+    "overheadWires",
+    [],
+  );
   const [ohwErrors, setOhwErrors] = useState({});
 
   // STATE: Arm input
@@ -144,35 +142,31 @@ export function PoleStructuralAnalyzer() {
   const [armsErrors, setArmsErrors] = useState({});
 
   // STATE: Arm Object input
-  // const [armObjects, setArmObjects] = useState(() => {
-  //   const saved = sessionStorage.getItem("armObjects");
-  //   return saved ? JSON.parse(saved) : [];
-  // });
   const [aoErrors, setAoErrors] = useState({});
 
   // STATE: Results all structural design
-  const [, setResultStructuralDesign] = useState(() => {
-    const saved = sessionStorage.getItem("resultStructuralDesign");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [, setResultStructuralDesign] = useProjectStorage(
+    projectType,
+    "resultStructuralDesign",
+    [],
+  );
 
   // STATE: Results all step pole
-  const [results, setResults] = useState(() => {
-    const saved = sessionStorage.getItem("results");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [results, setResults] = useProjectStorage(projectType, "results", []);
 
   // STATE: Results all direct object
-  const [resultsDo, setResultsDo] = useState(() => {
-    const saved = sessionStorage.getItem("resultsDo");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [resultsDo, setResultsDo] = useProjectStorage(
+    projectType,
+    "resultsDo",
+    [],
+  );
 
   // STATE: Results all overhead wire
-  const [resultsOhw, setResultsOhw] = useState(() => {
-    const saved = sessionStorage.getItem("resultsOhw");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [resultsOhw, setResultsOhw] = useProjectStorage(
+    projectType,
+    "resultsOhw",
+    [],
+  );
 
   // STATE: Results all arm
   const [resultsArm, setResultsArm] = useState(() => {
@@ -181,34 +175,17 @@ export function PoleStructuralAnalyzer() {
   });
 
   // STATE: Results table
-  const [showResults, setShowResults] = useState(() => {
-    const saved = sessionStorage.getItem("showResults");
-    return saved ? JSON.parse(saved) : false;
-  });
+  const [showResults, setShowResults] = useProjectStorage(
+    projectType,
+    "showResults",
+    false,
+  );
 
   //
   // ==========================================================================
   // 2. PERSISTENCE (SESSION STORAGE)
   // ==========================================================================
   //
-  // PERSISTENCE: Cover information
-  useEffect(() => {
-    sessionStorage.setItem("cover", JSON.stringify(cover));
-  }, [cover]);
-
-  // PERSISTENCE: Condition for calculation
-  useEffect(() => {
-    sessionStorage.setItem("condition", JSON.stringify(condition));
-  }, [condition]);
-
-  // PERSISTENCE: Structural Design of pole
-  useEffect(() => {
-    sessionStorage.setItem(
-      "structuralDesign",
-      JSON.stringify(structuralDesign),
-    );
-  }, [structuralDesign]);
-
   // PERSISTENCE: Method for pole calculation (custom or standard)
   useEffect(() => {
     sessionStorage.setItem("method", JSON.stringify(method));
@@ -219,7 +196,7 @@ export function PoleStructuralAnalyzer() {
     sessionStorage.setItem("poleBasic", JSON.stringify(poleBasic));
   }, [poleBasic]);
 
-  // PERSISTENCE: Sections/Step input, each section represents one pole
+  // PERSISTENCE: Project Type
   useEffect(() => {
     if (projectType !== "lighting-pole") {
       setMethod(null);
@@ -227,54 +204,15 @@ export function PoleStructuralAnalyzer() {
     }
   }, [projectType]);
 
-  useEffect(() => {
-    sessionStorage.setItem("sections", JSON.stringify(sections));
-  }, [sections]);
-
-  // PERSISTENCE: Direct Object input
-  useEffect(() => {
-    sessionStorage.setItem("directObjects", JSON.stringify(directObjects));
-  }, [directObjects]);
-
-  // PERSISTENCE: Overhead Wire input
-  useEffect(() => {
-    sessionStorage.setItem("overheadWires", JSON.stringify(overheadWires));
-  }, [overheadWires]);
-
   // PERSISTENCE: Arm Input
   useEffect(() => {
     sessionStorage.setItem("arms", JSON.stringify(arms));
   }, [arms]);
 
-  // // PERSISTENCE: Arm Object input
-  // useEffect(() => {
-  //   sessionStorage.setItem("armObjects", JSON.stringify(armObjects));
-  // }, [armObjects]);
-
-  // PERSISTENCE: Results all step pole
-  useEffect(() => {
-    sessionStorage.setItem("results", JSON.stringify(results));
-  }, [results]);
-
-  // PERSISTENCE: Results all direct object
-  useEffect(() => {
-    sessionStorage.setItem("resultsDo", JSON.stringify(resultsDo));
-  }, [resultsDo]);
-
-  // PERSISTENCE: Results all overhead wire
-  useEffect(() => {
-    sessionStorage.setItem("resultsOhw", JSON.stringify(resultsOhw));
-  }, [resultsOhw]);
-
   // PERSISTENCE: Results all arm
   useEffect(() => {
     sessionStorage.setItem("resultsArm", JSON.stringify(resultsArm));
   }, [resultsArm]);
-
-  // PERSISTENCE: Results table
-  useEffect(() => {
-    sessionStorage.setItem("showResults", JSON.stringify(showResults));
-  }, [showResults]);
 
   // LISTENER: Render the Report Page component, and pass a prop named onDelete Report to that component.
   useEffect(() => {
@@ -1058,6 +996,7 @@ export function PoleStructuralAnalyzer() {
   // FUNCTION: Removes all calculation results and hides the results table.
   const handleDeleteReport = () => {
     Utils.deleteReport(
+      projectType,
       setResults,
       setResultsDo,
       setResultsOhw,
@@ -1093,8 +1032,7 @@ export function PoleStructuralAnalyzer() {
   };
 
   // FUNCTION: Conditional form calculation input (custom or standard)
-  const isCustomPoleMode =
-    projectType !== "lighting-pole" || method === "custom";
+  const isCustomPoleMode = projectType !== "null" || method === "custom";
 
   return (
     <div className="min-h-screen">
@@ -1211,20 +1149,21 @@ export function PoleStructuralAnalyzer() {
             </div>
 
             {/* Input Mode Selection (Only for Lighting Pole) */}
-            {projectType === "lighting-pole" && (
-              <div className="border-b border-gray-200 mx-6 pt-6 pb-6 hp:mx-4 hp:pt-4">
-                <div className="flex items-center justify-between mb-4 hp:mb-2">
-                  <div>
-                    <h2 className="text-[#0d3b66] font-semibold flex items-center text-sm gap-2 hp:text-xs hp:font-medium">
-                      <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
-                      Input Mode Selection
-                    </h2>
+            {condition.projectType === "lightingPole" &&
+              method === "standard" && (
+                <div className="border-b border-gray-200 mx-6 pt-6 pb-6 hp:mx-4 hp:pt-4">
+                  <div className="flex items-center justify-between mb-4 hp:mb-2">
+                    <div>
+                      <h2 className="text-[#0d3b66] font-semibold flex items-center text-sm gap-2 hp:text-xs hp:font-medium">
+                        <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
+                        Input Mode Selection
+                      </h2>
+                    </div>
                   </div>
-                </div>
 
-                <InputModeSelectionPole value={method} onChange={setMethod} />
-              </div>
-            )}
+                  <InputModeSelectionPole value={method} onChange={setMethod} />
+                </div>
+              )}
 
             {projectType === "lighting-pole" && method === "standard" && (
               <PoleBasicForm
@@ -1559,7 +1498,7 @@ export function PoleStructuralAnalyzer() {
         {/* ============================================================
           FORM ARM (Bagian input arm)
         ============================================================ */}
-        {isCustomPoleMode && (
+        {condition.projectType === "lighting-pole" && method === "standard" && (
           <>
             <div
               className={`bg-gradient-to-r from-[#0d3b66] to-[#3399cc] p-4 flex items-center justify-between cursor-pointer mt-20 transition-all duration-500 ease-in-out ${
