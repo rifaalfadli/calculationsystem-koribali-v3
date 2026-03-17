@@ -254,8 +254,8 @@ export function PoleStructuralAnalyzer() {
   // --- Accordion States (Toggles) ---
   const [isExpandedPole, setIsExpandedPole] = useState(true); // expand/collapse pole input
   const [isExpandedCondition, setIsExpandedCondition] = useState(true); // expand/collapse condition input
-  const [isExpandedDo, setIsExpandedDo] = useState(false); // expand/collapse direct object input
-  const [isExpandedOhw, setIsExpandedOhw] = useState(false); // expand/collapse overhead wire input
+  const [isExpandedDo, setIsExpandedDo] = useState(true); // expand/collapse direct object input
+  const [isExpandedOhw, setIsExpandedOhw] = useState(true); // expand/collapse overhead wire input
   const [isExpandedArm, setIsExpandedArm] = useState(true); // expand/collapse arm input
 
   //

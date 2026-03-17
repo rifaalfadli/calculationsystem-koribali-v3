@@ -68,7 +68,7 @@ export function OverheadWireInput({
       <div className="border-b border-gray-200">
         <div
           className="
-            flex items-center justify-between
+            flex items-center justify-start
             px-6 pt-3 pb-6
 
             hp:flex-col
@@ -76,28 +76,48 @@ export function OverheadWireInput({
             hp:gap-3
             hp:px-3
             hp:pt-2
+
           "
         >
           {/* INPUT + BUTTON */}
           <div
             className="
-              flex items-center gap-3
+              flex items-center gap-3.5
 
               hp:gap-2
             "
           >
+            {/* Show Object Count */}
+            <div
+              className="
+                flex items-center gap-2 px-5 py-2.5 text-sm rounded-md
+                bg-slate-50 border border-slate-200 text-slate-700 font-medium
+
+                hp:px-3
+                hp:py-2
+                hp:text-xs
+                hp:justify-center
+              "
+            >
+              <span className="text-[#0d3b66] font-semibold">
+                {overheadWires.length}
+              </span>
+              <span className="text-slate-400">/</span>
+              <span className="text-slate-600">8 Overhead Wires</span>
+          </div>
+
             <input
               type="number"
               min={1}
               max={8}
-              placeholder="OHW Count"
+              placeholder="Input OHW Number"
               value={ohwInputValue}
               onChange={(e) => setOhwInputValue(e.target.value)}
               onWheel={(e) => e.target.blur()}
               className="
-                w-[180px] px-7 py-2.5 text-center text-sm rounded-lg outline-none
-                transition-all border border-[#3399cc] bg-white
-                focus:ring-1 focus:ring-[#3399cc]
+                w-[180px] px-2.5 py-2.5 text-center text-sm rounded-md outline-none
+                transition-all border border-slate-300 bg-white
+                focus:border-[#3399cc] focus:ring-1 focus:ring-[#3399cc]
 
                 hp:w-[120px]
                 hp:px-1
@@ -110,8 +130,8 @@ export function OverheadWireInput({
               onClick={onAddOhw}
               disabled={isOhwInputValue}
               className={`
-                flex items-center gap-2 px-7 py-2.5 text-sm font-medium rounded-lg
-                transition-all shadow-md border
+                flex items-center gap-2 px-7 py-2.5 text-sm font-medium rounded-md
+                transition-all border
 
                 hp:px-6
                 hp:py-2
@@ -130,25 +150,6 @@ export function OverheadWireInput({
               )}
               OK
             </button>
-          </div>
-
-          {/* Show Object Count */}
-          <div
-            className="
-              flex items-center gap-2 px-7 py-2.5 text-sm rounded-lg
-              bg-slate-50 border border-slate-200 text-slate-700 font-medium
-
-              hp:px-3
-              hp:py-2
-              hp:text-xs
-              hp:justify-center
-            "
-          >
-            <span className="text-[#0d3b66] font-semibold">
-              {overheadWires.length}
-            </span>
-            <span className="text-slate-400">/</span>
-            <span className="text-slate-600">8 Overhead Wires</span>
           </div>
         </div>
       </div>

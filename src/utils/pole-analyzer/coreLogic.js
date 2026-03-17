@@ -384,8 +384,8 @@ export const deleteReport = (
   // Reset UI control
   setIsExpandedCondition(true);
   setIsExpandedPole(true);
-  setIsExpandedDo(false);
-  setIsExpandedOhw(false);
+  setIsExpandedDo(true);
+  setIsExpandedOhw(true);
   setIsExpandedArm(false);
 
   // Hapus semua sessionStorage
