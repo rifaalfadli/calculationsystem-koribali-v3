@@ -7,19 +7,6 @@ import {
 } from "./calculatePole";
 
 // ==============================
-// STRUCTURAL DESIGN POLE INPUT
-// ==============================
-export function structuralDesignResults(structuralDesign) {
-  const lowestStep = parseFloat(structuralDesign.lowestStep) || 0;
-  const overDesign = parseFloat(structuralDesign.overDesign) || 0;
-
-  return {
-    lowestStep,
-    overDesign,
-  };
-}
-
-// ==============================
 // STEP POLE INPUT
 // ==============================
 export function calculatePoleResults(sections) {

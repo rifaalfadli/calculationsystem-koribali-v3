@@ -1,4 +1,3 @@
-import { PoleStructuralAnalyzer } from "../components/PoleStructuralAnalyzer";
 import CalculationSelection from "../components/CalculationSelection";
 import { Helmet } from "react-helmet";
 

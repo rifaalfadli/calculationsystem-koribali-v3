@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   useNavigate,
   useLocation,
@@ -144,13 +144,6 @@ export function PoleStructuralAnalyzer() {
   // STATE: Arm Object input
   const [aoErrors, setAoErrors] = useState({});
 
-  // STATE: Results all structural design
-  const [, setResultStructuralDesign] = useProjectStorage(
-    projectType,
-    "resultStructuralDesign",
-    [],
-  );
-
   // STATE: Results all step pole
   const [results, setResults] = useProjectStorage(projectType, "results", []);
 
@@ -214,16 +207,6 @@ export function PoleStructuralAnalyzer() {
     sessionStorage.setItem("resultsArm", JSON.stringify(resultsArm));
   }, [resultsArm]);
 
-  // LISTENER: Render the Report Page component, and pass a prop named onDelete Report to that component.
-  useEffect(() => {
-    if (location.state?.deleteReport) {
-      handleDeleteReport();
-
-      // setelah delete selesai, pindah ke halaman calculation utama
-      navigate("/calculation", { replace: true });
-    }
-  }, [location.state?.deleteReport, navigate]);
-
   //
   // ==========================================================================
   // 3. UI CONTROL STATES (Modals, Toggles, & Temp Data)
@@ -253,14 +236,6 @@ export function PoleStructuralAnalyzer() {
   const [activeTabArm, setActiveTabArm] = useState("1"); // currently active section
   const activeArm = arms.find((s) => s.idArm === activeTabArm);
   const armObjects = activeArm?.armObjects || [];
-
-  // const setArmObjects = (newObjects) => {
-  //   setArms((prev) =>
-  //     prev.map((arm) =>
-  //       arm.idArm === activeTabArm ? { ...arm, armObjects: newObjects } : arm,
-  //     ),
-  //   );
-  // };
   const isLastArm = arms[arms.length - 1]?.idArm === activeTabArm;
   const isOnlyArm = arms.length === 1;
   const [armClipboard, setArmClipboard] = useState(null);
@@ -380,11 +355,6 @@ export function PoleStructuralAnalyzer() {
   // 5. ACTION HANDLERS & FEATURE LOGIC
   // ==========================================================================
   //
-
-  if (!validTypes.includes(projectType)) {
-    return <Navigate to="/calculation" />;
-  }
-
   // ------------------------ Function for CoverInput ------------------------
   // FUNCTION: Update cover data
   const handleCoverUpdate = (updates) => {
@@ -817,7 +787,6 @@ export function PoleStructuralAnalyzer() {
       handleIsArmComplete,
       handleIsAoComplete,
       setResults,
-      setResultStructuralDesign,
       setResultsDo,
       setResultsOhw,
       setResultsArm,
@@ -994,13 +963,12 @@ export function PoleStructuralAnalyzer() {
   };
 
   // FUNCTION: Removes all calculation results and hides the results table.
-  const handleDeleteReport = () => {
+  const handleDeleteReport = useCallback(() => {
     Utils.deleteReport(
       projectType,
       setResults,
       setResultsDo,
       setResultsOhw,
-      setResultStructuralDesign,
       setResultsArm,
       setShowResults,
       setCover,
@@ -1024,7 +992,22 @@ export function PoleStructuralAnalyzer() {
       setIsExpandedArm,
     );
     navigate("/calculation");
-  };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectType, navigate]);
+
+  // LISTENER: Render the Report Page component, and pass a prop named onDelete Report to that component.
+  useEffect(() => {
+    if (location.state?.deleteReport) {
+      handleDeleteReport();
+      navigate("/calculation", { replace: true });
+    }
+  }, [location.state?.deleteReport, navigate, handleDeleteReport]);
+
+
+  if (!validTypes.includes(projectType)) {
+    return <Navigate to="/calculation" />;
+  }
 
   // FUNCTION: Trigger toast notification with specific message and type.
   const showToast = (message, type = "error") => {

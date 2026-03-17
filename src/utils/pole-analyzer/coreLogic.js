@@ -1,6 +1,5 @@
 import {
   calculatePoleResults,
-  structuralDesignResults,
   calculateDoResults,
   calculateOhwResults,
   calculateArmResults,
@@ -27,7 +26,6 @@ export const handleCalculateResults = (
   handleIsArmComplete,
   handleIsAoComplete,
   setResults,
-  setResultStructuralDesign,
   setResultsDo,
   setResultsOhw,
   setResultsArm,
@@ -150,12 +148,10 @@ export const handleCalculateResults = (
   // =========================
   const calculatedResults = calculatePoleResults(sections);
   const calculatedResultsDo = calculateDoResults(directObjects);
-  const calculatedStructuralDesign = structuralDesignResults(structuralDesign);
   const calculatedResultsOhw = calculateOhwResults(overheadWires);
   const calculatedResultsArm = calculateArmResults(arms);
 
   setResults(calculatedResults);
-  setResultStructuralDesign(calculatedStructuralDesign);
   setResultsDo(calculatedResultsDo);
   setResultsOhw(calculatedResultsOhw);
   setResultsArm(calculatedResultsArm);
@@ -292,7 +288,6 @@ export const deleteReport = (
   setResults,
   setResultsDo,
   setResultsOhw,
-  setResultStructuralDesign,
   setResultsArm,
   setShowResults,
   setCover,
@@ -319,7 +314,6 @@ export const deleteReport = (
   setResults([]);
   setResultsDo([]);
   setResultsOhw([]);
-  setResultStructuralDesign([]);
   setResultsArm([]);
   setShowResults(false);
 

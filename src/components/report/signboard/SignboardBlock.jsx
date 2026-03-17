@@ -7,7 +7,7 @@ export const createBlocks = (
   structuralDesign = {},
 ) => {
   const blocks = [];
-  let sectionCounter = 0;
+  // let sectionCounter = 0;
 
   results?.forEach((r, index) => {
     const rows = getRowsForStep(index, results, resultsDo, structuralDesign);

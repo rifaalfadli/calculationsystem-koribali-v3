@@ -56,7 +56,6 @@ export function PoleBasicForm({ poleBasic, onUpdate, handleStepNext }) {
     onGL: [],
     underGL: [],
   };
-  const isFormValid = poleBasic.poleType && poleBasic.groundPosition;
 
   return (
     <div className="bg-white p-6 rounded-b-2xl hp:rounded-b-xl">
