@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, Outlet } from "react-router-dom";
 import {
   Calculator,
   BarChart2,
@@ -533,7 +533,9 @@ export default function Layout({ children }) {
         </header>
 
         <main className="flex-1 p-4 lg:p-8">
-          <div className="max-w-[1600px] mx-auto">{children}</div>
+          <div className="mx-6">
+            <Outlet />
+          </div>
         </main>
 
         <footer className="py-4 px-6 lg:px-8 border-t border-slate-200 text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">

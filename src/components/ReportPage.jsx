@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import LightingPoleReport from "./report/lightingpole/LightingPoleReport";
 import AcemastReport from "./report/acemast/AcemastReport";
 import SignboardReport from "./report/signboard/SignboardReport";
+import MultipleReport from "./report/multiple/MultipleReport";
 import {
   ArrowLeft,
   Download,
@@ -108,6 +109,19 @@ export function ReportPage() {
         return (
           <div id="report-a4">
             <SignboardReport
+              cover={cover}
+              condition={condition}
+              structuralDesign={structuralDesign}
+              results={results}
+              resultsDo={resultsDo}
+              resultsOhw={resultsOhw}
+            />
+          </div>
+        );
+      case "multiple":
+        return (
+          <div id="report-a4">
+            <MultipleReport
               cover={cover}
               condition={condition}
               structuralDesign={structuralDesign}
@@ -402,19 +416,6 @@ export function ReportPage() {
           </div>
         </div>
       )}
-
-      {/* Report Content */}
-      {/* <div className="max-w-7xl mx-auto px-6 py-8">
-        <div id="report-a4">
-          <LightingPoleReport
-            cover={cover}
-            condition={condition}
-            structuralDesign={structuralDesign}
-            results={results}
-            resultsDo={resultsDo}
-          />
-        </div>
-      </div> */}
 
       <div className="max-w-7xl mx-auto px-6 py-8 hp:mx-0 hp:px-0 hp:flex hp:justify-center hp:max-w-[100vh] hp:overflow-hidden">
         {renderReport()}

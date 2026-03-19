@@ -62,7 +62,9 @@ export const createBlocks = (
             </div>
             {/* Sub-section: 1) 荷重計算 (Load calculation) */}
             <div className="flex justify-start ml-[22px] mb-0">
-              <span className="page1-number">1).</span>
+              <span className="page1-number">
+                1<span className="jp">)</span>.
+              </span>
               <span className="page1-text tracking-[0.05em] jp">荷重計算</span>
             </div>
 

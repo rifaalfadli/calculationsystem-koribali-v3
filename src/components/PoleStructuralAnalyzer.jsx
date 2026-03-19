@@ -8,7 +8,6 @@ import {
 
 // COMPONENTS: Feature-specific components
 import { HeaderCalculationPage } from "./pole-analyzer/PoleAnalyzerHeader";
-import { ConditionInput } from "./pole-analyzer/ConditionInput";
 import { StructuralDesign } from "./pole-analyzer/StructuralDesignInput";
 import { PoleInput } from "./pole-analyzer/PoleInput";
 import { DirectObjectInput } from "./pole-analyzer/DirectObjectInput";
@@ -18,6 +17,8 @@ import { ArmObjectInput } from "./pole-analyzer/ArmObjectInput";
 import { ArmInput } from "./pole-analyzer/ArmInput";
 import { useProjectStorage } from "./pole-analyzer/hooks/useProjectStorage";
 import STANDARD_POLE_DATA from "../data/specStandardPole.json";
+import InputModeSelectionPole from "./pole-analyzer/InputModeSelectionPole";
+import { PoleBasicForm } from "./pole-analyzer/StandardLightingPoleInput";
 
 // UTILS & MODALS: Shared logic and overlays
 import * as Modal from "./pole-analyzer/PoleAnalyzerModal";
@@ -38,8 +39,6 @@ import {
   Copy,
   ClipboardPaste,
 } from "lucide-react";
-import InputModeSelectionPole from "./pole-analyzer/InputModeSelectionPole";
-import { PoleBasicForm } from "./pole-analyzer/StandardLightingPoleInput";
 
 export function PoleStructuralAnalyzer() {
   const navigate = useNavigate();
@@ -47,6 +46,9 @@ export function PoleStructuralAnalyzer() {
   const { type: projectType } = useParams();
 
   const validTypes = ["lighting-pole", "acemast", "signboard", "multiple"];
+  const condition = JSON.parse(
+    sessionStorage.getItem(`${projectType}_condition`) || "{}",
+  );
 
   //
   // ==========================================================================
@@ -63,17 +65,6 @@ export function PoleStructuralAnalyzer() {
     date: "",
   });
   const [coverErrors, setCoverErrors] = useState({});
-
-  // STATE: Condition for calculation
-  const [condition, setCondition] = useProjectStorage(
-    projectType,
-    "condition",
-    {
-      designStandard: "",
-      windSpeed: "",
-    },
-  );
-  const [conditionErrors, setConditionErrors] = useState({});
 
   // STATE: Structural Design of pole
   const [structuralDesign, setStructuralDesign] = useProjectStorage(
@@ -253,7 +244,6 @@ export function PoleStructuralAnalyzer() {
 
   // --- Accordion States (Toggles) ---
   const [isExpandedPole, setIsExpandedPole] = useState(true); // expand/collapse pole input
-  const [isExpandedCondition, setIsExpandedCondition] = useState(true); // expand/collapse condition input
   const [isExpandedDo, setIsExpandedDo] = useState(true); // expand/collapse direct object input
   const [isExpandedOhw, setIsExpandedOhw] = useState(true); // expand/collapse overhead wire input
   const [isExpandedArm, setIsExpandedArm] = useState(true); // expand/collapse arm input
@@ -375,23 +365,6 @@ export function PoleStructuralAnalyzer() {
   // FUNCTION: Close Cover Input
   const handleCloseCoverPopup = () => {
     setShowCoverPopup(false);
-  };
-
-  // ------------------------ Function for ConditionInput ------------------------
-  // FUNCTION: Update condition data
-  const handleConditionUpdate = (updates) => {
-    Utils.updateCondition(condition, updates, setCondition);
-    Utils.clearError(updates, setConditionErrors);
-  };
-
-  // FUNCTION: Check if condition information form is complete
-  const handleIsConditionComplete = () => {
-    return Utils.isConditionComplete(condition);
-  };
-
-  // FUNCTION: Go to Pole Input after Condition
-  const handleConditionNext = () => {
-    Utils.conditionNext(setIsExpandedCondition, setIsExpandedPole);
   };
 
   // ------------------------ Function for structural design pole input ------------------------
@@ -704,7 +677,7 @@ export function PoleStructuralAnalyzer() {
 
   // ------------------------ Function for All Form ------------------------
   const resolveStandardData = () => {
-    if (method !== "standard") {
+    if (condition.method !== "standard") {
       return {
         sections,
         directObjects,
@@ -741,7 +714,6 @@ export function PoleStructuralAnalyzer() {
     // =========================
     // RESET ALL PREVIOUS ERRORS
     // =========================
-    setConditionErrors({});
     setStructuralDesignErrors({});
     setSectionsErrors({});
     setDoErrors({});
@@ -761,7 +733,7 @@ export function PoleStructuralAnalyzer() {
 
     // Safety check kalau standard tapi tidak ditemukan di JSON
     if (
-      method === "standard" &&
+      condition.method === "standard" &&
       (!finalSections || finalSections.length === 0)
     ) {
       showToast("Selected standard configuration not found.");
@@ -772,8 +744,7 @@ export function PoleStructuralAnalyzer() {
     // CALL VALIDATION + CALCULATION ENGINE
     // =========================
     const result = Utils.handleCalculateResults(
-      method,
-      handleIsConditionComplete,
+      condition,
       showToast,
       structuralDesign,
       handleStructuralDesignComplete,
@@ -802,33 +773,29 @@ export function PoleStructuralAnalyzer() {
     // IF INVALID => MAP ERRORS TO UI
     // =========================
     if (!isValid) {
-      if (errors.condition) {
-        setConditionErrors(Utils.getConditionErrors(condition));
-      }
-
       if (errors.structuralDesign) {
         setStructuralDesignErrors(
           Utils.getStructuralDesignErrors(structuralDesign),
         );
       }
 
-      if (errors.section && method !== "standard") {
+      if (errors.section && condition.method !== "standard") {
         setSectionsErrors(Utils.getSectionsErrors(sections));
       }
 
-      if (errors.directObject && method !== "standard") {
+      if (errors.directObject && condition.method !== "standard") {
         setDoErrors(Utils.getDoErrors(directObjects));
       }
 
-      if (errors.overheadWire && method !== "standard") {
+      if (errors.overheadWire && condition.method !== "standard") {
         setOhwErrors(Utils.getOhwErrors(overheadWires));
       }
 
-      if (errors.arm && method !== "standard") {
+      if (errors.arm && condition.method !== "standard") {
         setArmsErrors(Utils.getArmsErrors(arms));
       }
 
-      if (errors.armObject && method !== "standard") {
+      if (errors.armObject && condition.method !== "standard") {
         setAoErrors(Utils.getAoErrors(arms));
       }
 
@@ -846,7 +813,6 @@ export function PoleStructuralAnalyzer() {
   const handleMakeReport = () => {
     // reset all previous errors
     setCoverErrors({});
-    setConditionErrors({});
     setStructuralDesignErrors({});
     setSectionsErrors({});
     setDoErrors({});
@@ -864,7 +830,7 @@ export function PoleStructuralAnalyzer() {
 
     // safety check kalau standard tapi tidak ditemukan di JSON
     if (
-      method === "standard" &&
+      condition.method === "standard" &&
       (!finalSections || finalSections.length === 0)
     ) {
       showToast("Selected standard configuration not found.");
@@ -873,11 +839,10 @@ export function PoleStructuralAnalyzer() {
 
     // call report validation engine
     const result = Utils.makeReport(
-      method,
+      condition,
       results,
       showToast,
       handleIsCoverComplete,
-      handleIsConditionComplete,
       handleStructuralDesignComplete,
       finalSections,
       handleIsSectionComplete,
@@ -902,11 +867,6 @@ export function PoleStructuralAnalyzer() {
         setCoverErrors(Utils.getCoverErrors(cover));
       }
 
-      // Validate environmental parameters and design standards before export
-      if (errors.condition) {
-        setConditionErrors(Utils.getConditionErrors(condition));
-      }
-
       // Verify pole structural design integrity and over-design ratios
       if (errors.structuralDesign) {
         setStructuralDesignErrors(
@@ -915,27 +875,27 @@ export function PoleStructuralAnalyzer() {
       }
 
       // Check all pole section dimensions and material specifications
-      if (errors.section && method !== "standard") {
+      if (errors.section && condition.method !== "standard") {
         setSectionsErrors(Utils.getSectionsErrors(sections));
       }
 
       // Ensure all mounted equipment (DO) data is valid for the final report
-      if (errors.directObject && method !== "standard") {
+      if (errors.directObject && condition.method !== "standard") {
         setDoErrors(Utils.getDoErrors(directObjects));
       }
 
       // Final check for overhead wire tension, span, and clearance data
-      if (errors.overheadWire && method !== "standard") {
+      if (errors.overheadWire && condition.method !== "standard") {
         setOhwErrors(Utils.getOhwErrors(overheadWires));
       }
 
       // Check all arm dimensions and material specifications
-      if (errors.arm && method !== "standard") {
+      if (errors.arm && condition.method !== "standard") {
         setArmsErrors(Utils.getArmsErrors(arms));
       }
 
       // Ensure all mounted equipment (AO) data is valid for the final report
-      if (errors.armObject && method !== "standard") {
+      if (errors.armObject && condition.method !== "standard") {
         setAoErrors(Utils.getAoErrors(arms));
       }
 
@@ -972,7 +932,6 @@ export function PoleStructuralAnalyzer() {
       setResultsArm,
       setShowResults,
       setCover,
-      setCondition,
       setStructuralDesign,
       setSections,
       setDirectObjects,
@@ -981,7 +940,6 @@ export function PoleStructuralAnalyzer() {
       setMethod,
       setPoleBasic,
       setActiveTab,
-      setIsExpandedCondition,
       setIsExpandedPole,
       sectionIdRef,
       doIdRef,
@@ -1004,7 +962,6 @@ export function PoleStructuralAnalyzer() {
     }
   }, [location.state?.deleteReport, navigate, handleDeleteReport]);
 
-
   if (!validTypes.includes(projectType)) {
     return <Navigate to="/calculation" />;
   }
@@ -1015,7 +972,8 @@ export function PoleStructuralAnalyzer() {
   };
 
   // FUNCTION: Conditional form calculation input (custom or standard)
-  const isCustomPoleMode = projectType !== "null" || method === "custom";
+  const isCustomPoleMode =
+    projectType !== "lighting-pole" || condition.method === "custom";
 
   return (
     <div className="min-h-screen">
@@ -1029,55 +987,10 @@ export function PoleStructuralAnalyzer() {
       ============================================================ */}
       <div className="mx-6 2040:mx-38 pt-1 pb-8 hp:mx-2">
         {/* ============================================================
-          FORM CONDITION (Bagian kondisi perhitungan)
-        ============================================================ */}
-        <div
-          className={`bg-gradient-to-r from-[#0d3b66] to-[#3399cc] p-4 flex items-center justify-between cursor-pointer mt-8 transition-all duration-500 ease-in-out ${
-            isExpandedCondition
-              ? "rounded-t-2xl hp:rounded-t-xl"
-              : "rounded-2xl hp:rounded-xl"
-          } hp:px-4 hp:py-3`}
-          onClick={() => setIsExpandedCondition(!isExpandedCondition)}
-        >
-          {/* Judul cover */}
-          <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20 hp:px-2 hp:py-[8px]">
-            <h2 className="text-white text-sm font-bold hp:text-xs hp:font-semibold">
-              Standard and Condition
-            </h2>
-          </div>
-
-          {/* Icon toggle (up/down) */}
-          <div className="p-2">
-            {isExpandedCondition ? (
-              <ChevronUp className="w-5 h-5 text-white hp:w4 hp:h-4" />
-            ) : (
-              <ChevronDown className="w-5 h-5 text-white hp:w4 hp:h-4" />
-            )}
-          </div>
-        </div>
-
-        {/* Body form (collapsible) */}
-        <div
-          className={`transition-all duration-500 ease-in-out overflow-hidden ${
-            isExpandedCondition
-              ? "max-h-[500px] rounded-b-2xl hp:rounded-b-xl"
-              : "max-h-0 rounded-b-2xl hp:rounded-b-xl"
-          }`}
-        >
-          <ConditionInput
-            projectType={projectType}
-            condition={condition}
-            onUpdate={handleConditionUpdate}
-            onNext={handleConditionNext}
-            errors={conditionErrors}
-          />
-        </div>
-
-        {/* ============================================================
           FORM POLE (Bagian input section/Step Pole)
         ============================================================ */}
         <div
-          className={`bg-gradient-to-r from-[#0d3b66] to-[#3399cc] p-4 flex items-center justify-between cursor-pointer mt-20 transition-all duration-500 ease-in-out ${
+          className={`bg-gradient-to-r from-[#0d3b66] to-[#3399cc] p-4 flex items-center justify-between cursor-pointer mt-6 transition-all duration-500 ease-in-out ${
             isExpandedPole
               ? "rounded-t-2xl hp:rounded-t-xl"
               : "rounded-2xl hp:rounded-xl"
@@ -1131,30 +1044,17 @@ export function PoleStructuralAnalyzer() {
               />
             </div>
 
-            {/* Input Mode Selection (Only for Lighting Pole) */}
-            {condition.projectType === "lightingPole" &&
-              method === "standard" && (
-                <div className="border-b border-gray-200 mx-6 pt-6 pb-6 hp:mx-4 hp:pt-4">
-                  <div className="flex items-center justify-between mb-4 hp:mb-2">
-                    <div>
-                      <h2 className="text-[#0d3b66] font-semibold flex items-center text-sm gap-2 hp:text-xs hp:font-medium">
-                        <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
-                        Input Mode Selection
-                      </h2>
-                    </div>
-                  </div>
-
-                  <InputModeSelectionPole value={method} onChange={setMethod} />
-                </div>
+            {projectType === "lighting-pole" &&
+              condition.method === "standard" && (
+                <>
+                  <div className="border-t border-gray-200 mx-6 pt-6 hp:mx-4 hp:pt-4"></div>
+                  <PoleBasicForm
+                    poleBasic={poleBasic}
+                    onUpdate={handleUpdatePoleBasic}
+                    handleStepNext={handleStepNext}
+                  />
+                </>
               )}
-
-            {projectType === "lighting-pole" && method === "standard" && (
-              <PoleBasicForm
-                poleBasic={poleBasic}
-                onUpdate={handleUpdatePoleBasic}
-                handleStepNext={handleStepNext}
-              />
-            )}
 
             {isCustomPoleMode && (
               <>
@@ -1481,7 +1381,7 @@ export function PoleStructuralAnalyzer() {
         {/* ============================================================
           FORM ARM (Bagian input arm)
         ============================================================ */}
-        {condition.projectType === "lighting-pole" && method === "standard" && (
+        {isCustomPoleMode && (
           <>
             <div
               className={`bg-gradient-to-r from-[#0d3b66] to-[#3399cc] p-4 flex items-center justify-between cursor-pointer mt-20 transition-all duration-500 ease-in-out ${

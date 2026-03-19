@@ -11,8 +11,7 @@ import { validatePole } from "./validation";
 // FUNCTION: Perform calculation for all form
 // ===============================================================================
 export const handleCalculateResults = (
-  method,
-  handleIsConditionComplete,
+  condition,
   showToast,
   structuralDesign,
   structuralDesignComplete,
@@ -33,21 +32,12 @@ export const handleCalculateResults = (
 ) => {
   const errors = {
     structuralDesign: false,
-    condition: false,
     section: false,
     directObject: false,
     overheadWire: false,
     arm: false,
     armObject: false,
   };
-
-  // =========================
-  // CONDITION VALIDATION
-  // =========================
-  if (!handleIsConditionComplete()) {
-    showToast("Please complete all Standard and Condition fields.");
-    errors.condition = true;
-  }
 
   // =========================
   // STRUCTURAL DESIGN VALIDATION
@@ -60,7 +50,7 @@ export const handleCalculateResults = (
   // =========================
   // POLE VALIDATION (ONLY CUSTOM MODE)
   // =========================
-  if (method !== "standard") {
+  if (condition.method !== "standard") {
     for (const section of sections || []) {
       if (!handleIsSectionComplete(section)) {
         showToast("Please complete all Pole Specification fields.");
@@ -82,7 +72,7 @@ export const handleCalculateResults = (
   // =========================
   // DIRECT OBJECT VALIDATION
   // =========================
-  if (method !== "standard") {
+  if (condition.method !== "standard") {
     for (const directObject of directObjects || []) {
       if (!handleIsDoComplete(directObject)) {
         showToast("Please complete all Direct Object fields.");
@@ -95,7 +85,7 @@ export const handleCalculateResults = (
   // =========================
   // OVERHEAD WIRE VALIDATION
   // =========================
-  if (method !== "standard") {
+  if (condition.method !== "standard") {
     for (const overheadWire of overheadWires || []) {
       if (!handleIsOhwComplete(overheadWire)) {
         showToast("Please complete all Overhead Wire fields.");
@@ -108,7 +98,7 @@ export const handleCalculateResults = (
   // =========================
   // ARM VALIDATION
   // =========================
-  if (method !== "standard") {
+  if (condition.method !== "standard") {
     for (const arm of arms || []) {
       if (!handleIsArmComplete(arm)) {
         showToast("Please complete all Arm Specification fields.");
@@ -121,7 +111,7 @@ export const handleCalculateResults = (
   // =========================
   // ARM OBJECT VALIDATION
   // =========================
-  if (method !== "standard") {
+  if (condition.method !== "standard") {
     for (const arm of arms || []) {
       if (!arm) continue;
 
@@ -163,11 +153,10 @@ export const handleCalculateResults = (
 // FUNCTION: Validate all inputs before generating the final report
 // ===============================================================================
 export const makeReport = (
-  method,
+  condition,
   results,
   showToast,
   handleIsCoverComplete,
-  handleIsConditionComplete,
   structuralDesignComplete,
   sections,
   handleIsSectionComplete,
@@ -182,7 +171,6 @@ export const makeReport = (
   const errors = {
     results: false,
     cover: false,
-    condition: false,
     structuralDesign: false,
     section: false,
     directObject: false,
@@ -203,12 +191,6 @@ export const makeReport = (
     errors.cover = true;
   }
 
-  // CHECK 4: Condition
-  if (!handleIsConditionComplete()) {
-    showToast("Please complete all Standard and Condition information first.");
-    errors.condition = true;
-  }
-
   // CHECK 5: Structural Design
   if (!structuralDesignComplete()) {
     showToast("Please complete all Pole Specification first.");
@@ -216,7 +198,7 @@ export const makeReport = (
   }
 
   // CHECK 6: Sections/Steps
-  if (method !== "standard") {
+  if (condition.method !== "standard") {
     for (const section of sections || []) {
       if (!handleIsSectionComplete(section)) {
         showToast("Please complete all Pole Specification first.");
@@ -227,7 +209,7 @@ export const makeReport = (
   }
 
   // CHECK 7: Direct Object
-  if (method !== "standard") {
+  if (condition.method !== "standard") {
     for (const directObject of directObjects || []) {
       if (!handleIsDoComplete(directObject)) {
         showToast("Please complete all Direct Object first.");
@@ -238,7 +220,7 @@ export const makeReport = (
   }
 
   // CHECK 8: Overhead Wire
-  if (method !== "standard") {
+  if (condition.method !== "standard") {
     for (const overheadWire of overheadWires) {
       if (!handleIsOhwComplete(overheadWire)) {
         showToast("Please complete all Overhead Wire first.");
@@ -249,7 +231,7 @@ export const makeReport = (
   }
 
   // CHECK 9: Arms
-  if (method !== "standard") {
+  if (condition.method !== "standard") {
     for (const arm of arms || []) {
       if (!handleIsArmComplete(arm)) {
         showToast("Please complete all Arm Specification first.");
@@ -260,7 +242,7 @@ export const makeReport = (
   }
 
   // CHECK 10: Arm Object
-  if (method !== "standard") {
+  if (condition.method !== "standard") {
     for (const arm of arms || []) {
       if (!arm) continue;
 
@@ -291,7 +273,6 @@ export const deleteReport = (
   setResultsArm,
   setShowResults,
   setCover,
-  setCondition,
   setStructuralDesign,
   setSections,
   setDirectObjects,
@@ -300,7 +281,6 @@ export const deleteReport = (
   setMethod,
   setPoleBasic,
   setActiveTab,
-  setIsExpandedCondition,
   setIsExpandedPole,
   sectionIdRef,
   doIdRef,
@@ -334,13 +314,6 @@ export const deleteReport = (
     contentr2: "",
     contentr3: "",
     date: "",
-  });
-
-  // Reset Condition
-  setCondition({
-    designStandard: "",
-    windSpeed: "",
-    projectType: "",
   });
 
   // Reset Structural Design
@@ -382,7 +355,6 @@ export const deleteReport = (
   sectionIdRef.current = 1;
 
   // Reset UI control
-  setIsExpandedCondition(true);
   setIsExpandedPole(true);
   setIsExpandedDo(true);
   setIsExpandedOhw(true);
@@ -391,7 +363,6 @@ export const deleteReport = (
   // Hapus semua sessionStorage
   const keys = [
     "cover",
-    "condition",
     "structuralDesign",
     "sections",
     "directObjects",

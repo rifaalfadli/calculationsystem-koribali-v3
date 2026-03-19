@@ -140,6 +140,16 @@
   margin-right: 63px;
 }
 
+.cover-double-line-mpl {
+  border-top: 4.5px double #000;
+  border-bottom: 4.5px double #000;
+  padding: 0;
+  margin-top: 18px;
+  margin-bottom: 230px;
+  margin-left: 63px;
+  margin-right: 63px;
+}
+
 .cover-double-line-sb {
   border-top: 4.5px double #000;
   border-bottom: 4.5px double #000;

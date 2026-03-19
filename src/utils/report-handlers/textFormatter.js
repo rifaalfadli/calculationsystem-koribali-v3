@@ -61,6 +61,88 @@ export const getDesignStandardText = (value) => {
   }
 };
 
+// Data Dummy Arm
+const ARM_DATA = [
+  {
+    name: "歩信アーム1",
+    weight: 227.1,
+    qty: 1,
+    wlaf: 796.5,
+    frontArea: "",
+    cf: "",
+  },
+  {
+    name: "歩信アーム2",
+    weight: 227.1,
+    qty: 1,
+    wlaf: 600.4,
+    frontArea: 0.226,
+    cf: 1.2,
+  },
+];
+
+// Function to generate load table rows based on step height criteria
+export const getRowsForStepPlusArm = (
+  stepIndex,
+  resultsPole,
+  resultsDo,
+  structuralDesign,
+) => {
+  // Current pole step
+  const currentStep = resultsPole[stepIndex];
+
+  // Pole below current step (if any)
+  const nextStep = resultsPole[stepIndex + 1];
+
+  // Current pole step height
+  const currentH = Number(currentStep.heightPole);
+
+  // Height of the pole below (null if last step)
+  const nextH = nextStep ? Number(nextStep.heightPole) : null;
+
+  // The most basic lower limit
+  const lowestPole = Number(structuralDesign?.lowestStep) || 0;
+
+  const rows = [];
+
+  // for direct object
+  resultsDo.forEach((doItem) => {
+    const doHeight = Number(doItem.heightDo) || 0;
+
+    // appear in this step?
+    const passHeight = nextStep ? doHeight > nextH : doHeight >= lowestPole;
+
+    if (!passHeight) return;
+
+    rows.push({
+      type: "do",
+      data: doItem,
+    });
+  });
+
+  // for arm (loop static data)
+  ARM_DATA.forEach((arm) => {
+    rows.push({
+      type: "arm",
+      data: arm,
+    });
+  });
+
+  // for pole
+  resultsPole.forEach((pole) => {
+    const poleH = Number(pole.heightPole) || 0;
+
+    if (poleH >= currentH) {
+      rows.push({
+        type: "pole",
+        data: pole,
+      });
+    }
+  });
+
+  return rows;
+};
+
 // Function to generate load table rows based on step height criteria
 export const getRowsForStep = (
   stepIndex,
@@ -113,4 +195,17 @@ export const getRowsForStep = (
   });
 
   return rows;
+};
+
+export const getDesignStandardTextMultiple = (value) => {
+  switch (value) {
+    case "v60":
+      return "V60";
+    case "jil":
+      return "ＪＩＬ日本照明器具工業会規格に準拠する。";
+    case "haiden":
+      return "Haiden";
+    default:
+      return "";
+  }
 };
