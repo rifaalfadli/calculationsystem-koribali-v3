@@ -569,7 +569,7 @@ export default function MultiplePages({
                     <span className="mx-2">&lt;</span>
                     <span>sfb・・・O.K</span>
                   </div>
-                  <div className="border-t border-black mt-[3px] w-full"></div>
+                  <div className="border-t border-black mt-[1px] w-full"></div>
                 </div>
               </div>
             </div>
@@ -813,7 +813,7 @@ export default function MultiplePages({
                     <span className="mx-2">&lt;</span>
                     <span>sfb・・・O.K</span>
                   </div>
-                  <div className="border-t border-black mt-[3px] w-full"></div>
+                  <div className="border-t border-black mt-[1px] w-full"></div>
                 </div>
               </div>
             </div>

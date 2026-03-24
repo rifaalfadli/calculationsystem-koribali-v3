@@ -1,14 +1,13 @@
 // App.js
 import { Routes, Route, Navigate } from "react-router-dom";
 import Calculation from "./pages/Calculation";
-import CalculationType from "./pages/CalculationType";
+import CalculationTypeSetup from "./pages/CalculationType";
 import Report from "./pages/Report";
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ScrollToTop from "./components/shared/ScroolTop";
 import Entry from "./pages/Entry";
-import CalculationSetup from "./components/calculation-setup/CalculationSetup";
 import PoleStructurePage from "./pages/detail-input/PoleStructure";
 import OpeningPage from "./pages/detail-input/Opening";
 import BaseplatePage from "./pages/detail-input/Baseplate";
@@ -31,7 +30,7 @@ function App() {
           }
         >
           <Route path="/calculation" element={<Calculation />} />
-          <Route path="/calculation/:type" element={<CalculationSetup />} />
+          <Route path="/calculation/:type" element={<CalculationTypeSetup />} />
           <Route
             path="/calculation/:type/pole"
             element={<PoleStructurePage />}

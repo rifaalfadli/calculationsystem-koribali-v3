@@ -1,10 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import {
-  useNavigate,
-  useLocation,
-  useParams,
-  Navigate,
-} from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 // COMPONENTS: Feature-specific components
 import { HeaderCalculationPage } from "./pole-analyzer/PoleAnalyzerHeader";
@@ -17,7 +12,6 @@ import { ArmObjectInput } from "./pole-analyzer/ArmObjectInput";
 import { ArmInput } from "./pole-analyzer/ArmInput";
 import { useProjectStorage } from "./pole-analyzer/hooks/useProjectStorage";
 import STANDARD_POLE_DATA from "../data/specStandardPole.json";
-import InputModeSelectionPole from "./pole-analyzer/InputModeSelectionPole";
 import { PoleBasicForm } from "./pole-analyzer/StandardLightingPoleInput";
 
 // UTILS & MODALS: Shared logic and overlays
@@ -42,10 +36,8 @@ import {
 
 export function PoleStructuralAnalyzer() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { type: projectType } = useParams();
 
-  const validTypes = ["lighting-pole", "acemast", "signboard", "multiple"];
   const condition = JSON.parse(
     sessionStorage.getItem(`${projectType}_condition`) || "{}",
   );
@@ -90,12 +82,6 @@ export function PoleStructuralAnalyzer() {
     },
   ]);
   const [sectionsErrors, setSectionsErrors] = useState({});
-
-  // STATE: Method for calculation pole
-  const [method, setMethod] = useState(() => {
-    const saved = sessionStorage.getItem("method");
-    return saved ? JSON.parse(saved) : null;
-  });
 
   // STATE: Standarad pole input
   const [poleBasic, setPoleBasic] = useState(() => {
@@ -170,23 +156,10 @@ export function PoleStructuralAnalyzer() {
   // 2. PERSISTENCE (SESSION STORAGE)
   // ==========================================================================
   //
-  // PERSISTENCE: Method for pole calculation (custom or standard)
-  useEffect(() => {
-    sessionStorage.setItem("method", JSON.stringify(method));
-  }, [method]);
-
   // PERSISTENCE: Form input standard calculation pole
   useEffect(() => {
     sessionStorage.setItem("poleBasic", JSON.stringify(poleBasic));
   }, [poleBasic]);
-
-  // PERSISTENCE: Project Type
-  useEffect(() => {
-    if (projectType !== "lighting-pole") {
-      setMethod(null);
-      sessionStorage.removeItem("method");
-    }
-  }, [projectType]);
 
   // PERSISTENCE: Arm Input
   useEffect(() => {
@@ -240,7 +213,6 @@ export function PoleStructuralAnalyzer() {
   // --- Global UI & Navigation ---
   const [toast, setToast] = useState(null); // toast notifications { message, type }
   const [showCoverPopup, setShowCoverPopup] = useState(false); // show cover popup
-  const [confirmResetAll, setConfirmResetAll] = useState(false); // reset all confirmation
 
   // --- Accordion States (Toggles) ---
   const [isExpandedPole, setIsExpandedPole] = useState(true); // expand/collapse pole input
@@ -922,50 +894,6 @@ export function PoleStructuralAnalyzer() {
     });
   };
 
-  // FUNCTION: Removes all calculation results and hides the results table.
-  const handleDeleteReport = useCallback(() => {
-    Utils.deleteReport(
-      projectType,
-      setResults,
-      setResultsDo,
-      setResultsOhw,
-      setResultsArm,
-      setShowResults,
-      setCover,
-      setStructuralDesign,
-      setSections,
-      setDirectObjects,
-      setOverheadWires,
-      setArms,
-      setMethod,
-      setPoleBasic,
-      setActiveTab,
-      setIsExpandedPole,
-      sectionIdRef,
-      doIdRef,
-      ohwIdRef,
-      armIdRef,
-      setIsExpandedDo,
-      setIsExpandedOhw,
-      setIsExpandedArm,
-    );
-    navigate("/calculation");
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectType, navigate]);
-
-  // LISTENER: Render the Report Page component, and pass a prop named onDelete Report to that component.
-  useEffect(() => {
-    if (location.state?.deleteReport) {
-      handleDeleteReport();
-      navigate("/calculation", { replace: true });
-    }
-  }, [location.state?.deleteReport, navigate, handleDeleteReport]);
-
-  if (!validTypes.includes(projectType)) {
-    return <Navigate to="/calculation" />;
-  }
-
   // FUNCTION: Trigger toast notification with specific message and type.
   const showToast = (message, type = "error") => {
     setToast({ message, type });
@@ -980,12 +908,12 @@ export function PoleStructuralAnalyzer() {
       {/* ============================================================
         HEADER UTAMA CALCULATION PAGE (Judul + Subjudul + Icon)
       ============================================================ */}
-      <HeaderCalculationPage onResetAll={() => setConfirmResetAll(true)} />
+      <HeaderCalculationPage />
 
       {/* ============================================================
         MAIN CONTENT AREA
       ============================================================ */}
-      <div className="mx-6 2040:mx-38 pt-1 pb-8 hp:mx-2">
+      <div className="mx-6 2040:mx-[250px] pt-1 pb-8 hp:mx-2">
         {/* ============================================================
           FORM POLE (Bagian input section/Step Pole)
         ============================================================ */}
@@ -1734,13 +1662,6 @@ export function PoleStructuralAnalyzer() {
 
       {/* Toast Modal */}
       <Modal.ToastModal toast={toast} onClose={() => setToast(null)} />
-
-      {/* Reset Confirmation Modal */}
-      <Modal.ConfirmResetAllModal
-        confirmResetAll={confirmResetAll}
-        onClose={() => setConfirmResetAll(false)}
-        handleDeleteReport={handleDeleteReport}
-      />
 
       {/* Delete Confirmation Modal for Step Pole */}
       <Modal.ConfirmDeletePoleModal

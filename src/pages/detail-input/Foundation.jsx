@@ -1,14 +1,14 @@
 import { Helmet } from "react-helmet";
-import {
-  useNavigate,
-  useLocation,
-  useParams,
-  Navigate,
-} from "react-router-dom";
+// import {
+//   useNavigate,
+//   useLocation,
+//   useParams,
+//   Navigate,
+// } from "react-router-dom";
 import { HeaderCalculationPage } from "../../components/pole-analyzer/PoleAnalyzerHeader";
 
 export default function FoundationPage() {
-  const { type: projectType } = useParams();
+  // const { type: projectType } = useParams();
 
   return (
     <>

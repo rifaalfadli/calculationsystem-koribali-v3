@@ -17,6 +17,7 @@ export function ConditionInput({
   onNext,
   errors,
 }) {
+  // OPTIONS: Pole input method (standard or custom)
   const options = [
     {
       id: "standard",
@@ -32,6 +33,7 @@ export function ConditionInput({
     },
   ];
 
+  // OPTIONS: Available design standards based on selected project type
   const designStandardOptions = {
     acemast: [
       { value: "act", label: "Standard Acts. (Law)" },

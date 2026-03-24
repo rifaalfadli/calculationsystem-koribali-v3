@@ -49,15 +49,20 @@ export const getCoverErrors = (cover) => ({
 // ====================================================
 // FUNCTION: Check if condition information form is complete
 export const isConditionComplete = (condition) => {
-  return [condition.designStandard, condition.windSpeed].every(
-    (v) => v && v.trim() !== "",
-  );
+  return [
+    condition.designStandard,
+    condition.windSpeed,
+    condition.airDensity,
+    condition.method,
+  ].every((v) => v && v.trim() !== "");
 };
 
 // FUNCTION: Create an error checker helper for the condition
 export const getConditionErrors = (condition) => ({
   designStandard: isEmpty(condition.designStandard),
   windSpeed: isEmpty(condition.windSpeed),
+  airDensity: isEmpty(condition.airDensity),
+  method: isEmpty(condition.method),
 });
 
 // ====================================================

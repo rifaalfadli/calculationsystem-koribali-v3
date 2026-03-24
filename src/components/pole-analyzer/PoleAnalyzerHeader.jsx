@@ -9,10 +9,9 @@ import {
   Square,
   Layers,
 } from "lucide-react";
-
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 
-export function HeaderCalculationPage({ onResetAll }) {
+export function HeaderCalculationPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { type } = useParams();
@@ -57,6 +56,7 @@ export function HeaderCalculationPage({ onResetAll }) {
       "results",
       "resultsDo",
       "resultsOhw",
+      "showResults",
     ];
 
     keys.forEach((key) => sessionStorage.removeItem(`${type}_${key}`));
@@ -118,6 +118,7 @@ export function HeaderCalculationPage({ onResetAll }) {
           icon: LayoutDashboard,
         },
       ];
+
   return (
     <div className="sticky top-[64px] z-30">
       {/* ================= TOP BAR ================= */}

@@ -2,12 +2,33 @@
 // Function for Condition Input
 // ====================================================
 // FUNCTIONS: Go to Pole Input after Condition
-export const conditionNext = (setIsExpandedCondition, setIsExpandedPole) => {
-  // Close section condition
-  setIsExpandedCondition(false);
+export const conditionNext = (isComplete, projectType, condition) => {
+  if (!isComplete) {
+    return {
+      isValid: false,
+      errors: {
+        condition: true,
+      },
+    };
+  }
 
-  // Open section pole
-  setIsExpandedPole(true);
+  // KEY: Dynamic config key based on project type
+  const configKey = `${projectType}_calculation_config`;
+
+  // STORE: Save enabled components configuration
+  sessionStorage.setItem(
+    configKey,
+    JSON.stringify({
+      opening: condition.openingEnabled,
+      baseplate: condition.baseplateEnabled,
+      foundation: condition.foundationEnabled,
+    }),
+  );
+
+  return {
+    isValid: true,
+    errors: null,
+  };
 };
 
 // ====================================================

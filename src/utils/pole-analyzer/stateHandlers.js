@@ -633,3 +633,11 @@ export const resetCurrentAo = (idAo, armObjects, updateActiveArmObjects) => {
     ),
   );
 };
+
+// ====================================================
+// Function for OP Box Type Input
+// ====================================================
+// FUNCTION: Update opening part box type data
+export const updateOpBoxType = (opBoxType, updates, setOpBoxType) => {
+  setOpBoxType({ ...opBoxType, ...updates });
+};

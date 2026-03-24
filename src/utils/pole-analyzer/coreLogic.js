@@ -278,7 +278,6 @@ export const deleteReport = (
   setDirectObjects,
   setOverheadWires,
   setArms,
-  setMethod,
   setPoleBasic,
   setActiveTab,
   setIsExpandedPole,
@@ -296,10 +295,6 @@ export const deleteReport = (
   setResultsOhw([]);
   setResultsArm([]);
   setShowResults(false);
-
-  // Reset Method and Standard Input
-  setMethod(null);
-
   setPoleBasic({
     poleType: "",
     groundPosition: "",

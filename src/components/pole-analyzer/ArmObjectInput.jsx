@@ -50,7 +50,7 @@ export function ArmObjectInput({
     <div className="shadow-sm border border-gray-200 overflow-hidden bg-white">
       <div className="px-6 pt-6 pb-3 hp:px-4 hp:pt-4 hp:pb-2">
         <div>
-          {/* HEADER DIRECT OBJECT INPUT */}
+          {/* HEADER ARM OBJECT INPUT */}
           <div className="flex items-center justify-between mb-1">
             <div>
               <h2 className="text-[#0d3b66] font-medium text-sm flex items-center gap-1 hp:text-xs">
@@ -86,18 +86,37 @@ export function ArmObjectInput({
               hp:gap-2
             "
           >
+            {/* Show Object Count */}
+            <div
+              className="
+                flex items-center gap-2 px-5 py-2.5 text-sm rounded-md
+                bg-slate-50 border border-slate-200 text-slate-700 font-medium
+
+              hp:px-3
+              hp:py-2
+              hp:text-xs
+              hp:justify-center
+            "
+            >
+              <span className="text-[#0d3b66] font-semibold">
+                {armObjects.length}
+              </span>
+              <span className="text-slate-400">/</span>
+              <span className="text-slate-600">5 Arm Objects</span>
+            </div>
+
             <input
               type="number"
               min={1}
               max={5}
-              placeholder="Object Count"
+              placeholder="Input Object Number"
               value={aoInputValue}
               onChange={(e) => setAoInputValue(e.target.value)}
               onWheel={(e) => e.target.blur()}
               className="
-                w-[180px] px-7 py-2.5 text-center text-sm rounded-lg outline-none
-                transition-all border border-[#3399cc] bg-white
-                focus:ring-1 focus:ring-[#3399cc]
+                w-[180px] px-3.5 py-2.5 text-center text-sm rounded-md outline-none
+                transition-all border border-slate-300 bg-white
+                focus:border-[#3399cc] focus:ring-1 focus:ring-[#3399cc]
 
                 hp:w-[120px]
                 hp:px-1
@@ -110,8 +129,8 @@ export function ArmObjectInput({
               onClick={onAddAo}
               disabled={isAoInputValue}
               className={`
-                flex items-center gap-2 px-7 py-2.5 text-sm font-medium rounded-lg
-                transition-all shadow-md border
+                flex items-center gap-2 px-7 py-2.5 text-sm font-medium rounded-md
+                transition-all border
 
                 hp:px-6
                 hp:py-2
@@ -131,25 +150,6 @@ export function ArmObjectInput({
               )}
               OK
             </button>
-          </div>
-
-          {/* Show Object Count */}
-          <div
-            className="
-              flex items-center gap-2 px-7 py-2.5 text-sm rounded-lg
-              bg-slate-50 border border-slate-200 text-slate-700 font-medium
-
-              hp:px-3
-              hp:py-2
-              hp:text-xs
-              hp:justify-center
-            "
-          >
-            <span className="text-[#0d3b66] font-semibold">
-              {armObjects.length}
-            </span>
-            <span className="text-slate-400">/</span>
-            <span className="text-slate-600">5 Arm Objects</span>
           </div>
         </div>
       </div>

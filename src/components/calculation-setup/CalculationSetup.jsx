@@ -1,23 +1,19 @@
 import { Helmet } from "react-helmet";
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import {
-  useNavigate,
-  useLocation,
-  useParams,
-  Navigate,
-} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { useProjectStorage } from "../pole-analyzer/hooks/useProjectStorage";
 import { HeaderCalculationPage } from "../pole-analyzer/PoleAnalyzerHeader";
-import { ConditionInput } from "../pole-analyzer/ConditionInput";
+import { ConditionInput } from "./ConditionInput";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { ToastModal } from "../pole-analyzer/PoleAnalyzerModal";
 import * as Utils from "../../utils/pole-analyzer";
+
+// CONSTANT: List of allowed project types
+const VALID_TYPES = ["lighting-pole", "acemast", "signboard", "multiple"];
 
 export default function CalculationSetup() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { type: projectType } = useParams();
-
-  const validTypes = ["lighting-pole", "acemast", "signboard", "multiple"];
 
   // STATE: Condition for calculation
   const [condition, setCondition] = useProjectStorage(
@@ -34,9 +30,21 @@ export default function CalculationSetup() {
     },
   );
 
+  // STATE: Validation errors for condition form
   const [conditionErrors, setConditionErrors] = useState({});
-  const [isExpandedPole, setIsExpandedPole] = useState(true); // expand/collapse pole input
-  const [isExpandedCondition, setIsExpandedCondition] = useState(true); // expand/collapse condition input
+
+  // STATE: Toggle expand/collapse for condition section UI
+  const [isExpandedCondition, setIsExpandedCondition] = useState(true);
+
+  // STATE: Toast notifications { message, type
+  const [toast, setToast] = useState(null);
+
+  // EFFECT: Validate project type on mount/change and clean invalid session
+  useEffect(() => {
+    if (!VALID_TYPES.includes(projectType)) {
+      sessionStorage.removeItem("projectType");
+    }
+  }, [projectType]);
 
   // ------------------------ Function for ConditionInput ------------------------
   // FUNCTION: Update condition data
@@ -50,26 +58,38 @@ export default function CalculationSetup() {
     return Utils.isConditionComplete(condition);
   };
 
+  // FUNCTION: Trigger toast notification with specific message and type.
+  const showToast = (message, type = "error") => {
+    setToast({ message, type });
+  };
+
   // FUNCTION: Go to Pole Input after Condition
   const handleConditionNext = () => {
-    if (!handleIsConditionComplete()) {
+    setConditionErrors({});
+
+    const result = Utils.conditionNext(
+      handleIsConditionComplete(),
+      projectType,
+      condition,
+    );
+
+    if (!result.isValid) {
+      showToast("Please complete all initial input fields.");
+
+      if (result.errors?.condition) {
+        setConditionErrors(Utils.getConditionErrors(condition));
+      }
       return;
     }
 
-    // dynamic key berdasarkan project type
-    const configKey = `${projectType}_calculation_config`;
-
-    sessionStorage.setItem(
-      configKey,
-      JSON.stringify({
-        opening: condition.openingEnabled,
-        baseplate: condition.baseplateEnabled,
-        foundation: condition.foundationEnabled,
-      }),
-    );
-
     navigate(`/calculation/${projectType}/pole`);
   };
+
+  // GUARD: Redirect if project type is invalid
+  if (!VALID_TYPES.includes(projectType)) {
+    return <Navigate to="/calculation" replace />;
+  }
+
   return (
     <>
       <div className="flex flex-col min-h-screen">
@@ -84,7 +104,7 @@ export default function CalculationSetup() {
         <div className="min-h-screen bg-gray-50 border border-gray-250">
           <HeaderCalculationPage />
 
-          <div className="mx-6 2040:mx-[300px] pt-1 pb-8 hp:mx-2">
+          <div className="mx-6 2040:mx-[250px] pt-1 pb-8 hp:mx-2">
             {/* ============================================================
               FORM CONDITION (Bagian kondisi perhitungan)
             ============================================================ */}
@@ -131,6 +151,9 @@ export default function CalculationSetup() {
             </div>
           </div>
         </div>
+
+        {/* Toast Modal */}
+        <ToastModal toast={toast} onClose={() => setToast(null)} />
       </div>
     </>
   );

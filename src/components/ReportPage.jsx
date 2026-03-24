@@ -61,7 +61,7 @@ export function ReportPage() {
   // Fungsi print + rename file PDF via dokumen.title (workaround umum)
   const handlePrint = () => {
     const oldTitle = document.title;
-    document.title = cover.calculationNumber; // rename filename
+    document.title = cover?.calculationNumber || "Calculation Report"; // rename filename
     window.print(); // buka dialog print
     document.title = oldTitle; // kembalikan title setelah print
   };
@@ -71,10 +71,29 @@ export function ReportPage() {
     setHasReport(false);
     setShowDeleteConfirm(false);
 
-    // navigate("/calculation", { state: { deleteReport: true } });
-    navigate(`/calculation/${projectType}`, {
-      state: { deleteReport: true },
-    });
+    // Hapus semua sessionStorage
+    const keys = [
+      "cover",
+      "condition",
+      "structuralDesign",
+      "sections",
+      "directObjects",
+      "overheadWires",
+      "results",
+      "resultsDo",
+      "resultsOhw",
+      "showResults",
+    ];
+
+    keys.forEach((key) => sessionStorage.removeItem(`${projectType}_${key}`));
+    sessionStorage.removeItem(`${projectType}_calculation_config`);
+    sessionStorage.removeItem("arms");
+    sessionStorage.removeItem("armObjects");
+    sessionStorage.removeItem("resultsArm");
+    sessionStorage.removeItem("method");
+    sessionStorage.removeItem("poleBasic");
+    sessionStorage.removeItem("projectType");
+    navigate("/calculation");
   };
 
   // Render report component based on selected project type
