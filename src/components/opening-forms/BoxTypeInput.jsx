@@ -1,4 +1,23 @@
-export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
+import { RotateCcw, ChevronRight, Calculator } from "lucide-react";
+
+export function BoxTypeInput({
+  opBoxType,
+  onUpdate,
+  errors,
+  onNext,
+  onCalculate,
+}) {
+  // Reset all Opening Box Type fields
+  const handleReset = () => {
+    onUpdate({
+      boxWidth: "",
+      opWidth: "",
+      boxHeight: "",
+      opSurfaceHeight: "",
+      opLength: "",
+    });
+  };
+
   // Function to helper class input
   const inputClass = (hasError) =>
     `w-full px-4 py-2.5 rounded-lg outline-none transition-all text-sm border
@@ -17,18 +36,17 @@ export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
     ) : null;
 
   return (
-    <div>
-      {/* MAIN CARD */}
-      <div className="bg-white border border-gray-200 p-6 rounded-b-2xl shadow-sm">
+    <div className="bg-white rounded-b-2xl shadow-sm border border-gray-200 hp:rounded-b-xl">
+      <div className="p-6 shadow-sm space-y-6 hp:space-y-4 hp:p-4">
         {/* GRID 2 KOLOM */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6">
           {/* ================= LEFT : INPUT ================= */}
-          <div>
+          <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
             {/* STACK INPUT (VERTICAL) */}
             <div className="flex flex-col gap-5">
               {/* Box Width */}
               <div>
-                <label className="block text-sm text-gray-600 mb-2">
+                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Box Width (a)
                 </label>
                 <div className="relative">
@@ -39,7 +57,7 @@ export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
                     onWheel={(e) => e.target.blur()}
                     className={`${inputClass(errors.boxWidth)} pr-12`}
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
                     mm
                   </span>
                 </div>
@@ -48,7 +66,7 @@ export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
 
               {/* Opening Width */}
               <div>
-                <label className="block text-sm text-gray-600 mb-2">
+                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Opening Width (b)
                 </label>
                 <div className="relative">
@@ -59,7 +77,7 @@ export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
                     onWheel={(e) => e.target.blur()}
                     className={`${inputClass(errors.opWidth)} pr-12`}
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
                     mm
                   </span>
                 </div>
@@ -68,7 +86,7 @@ export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
 
               {/* Box Height */}
               <div>
-                <label className="block text-sm text-gray-600 mb-2">
+                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Box Height (tb)
                 </label>
                 <div className="relative">
@@ -79,7 +97,7 @@ export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
                     onWheel={(e) => e.target.blur()}
                     className={`${inputClass(errors.boxHeight)} pr-12`}
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
                     mm
                   </span>
                 </div>
@@ -88,7 +106,7 @@ export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
 
               {/* Opening Surface Height */}
               <div>
-                <label className="block text-sm text-gray-600 mb-2">
+                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Opening Surface Height (HOp)
                 </label>
                 <div className="relative">
@@ -101,7 +119,7 @@ export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
                     onWheel={(e) => e.target.blur()}
                     className={`${inputClass(errors.opSurfaceHeight)} pr-12`}
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
                     mm
                   </span>
                 </div>
@@ -113,7 +131,7 @@ export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
 
               {/* Opening Length */}
               <div>
-                <label className="block text-sm text-gray-600 mb-2">
+                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Opening Length (LOp)
                 </label>
                 <div className="relative">
@@ -124,7 +142,7 @@ export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
                     onWheel={(e) => e.target.blur()}
                     className={`${inputClass(errors.opLength)} pr-12`}
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
                     mm
                   </span>
                 </div>
@@ -147,11 +165,56 @@ export function BoxTypeInput({ opBoxType, onUpdate, errors }) {
             {/* SIDE VIEW */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex items-center justify-center hover:shadow-sm transition">
               <img
-                src="/images/opBox-side-view.png"
+                src="/images/op-side-view.png"
                 alt="Side View"
                 className="max-h-48 object-contain"
               />
             </div>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="mt-6 border-t border-gray-200"></div>
+
+        {/* FOOTER: LEFT (Reset Button) & RIGHT (Next Input) */}
+        <div className="flex justify-between items-center pt-6 hp:pt-4">
+          {/* LEFT */}
+          <button
+            onClick={handleReset}
+            className="flex items-center gap-2 px-7 py-2.5 bg-[#eef2f6] text-[#0d3b66] text-sm
+            border-2 border-[#d0d7e2] rounded-lg hover:bg-[#e2e8f0] transition-colors font-medium hp:text-xs hp:px-[22px] hp:py-[10px]"
+          >
+            <RotateCcw className="w-5 h-5 hp:w-4 hp:h-4" />
+            Reset
+          </button>
+
+          {/* RIGHT GROUP */}
+          <div className="flex items-center gap-3">
+            {/* Calculate */}
+            <button
+              onClick={onCalculate}
+              className="flex items-center gap-2 px-7 py-2.5
+              border border-[#cbd5e1] text-[#0d3b66]
+              rounded-lg text-sm
+              hover:bg-[#f1f5f9] transition-all font-medium
+              hp:text-xs hp:px-[22px] hp:py-[10px]"
+            >
+              <Calculator className="w-5 h-5 hp:w-4 hp:h-4" />
+              Calculate
+            </button>
+
+            {/* Finish */}
+            <button
+              onClick={onNext}
+              className="flex items-center gap-2 px-7 py-2.5
+              bg-gradient-to-r from-[#0d3b66] to-[#3399cc]
+              text-white rounded-lg text-sm
+              hover:brightness-110 transition-all shadow-sm font-medium
+              hp:text-xs hp:px-[22px] hp:py-[10px]"
+            >
+              Finish
+              <ChevronRight className="w-5 h-5 hp:w-4 hp:h-4" />
+            </button>
           </div>
         </div>
       </div>

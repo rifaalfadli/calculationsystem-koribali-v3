@@ -958,7 +958,7 @@ export function PoleStructuralAnalyzer() {
             <div className="border-b border-gray-200 px-6 pt-6 pb-7 hp:px-4 hp:pt-4">
               <div className="flex items-center justify-between mb-4 hp:mb-2">
                 <div>
-                  <h2 className="text-[#0d3b66] font-semibold flex items-center text-sm gap-2 hp:text-xs hp:font-medium">
+                  <h2 className="text-[#0d3b66] font-medium flex items-center text-sm gap-2 hp:text-xs hp:font-medium">
                     <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
                     Structural Design
                   </h2>
@@ -975,7 +975,7 @@ export function PoleStructuralAnalyzer() {
             {projectType === "lighting-pole" &&
               condition.method === "standard" && (
                 <>
-                  <div className="border-t border-gray-200 mx-6 pt-6 hp:mx-4 hp:pt-4"></div>
+                  <div className="pt-6 hp:pt-4"></div>
                   <PoleBasicForm
                     poleBasic={poleBasic}
                     onUpdate={handleUpdatePoleBasic}

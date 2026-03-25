@@ -635,9 +635,44 @@ export const resetCurrentAo = (idAo, armObjects, updateActiveArmObjects) => {
 };
 
 // ====================================================
-// Function for OP Box Type Input
+// Function for Opening Part Input
 // ====================================================
+// FUNCTION: Update opening part type data
+export const updateOpType = (opType, updates, setOpType) => {
+  setOpType({ ...opType, ...updates });
+};
+
 // FUNCTION: Update opening part box type data
 export const updateOpBoxType = (opBoxType, updates, setOpBoxType) => {
   setOpBoxType({ ...opBoxType, ...updates });
+};
+
+// FUNCTION: Update opening part r type data
+export const updateOpRType = (opRType, updates, setOpRType) => {
+  setOpRType({ ...opRType, ...updates });
+};
+
+// ====================================================
+// Function for Baseplate Input
+// ====================================================
+// FUNCTION: Update baseplate type data
+export const updateBpType = (bpType, updates, setBpType) => {
+  setBpType({ ...bpType, ...updates });
+};
+
+// FUNCTION: Update baseplate 4 rib type data
+export const updateFourRibType = (fourRibType, updates, setFourRibType) => {
+  setFourRibType({ ...fourRibType, ...updates });
+};
+
+// ====================================================
+// Function for Foundation Input
+// ====================================================
+// FUNCTION: Update foundation type data
+export const updateFoundationType = (
+  foundationType,
+  updates,
+  setFoundationType,
+) => {
+  setFoundationType({ ...foundationType, ...updates });
 };

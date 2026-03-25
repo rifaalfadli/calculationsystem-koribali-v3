@@ -80,10 +80,7 @@ export function PoleBasicForm({ poleBasic, onUpdate, handleStepNext }) {
                   type="button"
                   onClick={() =>
                     onUpdate({
-                      poleShape: active ? "" : item.id,
-                      poleType: "",
-                      groundPosition: "",
-                      height: "",
+                      poleShape: item.id,
                     })
                   }
                   className={`rounded-lg border px-4 py-3 text-sm font-medium transition-all
@@ -123,12 +120,10 @@ export function PoleBasicForm({ poleBasic, onUpdate, handleStepNext }) {
                       key={type.id}
                       type="button"
                       onClick={() => {
-                        const newType = active ? "" : type.id;
-
                         onUpdate({
-                          poleType: newType,
-                          groundPosition: "", // reset
-                          height: "", // reset
+                          poleType: type.id,
+                          groundPosition: "",
+                          height: "",
                         });
                       }}
                       className={`rounded-lg border px-4 py-3 text-sm font-medium transition-all
@@ -175,11 +170,9 @@ export function PoleBasicForm({ poleBasic, onUpdate, handleStepNext }) {
                         <div
                           key={item.id}
                           onClick={() => {
-                            const newGround = active ? "" : item.id;
-
                             onUpdate({
-                              groundPosition: newGround,
-                              height: "", // reset height setiap ground berubah
+                              groundPosition: item.id,
+                              height: "",
                             });
                           }}
                           className={`cursor-pointer rounded-lg border px-4 py-3 transition-all flex items-center gap-3
