@@ -1,16 +1,43 @@
 import { Helmet } from "react-helmet";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useProjectStorage } from "../../components/pole-analyzer/hooks/useProjectStorage";
 import { BoxTypeInput } from "../../components/opening-forms/BoxTypeInput";
 import { ChevronDown, ChevronUp, Box } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { HeaderCalculationPage } from "../../components/pole-analyzer/PoleAnalyzerHeader";
-import * as Utils from "../../utils/pole-analyzer";
 import { OpeningTypeInput } from "../../components/opening-forms/OpeningTypeInput";
 import { RTypeInput } from "../../components/opening-forms/RTypeInput";
+import * as Utils from "../../utils/pole-analyzer";
+import * as Modal from "../../components/pole-analyzer/PoleAnalyzerModal";
 
 export default function OpeningPage() {
   const { type: projectType } = useParams();
+  const navigate = useNavigate();
+
+  // STATE: Retrieve persisted calculation results from previous steps (Pole Page)
+  const condition = JSON.parse(
+    sessionStorage.getItem(`${projectType}_condition`) || "{}",
+  );
+  const [results] = useProjectStorage(projectType, "results", []);
+  const [resultsDo] = useProjectStorage(projectType, "resultsDo", []);
+  const [resultsOhw] = useProjectStorage(projectType, "resultsOhw", []);
+  const [resultsArm] = useProjectStorage(projectType, "resultsArm", []);
+  const [structuralDesign] = useProjectStorage(
+    projectType,
+    "structuralDesign",
+    {},
+  );
+
+  // STATE: Cover information
+  const [cover, setCover] = useProjectStorage(projectType, "cover", {
+    managementMark: "",
+    calculationNumber: "",
+    projectName: "",
+    contentr2: "",
+    contentr3: "",
+    date: "",
+  });
+  const [coverErrors, setCoverErrors] = useState({});
 
   // STATE: opType for calculation
   const [opType, setOpType] = useProjectStorage(projectType, "opType", {
@@ -51,8 +78,30 @@ export default function OpeningPage() {
 
   // STATE: Toggle expand/collapse for SelectOpType section UI
   const [isExpandedSelectOpType, setIsExpandedSelectOpType] = useState(true);
+  const [isCalculated, setIsCalculated] = useState(false);
+  const [toast, setToast] = useState(null); // toast notifications { message, type }
+  const [showCoverPopup, setShowCoverPopup] = useState(false); // show cover popup
+  const showToast = (message, type = "error") => {
+    setToast({ message, type });
+  };
+
+  // useEffect(() => {
+  //   if (opType.type === "box" && Utils.opBoxTypeComplete(opBoxType)) {
+  //     setIsCalculated(true);
+  //   }
+
+  //   if (opType.type === "r" && Utils.opRTypeComplete(opRType)) {
+  //     setIsCalculated(true);
+  //   }
+  // }, [opType, opBoxType, opRType]);
 
   // ------------------------ Function for OP Input ------------------------
+  // FUNCTION: Step navigation helper (dynamic flow control)
+  const { buttonLabel, nextStep, isLast } = Utils.getStepNavigation(
+    condition,
+    "opening",
+  );
+
   // FUNCTION: Update OpType data
   const handleOpTypeUpdate = (updates) => {
     Utils.updateOpType(opType, updates, setOpType);
@@ -61,11 +110,129 @@ export default function OpeningPage() {
   // FUNCTION: Update OpBoxType data
   const handleOpBoxTypeUpdate = (updates) => {
     Utils.updateOpBoxType(opBoxType, updates, setOpBoxType);
+    Utils.clearError(updates, setOpBoxTypeErrors);
   };
 
   // FUNCTION: Update OpRType data
   const handleOpRTypeUpdate = (updates) => {
     Utils.updateOpRType(opRType, updates, setOpRType);
+    Utils.clearError(updates, setOpRTypeErrors);
+  };
+
+  // FUNCTION: Check if OpBoxType form is complete
+  const handleOpBoxTypeComplete = () => {
+    return Utils.opBoxTypeComplete(opBoxType);
+  };
+
+  // FUNCTION: Check if OpRType form is complete
+  const handleOpRTypeComplete = () => {
+    return Utils.opRTypeComplete(opRType);
+  };
+
+  // HANDLE: Execute calculation and enable next step
+  const handleCalculate = () => {
+    // RESET ERROR
+    setOpTypeErrors({});
+    setOpBoxTypeErrors({});
+    setOpRTypeErrors({});
+
+    // VALIDASI TYPE DULU
+    if (!opType.type) {
+      showToast("Please select opening type first.");
+      setOpTypeErrors({ type: true });
+      return;
+    }
+
+    // VALIDASI BERDASARKAN TYPE
+    if (opType.type === "box") {
+      if (!handleOpBoxTypeComplete()) {
+        showToast("Please complete all Box Type fields.");
+        setOpBoxTypeErrors(Utils.getOpBoxTypeErrors(opBoxType));
+        return;
+      }
+    }
+
+    if (opType.type === "r") {
+      if (!handleOpRTypeComplete()) {
+        showToast("Please complete all R Type fields.");
+        setOpRTypeErrors(Utils.getOpRTypeErrors(opRType));
+        return;
+      }
+    }
+
+    // LOLOS VALIDASI
+    setIsCalculated(true);
+  };
+
+  // HANDLE: Proceed to next step or trigger report if last step
+  const handleFinish = () => {
+    if (!isCalculated) return;
+
+    if (isLast) {
+      handleOpenCoverPopup(); // atau generateReport()
+    } else {
+      navigate(`/calculation/${projectType}/${nextStep}`);
+    }
+  };
+
+  // ------------------------ Function for CoverInput ------------------------
+  // FUNCTION: Update cover data
+  const handleCoverUpdate = (updates) => {
+    Utils.updateCover(cover, updates, setCover);
+    Utils.clearError(updates, setCoverErrors);
+  };
+
+  // FUNCTION: Check if cover information form is complete
+  const handleIsCoverComplete = () => {
+    return Utils.isCoverComplete(cover);
+  };
+
+  // FUNCTION: Open Cover Input
+  const handleOpenCoverPopup = () => {
+    setShowCoverPopup(true);
+  };
+
+  // FUNCTION: Close Cover Input
+  const handleCloseCoverPopup = () => {
+    setShowCoverPopup(false);
+  };
+
+  // HANDLE: Execute make report
+  const handleMakeReport = () => {
+    // RESET ERROR
+    setCoverErrors({});
+
+    // VALIDASI RESULTS
+    if (!results || results.length === 0) {
+      showToast("No calculation results available.");
+      return;
+    }
+
+    // VALIDASI COVER
+    if (!handleIsCoverComplete()) {
+      showToast("Please complete the Cover Information first.");
+      setCoverErrors(Utils.getCoverErrors(cover));
+      return;
+    }
+
+    // VALIDASI OPENING
+    if (!isCalculated) {
+      showToast("Please calculate opening first.");
+      return;
+    }
+
+    // SUCCESS => NAVIGATE
+    navigate("/report", {
+      state: {
+        results,
+        resultsDo,
+        resultsOhw,
+        resultsArm,
+        cover,
+        condition,
+        structuralDesign,
+      },
+    });
   };
 
   const typeLabelMap = {
@@ -194,6 +361,10 @@ export default function OpeningPage() {
                   opBoxType={opBoxType}
                   onUpdate={handleOpBoxTypeUpdate}
                   errors={opBoxTypeErrors}
+                  onCalculate={handleCalculate}
+                  onNext={handleFinish}
+                  isCalculated={isCalculated}
+                  buttonLabel={buttonLabel}
                 />
               )}
 
@@ -202,12 +373,28 @@ export default function OpeningPage() {
                   opRType={opRType}
                   onUpdate={handleOpRTypeUpdate}
                   errors={opRTypeErrors}
+                  onCalculate={handleCalculate}
+                  onNext={handleFinish}
+                  isCalculated={isCalculated}
+                  buttonLabel={buttonLabel}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
+      {/* Cover Input Modal */}
+      <Modal.CoverInputModal
+        open={showCoverPopup}
+        onClose={handleCloseCoverPopup}
+        cover={cover}
+        onUpdateCover={handleCoverUpdate}
+        onMakeReport={handleMakeReport}
+        coverErrors={coverErrors}
+      />
+
+      {/* Toast Modal */}
+      <Modal.ToastModal toast={toast} onClose={() => setToast(null)} />
     </>
   );
 }

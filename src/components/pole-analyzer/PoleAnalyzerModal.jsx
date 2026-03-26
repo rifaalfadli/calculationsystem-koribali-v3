@@ -2,6 +2,51 @@ import { AlertCircle, X } from "lucide-react";
 import { CoverInput } from "./CoverInput";
 
 // ====================================================
+// INITIAL CONFIRM MODAL
+// ====================================================
+export const ConfirmToggleModal = ({ open, onClose, onConfirm, field }) => {
+  if (!open) return null;
+
+  const labelMap = {
+    openingEnabled: "Opening",
+    baseplateEnabled: "Baseplate",
+    foundationEnabled: "Foundation",
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
+      <div className="w-full max-w-md bg-white border rounded-2xl shadow-xl p-6">
+        <div className="text-center mb-4">
+          <h2 className="font-bold text-gray-900 text-base">
+            Disable {labelMap[field]}?
+          </h2>
+          <p className="text-gray-600 text-sm mt-2">
+            All input data will be permanently deleted. This action cannot be
+            undone.
+          </p>
+        </div>
+
+        <div className="flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 py-2 bg-gray-100 rounded-lg"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={onConfirm}
+            className="flex-1 py-2 bg-red-500 text-white rounded-lg"
+          >
+            Yes, Disable
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ====================================================
 // COVER INPUT MODAL
 // ====================================================
 export const CoverInputModal = ({

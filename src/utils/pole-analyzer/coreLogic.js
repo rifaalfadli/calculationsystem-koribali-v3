@@ -149,6 +149,7 @@ export const handleCalculateResults = (
 
   return { isValid, errors };
 };
+
 // ===============================================================================
 // FUNCTION: Validate all inputs before generating the final report
 // ===============================================================================

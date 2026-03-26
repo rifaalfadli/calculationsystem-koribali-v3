@@ -57,6 +57,13 @@ export function HeaderCalculationPage() {
       "resultsDo",
       "resultsOhw",
       "showResults",
+      "opType",
+      "opBoxType",
+      "opRType",
+      "bpType",
+      "fourRibType",
+      "eightRibType",
+      "foundationType",
     ];
 
     keys.forEach((key) => sessionStorage.removeItem(`${type}_${key}`));

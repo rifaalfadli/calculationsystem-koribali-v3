@@ -560,3 +560,117 @@ export const clearAoError = (idAo, updates, setAoErrors) => {
     return next;
   });
 };
+
+// ====================================================
+// Function for Opening Input
+// ====================================================
+// FUNCTION: Check if OP box type information form is complete
+export const opBoxTypeComplete = (opBoxType) => {
+  return [
+    opBoxType.boxWidth,
+    opBoxType.opWidth,
+    opBoxType.boxHeight,
+    opBoxType.opSurfaceHeight,
+    opBoxType.opLength,
+  ].every((v) => !isEmpty(v));
+};
+
+// FUNCTION: Create an error checker helper for the OP box type
+export const getOpBoxTypeErrors = (opBoxType) => ({
+  boxWidth: isEmpty(opBoxType.boxWidth),
+  opWidth: isEmpty(opBoxType.opWidth),
+  boxHeight: isEmpty(opBoxType.boxHeight),
+  opSurfaceHeight: isEmpty(opBoxType.opSurfaceHeight),
+  opLength: isEmpty(opBoxType.opLength),
+});
+
+// FUNCTION: Check if OP r type information form is complete
+export const opRTypeComplete = (opRType) => {
+  return [opRType.opWidth, opRType.opSurfaceHeight, opRType.opLength].every(
+    (v) => !isEmpty(v),
+  );
+};
+
+// FUNCTION: Create an error checker helper for the OP r type
+export const getOpRTypeErrors = (opRType) => ({
+  opWidth: isEmpty(opRType.opWidth),
+  opSurfaceHeight: isEmpty(opRType.opSurfaceHeight),
+  opLength: isEmpty(opRType.opLength),
+});
+
+// ====================================================
+// Function for Baseplate Input
+// ====================================================
+// FUNCTION: Check if 4 Rib type information form is complete
+export const fourRibTypeComplete = (fourRibType) => {
+  return [
+    fourRibType.bl1,
+    fourRibType.bl2,
+    fourRibType.ap1,
+    fourRibType.ap2,
+    fourRibType.dab,
+    fourRibType.nab,
+    fourRibType.nabTensionSide,
+    fourRibType.tb,
+    fourRibType.hr,
+    fourRibType.lr,
+    fourRibType.tr,
+    fourRibType.lrs,
+    fourRibType.lk,
+  ].every((v) => !isEmpty(v));
+};
+
+// FUNCTION: Create an error checker helper for the 4 rib type
+export const getFourRibTypeErrors = (fourRibType) => ({
+  bl1: isEmpty(fourRibType.bl1),
+  bl2: isEmpty(fourRibType.bl2),
+  ap1: isEmpty(fourRibType.ap1),
+  ap2: isEmpty(fourRibType.ap2),
+  dab: isEmpty(fourRibType.dab),
+  nab: isEmpty(fourRibType.nab),
+  nabTensionSide: isEmpty(fourRibType.nabTensionSide),
+  tb: isEmpty(fourRibType.tb),
+  hr: isEmpty(fourRibType.hr),
+  lr: isEmpty(fourRibType.lr),
+  tr: isEmpty(fourRibType.tr),
+  lrs: isEmpty(fourRibType.lrs),
+  lk: isEmpty(fourRibType.lk),
+});
+
+// FUNCTION: Check if 8 Rib type information form is complete
+export const eightRibTypeComplete = (eightRibType) => {
+  return [
+    eightRibType.bl1,
+    eightRibType.bl2,
+    eightRibType.ap1,
+    eightRibType.ap2,
+    eightRibType.dab,
+    eightRibType.nab,
+    eightRibType.nabTensionSide,
+    eightRibType.ribAngle,
+    eightRibType.tb,
+    eightRibType.hr,
+    eightRibType.lr,
+    eightRibType.tr,
+    eightRibType.lrs,
+    eightRibType.lk,
+  ].every((v) => !isEmpty(v));
+};
+
+// FUNCTION: Create an error checker helper for the 8 rib type
+export const getEightRibTypeErrors = (eightRibType) => ({
+  bl1: isEmpty(eightRibType.bl1),
+  bl2: isEmpty(eightRibType.bl2),
+  ap1: isEmpty(eightRibType.ap1),
+  ap2: isEmpty(eightRibType.ap2),
+  dab: isEmpty(eightRibType.dab),
+  nab: isEmpty(eightRibType.nab),
+  nabTensionSide: isEmpty(eightRibType.nabTensionSide),
+  ribAngle: isEmpty(eightRibType.ribAngle),
+  tb: isEmpty(eightRibType.tb),
+  hr: isEmpty(eightRibType.hr),
+  lr: isEmpty(eightRibType.lr),
+  tr: isEmpty(eightRibType.tr),
+  lrs: isEmpty(eightRibType.lrs),
+  lk: isEmpty(eightRibType.lk),
+});

@@ -180,8 +180,12 @@ export function PoleStructuralAnalyzer() {
   const [confirmDelete, setConfirmDelete] = useState(null); // section deletion confirmation
   const [activeTab, setActiveTab] = useState("1"); // currently active section
   const activeSection = sections.find((s) => s.id === activeTab);
-  const isLastSection = sections[sections.length - 1]?.id === activeTab;
+  const isFirstSection = sections.findIndex((s) => s.id === activeTab) === 0;
+  const isLastSection =
+    sections.findIndex((s) => s.id === activeTab) === sections.length - 1;
   const isOnlySection = sections.length === 1;
+  const isNextDisabledPole = isOnlySection || isLastSection;
+  const isBackDisabledPole = isOnlySection || isFirstSection;
 
   // --- Direct Object (DO) Controls ---
   const [confirmReduceDo, setConfirmReduceDo] = useState(null);
@@ -200,8 +204,12 @@ export function PoleStructuralAnalyzer() {
   const [activeTabArm, setActiveTabArm] = useState("1"); // currently active section
   const activeArm = arms.find((s) => s.idArm === activeTabArm);
   const armObjects = activeArm?.armObjects || [];
-  const isLastArm = arms[arms.length - 1]?.idArm === activeTabArm;
+  const currentIndex = arms.findIndex((s) => s.idArm === activeTabArm);
+  const isFirstArm = currentIndex === 0;
+  const isLastArm = currentIndex === arms.length - 1;
   const isOnlyArm = arms.length === 1;
+  const isNextDisabledArm = isOnlyArm || isLastArm;
+  const isBackDisabledArm = isOnlyArm || isFirstArm;
   const [armClipboard, setArmClipboard] = useState(null);
 
   // --- Arm Object (AO) Controls ---
@@ -213,6 +221,7 @@ export function PoleStructuralAnalyzer() {
   // --- Global UI & Navigation ---
   const [toast, setToast] = useState(null); // toast notifications { message, type }
   const [showCoverPopup, setShowCoverPopup] = useState(false); // show cover popup
+  const [isCalculated, setIsCalculated] = useState(false);
 
   // --- Accordion States (Toggles) ---
   const [isExpandedPole, setIsExpandedPole] = useState(true); // expand/collapse pole input
@@ -648,6 +657,7 @@ export function PoleStructuralAnalyzer() {
   };
 
   // ------------------------ Function for All Form ------------------------
+  // FUNCTION: Resolve standard data pole
   const resolveStandardData = () => {
     if (condition.method !== "standard") {
       return {
@@ -680,6 +690,12 @@ export function PoleStructuralAnalyzer() {
       overheadWires: selectedPole.overheadWires || [],
     };
   };
+
+  // FUNCTION: Step navigation helper (dynamic flow control)
+  const { buttonLabel, nextStep, isLast } = Utils.getStepNavigation(
+    condition,
+    "pole",
+  );
 
   // FUNCTION: Perform calculation for all form
   const calculateResults = () => {
@@ -779,6 +795,23 @@ export function PoleStructuralAnalyzer() {
     // =========================
     const target = document.getElementById("results-section");
     target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  // FUNCTION: Execute calculation and update calculation state
+  const handleCalculate = () => {
+    calculateResults();
+    setIsCalculated(true);
+  };
+
+  // FUNCTION: Complete current step and navigate or generate report
+  const handleFinish = () => {
+    if (!isCalculated) return;
+
+    if (isLast) {
+      handleOpenCoverPopup();
+    } else {
+      navigate(`/calculation/${projectType}/${nextStep}`);
+    }
   };
 
   // FUNCTION: Full validation before navigating to the report page
@@ -1134,57 +1167,64 @@ export function PoleStructuralAnalyzer() {
                       <button
                         onClick={resetCurrentSection}
                         className="flex items-center text-sm gap-2 px-7 py-2.5 bg-[#eef2f6] text-[#0d3b66]
-                        border-2 border-[#d0d7e2] rounded-lg hover:bg-[#e2e8f0] transition-colors font-medium hp:text-xs hp:px-[22px] hp:py-[8px]"
+                        border-2 border-[#d0d7e2] rounded-lg hover:bg-[#e2e8f0] transition-colors font-medium
+                        hp:text-xs hp:px-[22px] hp:py-[8px]"
                       >
                         <RotateCcw className="w-5 h-5 hp:w-4 hp:h-4" />
                         Reset
                       </button>
 
-                      {/* RIGHT: CALCULATE / NEXT SECTION */}
+                      {/* RIGHT GROUP */}
                       <div className="flex items-center gap-3 hp:gap-2">
                         {/* BACK BUTTON */}
-                        {sections.findIndex((s) => s.id === activeTab) > 0 && (
-                          <button
-                            onClick={() => {
-                              const currentIndex = sections.findIndex(
-                                (s) => s.id === activeTab,
-                              );
-                              setActiveTab(sections[currentIndex - 1].id);
-                            }}
-                            className="flex items-center text-sm gap-2 px-7 py-2.5 bg-[#eef2f6] text-[#0d3b66]
-                            border-2 border-[#d0d7e2] rounded-lg hover:bg-[#e2e8f0] transition-colors font-medium hp:text-xs hp:px-[10px] hp:py-[8px] hp:border-none"
-                          >
-                            <ChevronLeft className="w-5 h-5 hp:w-4 hp:h-4" />
-                            <span className="hp:hidden">Back</span>
-                          </button>
-                        )}
+                        <button
+                          onClick={
+                            !isBackDisabledPole
+                              ? () => {
+                                  const currentIndex = sections.findIndex(
+                                    (s) => s.id === activeTab,
+                                  );
+                                  setActiveTab(sections[currentIndex - 1].id);
+                                }
+                              : undefined
+                          }
+                          disabled={isBackDisabledPole}
+                          className={`
+                            flex items-center text-sm gap-2 px-7 py-2.5 rounded-lg font-medium
+                          border-2 transition-colors hp:text-xs hp:px-[22px] hp:py-[8px]
 
-                        {/* CALCULATE / NEXT BUTTON */}
-                        <div className="relative">
-                          {/* CONDITIONAL BUTTON */}
-                          {isOnlySection || isLastSection ? (
-                            <button
-                              onClick={handleStepNext}
-                              className="flex items-center text-sm gap-2 px-7 py-2.5 bg-gradient-to-r
-                              from-[#0d3b66] to-[#3399cc] text-white rounded-lg hover:brightness-110
-                              transition-all font-medium shadow-md hp:text-xs hp:px-[22px] hp:py-[8px]"
-                            >
-                              Next Input
-                              <ChevronDown className="w-5 h-5 hp:w-4 hp:h-4" />
-                            </button>
-                          ) : (
-                            <button
-                              onClick={handleNextSection}
-                              className="flex items-center text-sm gap-2 px-7 py-2.5
-                              bg-gradient-to-r from-[#0d3b66] to-[#3399cc]
-                              text-white rounded-lg  
-                              hover:brightness-110 transition-all shadow-md font-medium hp:text-xs hp:px-[22px] hp:py-[8px]"
-                            >
-                              Next Step
-                              <ChevronRight className="w-5 h-5 hp:w-4 hp:h-4" />
-                            </button>
-                          )}
-                        </div>
+                            ${
+                              isBackDisabledPole
+                                ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                                : "bg-[#eef2f6] text-[#0d3b66] border-[#d0d7e2] hover:bg-[#e2e8f0]"
+                            }
+                          `}
+                        >
+                          <ChevronLeft className="w-5 h-5 hp:w-4 hp:h-4" />
+                          <span className="hp:hidden">Back</span>
+                        </button>
+
+                        {/* NEXT STEP (ALWAYS EXIST) */}
+                        <button
+                          onClick={
+                            !isNextDisabledPole ? handleNextSection : undefined
+                          }
+                          disabled={isNextDisabledPole}
+                          className={`
+                            flex items-center text-sm gap-2 px-7 py-2.5 border-2
+                            rounded-lg font-medium shadow-md transition-all
+                            hp:text-xs hp:px-[22px] hp:py-[8px]
+
+                            ${
+                              isNextDisabledPole
+                                ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed shadow-none"
+                                : "bg-gradient-to-r from-[#0d3b66] to-[#3399cc] text-white hover:brightness-110"
+                            }
+                          `}
+                        >
+                          Next Step
+                          <ChevronRight className="w-5 h-5 hp:w-4 hp:h-4" />
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -1547,22 +1587,17 @@ export function PoleStructuralAnalyzer() {
                       {/* LEFT: BACK */}
                       <button
                         onClick={() => {
-                          const currentIndex = arms.findIndex(
-                            (s) => s.idArm === activeTabArm,
-                          );
-                          if (currentIndex > 0) {
+                          if (!isBackDisabledArm) {
                             setActiveTabArm(arms[currentIndex - 1].idArm);
                           }
                         }}
-                        disabled={
-                          arms.findIndex((s) => s.idArm === activeTabArm) === 0
-                        }
+                        disabled={isBackDisabledArm}
                         className={`
                           flex items-center text-sm gap-2 px-7 py-2.5 rounded-lg font-medium
                           border-2 transition-colors hp:text-xs hp:px-[22px] hp:py-[8px]
+
                           ${
-                            arms.findIndex((s) => s.idArm === activeTabArm) ===
-                            0
+                            isBackDisabledArm
                               ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
                               : "bg-[#eef2f6] text-[#0d3b66] border-[#d0d7e2] hover:bg-[#e2e8f0]"
                           }
@@ -1572,35 +1607,28 @@ export function PoleStructuralAnalyzer() {
                         <span className="hp:hidden">Back</span>
                       </button>
 
-                      {/* RIGHT: CALCULATE / NEXT ARM */}
-                      <div className="flex items-center">
-                        {/* CALCULATE / NEXT BUTTON */}
-                        <div className="relative">
-                          {/* CONDITIONAL BUTTON */}
-                          {isOnlyArm || isLastArm ? (
-                            <button
-                              onClick={handleArmNext}
-                              className="flex items-center text-sm gap-2 px-7 py-2.5 bg-gradient-to-r
-                              from-[#0d3b66] to-[#3399cc] text-white rounded-lg hover:brightness-110
-                              transition-all font-medium shadow-md hp:text-xs hp:px-[22px] hp:py-[8px]"
-                            >
-                              Next Input
-                              <ChevronDown className="w-5 h-5 hp:w-4 hp:h-4" />
-                            </button>
-                          ) : (
-                            <button
-                              onClick={handleNextArm}
-                              className="flex items-center text-sm gap-2 px-7 py-2.5
-                              bg-gradient-to-r from-[#0d3b66] to-[#3399cc]
-                              text-white rounded-lg  
-                              hover:brightness-110 transition-all shadow-md font-medium hp:text-xs hp:px-[22px] hp:py-[8px]"
-                            >
-                              Next Arm
-                              <ChevronRight className="w-5 h-5 hp:w-4 hp:h-4" />
-                            </button>
-                          )}
-                        </div>
-                      </div>
+                      {/* RIGHT: NEXT ARM */}
+                      <button
+                        onClick={() => {
+                          if (!isNextDisabledArm) {
+                            setActiveTabArm(arms[currentIndex + 1].idArm);
+                          }
+                        }}
+                        disabled={isNextDisabledArm}
+                        className={`
+                          flex items-center text-sm gap-2 px-7 py-2.5 border-2
+                            rounded-lg font-medium shadow-md transition-all
+                            hp:text-xs hp:px-[22px] hp:py-[8px]
+                          ${
+                            isNextDisabledArm
+                              ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed shadow-none"
+                              : "bg-gradient-to-r from-[#0d3b66] to-[#3399cc] text-white hover:brightness-110"
+                          }
+                        `}
+                      >
+                        Next Arm
+                        <ChevronRight className="w-5 h-5 hp:w-4 hp:h-4" />
+                      </button>
                     </div>
                   </div>
                 )}
@@ -1609,29 +1637,40 @@ export function PoleStructuralAnalyzer() {
           </>
         )}
 
-        <div className="flex justify-center items-center p-5 mt-12 mb-20 bg-gradient-to-b from-white to-slate-50 rounded-2xl border border-gray-200 shadow-sm relative hp:p-4 hp:rounded-xl">
+        <div className="flex items-center justify-between p-5 mt-12 mb-20 bg-gradient-to-b from-white to-slate-50 rounded-2xl border border-gray-200 shadow-sm">
+          {/* Kiri kosong biar center tetap center */}
+          <div className="w-[120px]" />
+
+          {/* Calculate (CENTER - PRIMARY ACTION) */}
           <button
-            onClick={calculateResults}
-            className="
-              group
-              flex items-center gap-3
-              px-9 py-3
-              bg-gradient-to-r from-[#0d3b66] to-[#3399cc]
-              text-white
-              rounded-xl
-              text-sm
-              font-semibold
-              shadow-md
-              transition-all duration-300
-              hover:shadow-2xl
-              hover:scale-[1.06]
-              active:scale-[0.97]
-              focus:outline-none focus:ring-2 focus:ring-[#3399cc]/40
-              hp:text-xs hp:px-[22px] hp:rounded-lg
-            "
+            onClick={handleCalculate}
+            className="flex items-center gap-2 px-7 py-2.5
+            bg-gradient-to-r from-[#0d3b66] to-[#3399cc]
+            text-white rounded-lg text-sm
+            hover:brightness-110 transition-all shadow-sm font-medium
+            hp:text-xs hp:px-[22px] hp:py-[10px]"
           >
             <Calculator className="w-5 h-5 hp:w-4 hp:h-4" />
             Calculate Results
+          </button>
+
+          {/* Finish (KANAN - NEXT STEP) */}
+          <button
+            onClick={handleFinish}
+            disabled={!isCalculated}
+            className={`
+              flex items-center gap-2 px-7 py-2.5 rounded-lg text-sm font-medium
+              transition-all hp:text-xs hp:px-[22px] hp:py-[10px]
+
+              ${
+                !isCalculated
+                  ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed shadow-none"
+                  : "bg-gradient-to-r from-[#0d3b66] to-[#3399cc] text-white hover:brightness-110 shadow-sm"
+              }
+            `}
+          >
+            {buttonLabel}
+            <ChevronRight className="w-5 h-5 hp:w-4 hp:h-4" />
           </button>
         </div>
 
@@ -1643,7 +1682,6 @@ export function PoleStructuralAnalyzer() {
               resultsDo={resultsDo}
               resultsOhw={resultsOhw}
               resultsArm={resultsArm}
-              onCoverInput={handleOpenCoverPopup}
             />
           )}
         </div>

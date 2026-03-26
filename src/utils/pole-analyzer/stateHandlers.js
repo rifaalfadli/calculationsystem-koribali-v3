@@ -665,6 +665,11 @@ export const updateFourRibType = (fourRibType, updates, setFourRibType) => {
   setFourRibType({ ...fourRibType, ...updates });
 };
 
+// FUNCTION: Update baseplate 8 rib type data
+export const updateEightRibType = (eightRibType, updates, setEightRibType) => {
+  setEightRibType({ ...eightRibType, ...updates });
+};
+
 // ====================================================
 // Function for Foundation Input
 // ====================================================

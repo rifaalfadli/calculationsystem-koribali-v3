@@ -262,17 +262,6 @@ export function PoleBasicForm({ poleBasic, onUpdate, handleStepNext }) {
           <RotateCcw className="w-5 h-5 hp:w-4 hp:h-4" />
           Reset
         </button>
-
-        <button
-          type="button"
-          onClick={handleStepNext}
-          className="flex items-center text-sm gap-2 px-7 py-2.5 bg-gradient-to-r
-          from-[#0d3b66] to-[#3399cc] text-white rounded-lg hover:brightness-110
-          transition-all font-medium shadow-md hp:text-xs hp:px-[22px] hp:py-[8px]"
-        >
-          <ChevronDown className="w-5 h-5 hp:w-4 hp:h-4" />
-          Next Input
-        </button>
       </div>
     </div>
   );

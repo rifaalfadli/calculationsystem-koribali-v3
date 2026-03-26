@@ -4,6 +4,7 @@ import {
   FileText,
   Settings,
   Circle,
+  DoorOpen,
   CheckCircle,
   CircleDashed,
   Square,
@@ -260,7 +261,7 @@ export function ConditionInput({
                     <div
                       className={`p-2 rounded-lg ${condition.openingEnabled ? "bg-blue-100 text-blue-600" : "bg-slate-200 text-slate-500"}`}
                     >
-                      <CircleDashed size={16} />
+                      <DoorOpen size={16} />
                     </div>
 
                     <div>

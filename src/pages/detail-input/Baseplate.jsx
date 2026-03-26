@@ -2,14 +2,42 @@ import { Helmet } from "react-helmet";
 import React, { useState } from "react";
 import { useProjectStorage } from "../../components/pole-analyzer/hooks/useProjectStorage";
 import { ChevronDown, ChevronUp, Box } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { BaseplateTypeInput } from "../../components/baseplate-forms/BaseplateTypeInput";
 import { HeaderCalculationPage } from "../../components/pole-analyzer/PoleAnalyzerHeader";
 import { FourRibTypeInput } from "../../components/baseplate-forms/4RibTypeInput";
+import { EightRibTypeInput } from "../../components/baseplate-forms/8RibTypeInput";
 import * as Utils from "../../utils/pole-analyzer";
+import * as Modal from "../../components/pole-analyzer/PoleAnalyzerModal";
 
 export default function BaseplatePage() {
   const { type: projectType } = useParams();
+  const navigate = useNavigate();
+
+  // STATE: Retrieve persisted calculation results from previous steps (Pole Page)
+  const condition = JSON.parse(
+    sessionStorage.getItem(`${projectType}_condition`) || "{}",
+  );
+  const [results] = useProjectStorage(projectType, "results", []);
+  const [resultsDo] = useProjectStorage(projectType, "resultsDo", []);
+  const [resultsOhw] = useProjectStorage(projectType, "resultsOhw", []);
+  const [resultsArm] = useProjectStorage(projectType, "resultsArm", []);
+  const [structuralDesign] = useProjectStorage(
+    projectType,
+    "structuralDesign",
+    {},
+  );
+
+  // STATE: Cover information
+  const [cover, setCover] = useProjectStorage(projectType, "cover", {
+    managementMark: "",
+    calculationNumber: "",
+    projectName: "",
+    contentr2: "",
+    contentr3: "",
+    date: "",
+  });
+  const [coverErrors, setCoverErrors] = useState({});
 
   // STATE: bpType for calculation
   const [bpType, setBpType] = useProjectStorage(projectType, "bpType", {
@@ -37,19 +65,56 @@ export default function BaseplatePage() {
     },
   );
 
+  // STATE: EightRibType for calculation
+  const [eightRibType, setEightRibType] = useProjectStorage(
+    projectType,
+    "eightRibType",
+    {
+      bl1: "",
+      bl2: "",
+      ap1: "",
+      ap2: "",
+      dab: "",
+      nab: "",
+      nabTensionSide: "",
+      ribAngle: "",
+      tb: "",
+      hr: "",
+      lr: "",
+      tr: "",
+      lrs: "",
+      lk: "",
+    },
+  );
+
   // STATE: Validation errors for bpType form
   const [bpTypeErrors, setBpTypeErrors] = useState({});
 
   // STATE: Validation errors for fourRibType form
   const [fourRibTypeErrors, setFourRibTypeErrors] = useState({});
 
+  // STATE: Validation errors for eightRibType form
+  const [eightRibTypeErrors, setEightRibTypeErrors] = useState({});
+
   // STATE: Toggle expand/collapse for BpType section UI
   const [isExpandedBpType, setIsExpandedBpType] = useState(true);
 
   // STATE: Toggle expand/collapse for SelectBpType section UI
   const [isExpandedSelectBpType, setIsExpandedSelectBpType] = useState(true);
+  const [isCalculated, setIsCalculated] = useState(false);
+  const [toast, setToast] = useState(null); // toast notifications { message, type }
+  const [showCoverPopup, setShowCoverPopup] = useState(false); // show cover popup
+  const showToast = (message, type = "error") => {
+    setToast({ message, type });
+  };
 
   // ------------------------ Function for Baseplate Input ------------------------
+  // FUNCTION: Step navigation helper (dynamic flow control)
+  const { buttonLabel, nextStep, isLast } = Utils.getStepNavigation(
+    condition,
+    "baseplate",
+  );
+
   // FUNCTION: Update BpType data
   const handleBpTypeUpdate = (updates) => {
     Utils.updateBpType(bpType, updates, setBpType);
@@ -58,6 +123,129 @@ export default function BaseplatePage() {
   // FUNCTION: Update FourRibType data
   const handleFourRibTypeUpdate = (updates) => {
     Utils.updateFourRibType(fourRibType, updates, setFourRibType);
+    Utils.clearError(updates, setFourRibTypeErrors);
+  };
+
+  // FUNCTION: Update EightRibType data
+  const handleEightRibTypeUpdate = (updates) => {
+    Utils.updateEightRibType(eightRibType, updates, setEightRibType);
+    Utils.clearError(updates, setEightRibTypeErrors);
+  };
+
+  // FUNCTION: Check if FourRibType form is complete
+  const handleFourRibTypeComplete = () => {
+    return Utils.fourRibTypeComplete(fourRibType);
+  };
+
+  // FUNCTION: Check if EightRibType form is complete
+  const handleEightRibTypeComplete = () => {
+    return Utils.eightRibTypeComplete(eightRibType);
+  };
+
+  // HANDLE: Execute calculation and enable next step
+  const handleCalculate = () => {
+    // RESET ERROR
+    setBpTypeErrors({});
+    setFourRibTypeErrors({});
+    setEightRibTypeErrors({});
+
+    // VALIDASI TYPE DULU
+    if (!bpType.type) {
+      showToast("Please select baseplate type first.");
+      setBpTypeErrors({ type: true });
+      return;
+    }
+
+    // VALIDASI BERDASARKAN TYPE
+    if (bpType.type === "4rib") {
+      if (!handleFourRibTypeComplete()) {
+        showToast("Please complete all 4 Rib Type fields.");
+        setFourRibTypeErrors(Utils.getFourRibTypeErrors(fourRibType));
+        return;
+      }
+    }
+
+    if (bpType.type === "8rib") {
+      if (!handleEightRibTypeComplete()) {
+        showToast("Please complete all 8 Rib Type fields.");
+        setEightRibTypeErrors(Utils.getEightRibTypeErrors(eightRibType));
+        return;
+      }
+    }
+
+    // LOLOS VALIDASI
+    setIsCalculated(true);
+  };
+
+  // HANDLE: Proceed to next step or trigger report if last step
+  const handleFinish = () => {
+    if (!isCalculated) return;
+
+    if (isLast) {
+      handleOpenCoverPopup(); // atau generateReport()
+    } else {
+      navigate(`/calculation/${projectType}/${nextStep}`);
+    }
+  };
+
+  // ------------------------ Function for CoverInput ------------------------
+  // FUNCTION: Update cover data
+  const handleCoverUpdate = (updates) => {
+    Utils.updateCover(cover, updates, setCover);
+    Utils.clearError(updates, setCoverErrors);
+  };
+
+  // FUNCTION: Check if cover information form is complete
+  const handleIsCoverComplete = () => {
+    return Utils.isCoverComplete(cover);
+  };
+
+  // FUNCTION: Open Cover Input
+  const handleOpenCoverPopup = () => {
+    setShowCoverPopup(true);
+  };
+
+  // FUNCTION: Close Cover Input
+  const handleCloseCoverPopup = () => {
+    setShowCoverPopup(false);
+  };
+
+  // HANDLE: Execute make report
+  const handleMakeReport = () => {
+    // RESET ERROR
+    setCoverErrors({});
+
+    // VALIDASI RESULTS
+    if (!results || results.length === 0) {
+      showToast("No calculation results available.");
+      return;
+    }
+
+    // VALIDASI COVER
+    if (!handleIsCoverComplete()) {
+      showToast("Please complete the Cover Information first.");
+      setCoverErrors(Utils.getCoverErrors(cover));
+      return;
+    }
+
+    // VALIDASI OPENING
+    if (!isCalculated) {
+      showToast("Please calculate opening first.");
+      return;
+    }
+
+    // SUCCESS => NAVIGATE
+    navigate("/report", {
+      state: {
+        results,
+        resultsDo,
+        resultsOhw,
+        resultsArm,
+        cover,
+        condition,
+        structuralDesign,
+      },
+    });
   };
 
   const typeLabelMap = {
@@ -188,12 +376,40 @@ export default function BaseplatePage() {
                   fourRibType={fourRibType}
                   onUpdate={handleFourRibTypeUpdate}
                   errors={fourRibTypeErrors}
+                  onCalculate={handleCalculate}
+                  onNext={handleFinish}
+                  isCalculated={isCalculated}
+                  buttonLabel={buttonLabel}
+                />
+              )}
+
+              {bpType.type === "8rib" && (
+                <EightRibTypeInput
+                  eightRibType={eightRibType}
+                  onUpdate={handleEightRibTypeUpdate}
+                  errors={eightRibTypeErrors}
+                  onCalculate={handleCalculate}
+                  onNext={handleFinish}
+                  isCalculated={isCalculated}
+                  buttonLabel={buttonLabel}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
+      {/* Cover Input Modal */}
+      <Modal.CoverInputModal
+        open={showCoverPopup}
+        onClose={handleCloseCoverPopup}
+        cover={cover}
+        onUpdateCover={handleCoverUpdate}
+        onMakeReport={handleMakeReport}
+        coverErrors={coverErrors}
+      />
+
+      {/* Toast Modal */}
+      <Modal.ToastModal toast={toast} onClose={() => setToast(null)} />
     </>
   );
 }

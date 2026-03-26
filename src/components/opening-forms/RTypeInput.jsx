@@ -1,6 +1,14 @@
 import { RotateCcw, ChevronRight, Calculator } from "lucide-react";
 
-export function RTypeInput({ opRType, onUpdate, errors, onNext, onCalculate }) {
+export function RTypeInput({
+  opRType,
+  onUpdate,
+  errors,
+  onCalculate,
+  onNext,
+  isCalculated,
+  buttonLabel,
+}) {
   // Reset all Opening Box Type fields
   const handleReset = () => {
     onUpdate({
@@ -135,6 +143,7 @@ export function RTypeInput({ opRType, onUpdate, errors, onNext, onCalculate }) {
 
           {/* RIGHT */}
           <div className="flex items-center gap-3">
+            {/* CALCULATE */}
             <button
               onClick={onCalculate}
               className="flex items-center gap-2 px-7 py-2.5
@@ -145,13 +154,22 @@ export function RTypeInput({ opRType, onUpdate, errors, onNext, onCalculate }) {
               Calculate
             </button>
 
+            {/* FINISH / MAKE REPORT */}
             <button
               onClick={onNext}
-              className="flex items-center gap-2 px-7 py-2.5
-              bg-gradient-to-r from-[#0d3b66] to-[#3399cc]
-              text-white rounded-lg text-sm hover:brightness-110 transition-all shadow-sm font-medium"
+              disabled={!isCalculated}
+              className={`
+                flex items-center gap-2 px-7 py-2.5 rounded-lg text-sm font-medium
+                transition-all
+
+                ${
+                  !isCalculated
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-gradient-to-r from-[#0d3b66] to-[#3399cc] text-white hover:brightness-110 shadow-sm"
+                }
+              `}
             >
-              Finish
+              {buttonLabel}
               <ChevronRight className="w-5 h-5 hp:w-4 hp:h-4" />
             </button>
           </div>

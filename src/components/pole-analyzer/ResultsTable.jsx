@@ -6,13 +6,7 @@ import { DirectObjectCalculationTable } from "../results-table/DirectObjectCalcu
 import { OverheadWireCalculationTable } from "../results-table/OverheadWireCalculationTable";
 import { ArmSpecificationTable } from "../results-table/ArmSpecificationTable";
 import { ArmObjectCalculationTable } from "../results-table/ArmObjectCalculationTable";
-export function ResultsTable({
-  results,
-  resultsDo,
-  resultsOhw,
-  resultsArm,
-  onCoverInput,
-}) {
+export function ResultsTable({ results, resultsDo, resultsOhw, resultsArm }) {
   const [page] = useState(0);
   const r = results[page]; // current Pole
 
@@ -49,28 +43,6 @@ export function ResultsTable({
           </div>
 
           {/* RIGHT BUTTON */}
-          <button
-            onClick={onCoverInput}
-            className="
-              flex items-center gap-2
-              px-7 py-2.5
-              hp:px-3 hp:py-2
-              bg-white text-[#0d3b66]
-              rounded-lg hp:rounded-md
-              text-sm hp:text-xs
-              shadow-md hover:shadow-lg
-              transition-all duration-300
-              transform hover:scale-105
-              border-2 border-transparent
-              font-medium
-            "
-          >
-            <FileText className="w-5 h-5 hp:w-4 hp:h-4" />
-
-            {/* text shorten on mobile */}
-            <span className="hp:hidden">Make Report</span>
-            <span className="hidden hp:inline">Report</span>
-          </button>
         </div>
       </div>
 
