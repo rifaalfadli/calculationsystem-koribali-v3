@@ -4,48 +4,51 @@ import { CoverInput } from "./CoverInput";
 // ====================================================
 // INITIAL CONFIRM MODAL
 // ====================================================
-export const ConfirmToggleModal = ({ open, onClose, onConfirm, field }) => {
-  if (!open) return null;
-
-  const labelMap = {
-    openingEnabled: "Opening",
-    baseplateEnabled: "Baseplate",
-    foundationEnabled: "Foundation",
-  };
+export const ConfirmDisableComponentModal = ({ data, onClose, onConfirm }) => {
+  if (!data) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-      <div className="w-full max-w-md bg-white border rounded-2xl shadow-xl p-6">
-        <div className="text-center mb-4">
-          <h2 className="font-bold text-gray-900 text-base">
-            Disable {labelMap[field]}?
-          </h2>
-          <p className="text-gray-600 text-sm mt-2">
-            All input data will be permanently deleted. This action cannot be
-            undone.
-          </p>
+      <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl shadow-xl p-6">
+        {/* Icon */}
+        <div className="mx-auto mb-4 flex items-center justify-center w-14 h-14 bg-red-100 rounded-full">
+          <AlertCircle className="w-7 h-7 text-red-500" />
         </div>
 
+        {/* Title */}
+        <h2 className="text-center font-bold text-base text-gray-900 mb-2">
+          Disable Components?
+        </h2>
+
+        {/* Description */}
+        <p className="text-center text-gray-600 text-sm mb-6">
+          You are about to disable:
+          <br />
+          <span className="font-semibold text-red-500">{data.join(", ")}</span>
+          <br />
+          All related data will be permanently deleted.
+        </p>
+
+        {/* Buttons */}
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-2 bg-gray-100 rounded-lg"
+            className="flex-1 py-3 font-bold text-sm bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition"
           >
             Cancel
           </button>
 
           <button
             onClick={onConfirm}
-            className="flex-1 py-2 bg-red-500 text-white rounded-lg"
+            className="flex-1 py-3 font-bold text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
           >
-            Yes, Disable
+            Yes, Continue
           </button>
         </div>
       </div>
     </div>
   );
 };
-
 // ====================================================
 // COVER INPUT MODAL
 // ====================================================

@@ -6,6 +6,7 @@ import { HeaderCalculationPage } from "../pole-analyzer/PoleAnalyzerHeader";
 import { ConditionInput } from "./ConditionInput";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { ToastModal } from "../pole-analyzer/PoleAnalyzerModal";
+import { ConfirmDisableComponentModal } from "../pole-analyzer/PoleAnalyzerModal";
 import * as Utils from "../../utils/pole-analyzer";
 
 // CONSTANT: List of allowed project types
@@ -30,14 +31,25 @@ export default function CalculationSetup() {
     },
   );
 
+  // Temporary draft state to prevent auto-persist before explicit submit (Finish)
+  const [localCondition, setLocalCondition] = useState(condition);
+
+  // Keep draft in sync with persisted session state
+  useEffect(() => {
+    setLocalCondition(condition);
+  }, [condition]);
+
   // STATE: Validation errors for condition form
   const [conditionErrors, setConditionErrors] = useState({});
 
   // STATE: Toggle expand/collapse for condition section UI
   const [isExpandedCondition, setIsExpandedCondition] = useState(true);
 
-  // STATE: Toast notifications { message, type
+  // STATE: Toast notifications { message, type}
   const [toast, setToast] = useState(null);
+
+  // STATE: confirm disable additional components
+  const [confirmDisable, setConfirmDisable] = useState(null);
 
   // EFFECT: Validate project type on mount/change and clean invalid session
   useEffect(() => {
@@ -47,15 +59,57 @@ export default function CalculationSetup() {
   }, [projectType]);
 
   // ------------------------ Function for ConditionInput ------------------------
+  const getDisabledComponents = () => {
+    const disabled = [];
+
+    if (condition.openingEnabled && !localCondition.openingEnabled) {
+      disabled.push("Opening");
+    }
+
+    if (condition.baseplateEnabled && !localCondition.baseplateEnabled) {
+      disabled.push("Baseplate");
+    }
+
+    if (condition.foundationEnabled && !localCondition.foundationEnabled) {
+      disabled.push("Foundation");
+    }
+
+    return disabled;
+  };
+
+  const proceedFinish = () => {
+    // CLEANUP
+    if (!localCondition.openingEnabled) {
+      sessionStorage.removeItem(`${projectType}_opType`);
+      sessionStorage.removeItem(`${projectType}_opBoxType`);
+      sessionStorage.removeItem(`${projectType}_opRType`);
+    }
+
+    if (!localCondition.baseplateEnabled) {
+      sessionStorage.removeItem(`${projectType}_bpType`);
+      sessionStorage.removeItem(`${projectType}_fourRibType`);
+      sessionStorage.removeItem(`${projectType}_eightRibType`);
+    }
+
+    if (!localCondition.foundationEnabled) {
+      sessionStorage.removeItem(`${projectType}_foundationType`);
+      sessionStorage.removeItem(`${projectType}_sqrCaissonType`);
+      sessionStorage.removeItem(`${projectType}_roundCaissonType`);
+    }
+
+    setCondition(localCondition);
+    navigate(`/calculation/${projectType}/pole`);
+  };
+
   // FUNCTION: Update condition data
   const handleConditionUpdate = (updates) => {
-    Utils.updateCondition(condition, updates, setCondition);
+    Utils.updateCondition(localCondition, updates, setLocalCondition);
     Utils.clearError(updates, setConditionErrors);
   };
 
   // FUNCTION: Check if condition information form is complete
   const handleIsConditionComplete = () => {
-    return Utils.isConditionComplete(condition);
+    return Utils.isConditionComplete(localCondition);
   };
 
   // FUNCTION: Trigger toast notification with specific message and type.
@@ -70,19 +124,27 @@ export default function CalculationSetup() {
     const result = Utils.conditionNext(
       handleIsConditionComplete(),
       projectType,
-      condition,
+      localCondition,
     );
 
     if (!result.isValid) {
       showToast("Please complete all initial input fields.");
-
       if (result.errors?.condition) {
-        setConditionErrors(Utils.getConditionErrors(condition));
+        setConditionErrors(Utils.getConditionErrors(localCondition));
       }
       return;
     }
 
-    navigate(`/calculation/${projectType}/pole`);
+    // cek perubahan true → false
+    const disabledComponents = getDisabledComponents();
+
+    if (disabledComponents.length > 0) {
+      setConfirmDisable(disabledComponents);
+      return; // STOP dulu, tunggu konfirmasi
+    }
+
+    // kalau tidak ada perubahan → langsung lanjut
+    proceedFinish();
   };
 
   // GUARD: Redirect if project type is invalid
@@ -143,7 +205,7 @@ export default function CalculationSetup() {
             >
               <ConditionInput
                 projectType={projectType}
-                condition={condition}
+                condition={localCondition}
                 onUpdate={handleConditionUpdate}
                 onNext={handleConditionNext}
                 errors={conditionErrors}
@@ -151,6 +213,15 @@ export default function CalculationSetup() {
             </div>
           </div>
         </div>
+
+        <ConfirmDisableComponentModal
+          data={confirmDisable}
+          onClose={() => setConfirmDisable(null)}
+          onConfirm={() => {
+            setConfirmDisable(null);
+            proceedFinish();
+          }}
+        />
 
         {/* Toast Modal */}
         <ToastModal toast={toast} onClose={() => setToast(null)} />

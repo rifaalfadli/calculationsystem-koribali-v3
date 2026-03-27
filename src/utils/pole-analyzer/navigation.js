@@ -24,7 +24,7 @@ export function getStepNavigation(condition, currentStep) {
     currentIndex,
     isLast,
     nextStep,
-    buttonLabel: isLast ? "Make Report" : "Finish",
+    buttonLabel: isLast ? "Finish" : "Next Input",
   };
 }
 

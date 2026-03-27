@@ -56,7 +56,7 @@ export function EightRibTypeInput({
             {/* INPUT */}
             <div className="grid grid-cols-2 gap-6">
               {/* Width of the Baseplate in the EW direction (BL1) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Width of the Baseplate in the EW direction (BL1)
                 </label>
@@ -76,7 +76,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Width of the Baseplate in the NS direction (BL2) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Width of the Baseplate in the NS direction (BL2)
                 </label>
@@ -96,7 +96,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Anchor pitch in the EW direction (Ap1) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Anchor pitch in the EW direction (Ap1)
                 </label>
@@ -116,7 +116,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Anchor pitch in the NS direction (Ap2) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Anchor pitch in the NS direction (Ap2)
                 </label>
@@ -136,7 +136,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Diameter of Anchor Bolt */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Diameter of Anchor Bolt
                 </label>
@@ -156,7 +156,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Number of anchor bolts (n) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Number of anchor bolts (n)
                 </label>
@@ -176,7 +176,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Number of anchor bolts on the tension side (n') */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Number of anchor bolts on the tension side (n')
                 </label>
@@ -198,7 +198,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Rib Angle (θ) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Rib Angle (θ)
                 </label>
@@ -224,7 +224,7 @@ export function EightRibTypeInput({
             <img
               src="/images/8rib-topview.png"
               alt="Top View"
-              className="max-h-[300px] object-contain"
+              className="max-h-[250px] object-contain"
             />
           </div>
 
@@ -232,7 +232,7 @@ export function EightRibTypeInput({
           <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
             <div className="grid grid-cols-2 gap-6">
               {/* Thickness of the Baseplate (Tb) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Thickness of the Baseplate (Tb)
                 </label>
@@ -251,7 +251,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Height of the Rib Plate (Hr) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Height of the Rib Plate (Hr)
                 </label>
@@ -270,7 +270,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Rib Plate scallop (Lrs) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Rib Plate scallop (Lrs)
                 </label>
@@ -289,7 +289,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Weld leg length (Lk) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Weld leg length (Lk)
                 </label>
@@ -308,7 +308,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Length of the Rib Plate (Lr) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Length of the Rib Plate (Lr)
                 </label>
@@ -327,7 +327,7 @@ export function EightRibTypeInput({
               </div>
 
               {/* Thickness of the Rib Plate (Tr) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Thickness of the Rib Plate (Tr)
                 </label>

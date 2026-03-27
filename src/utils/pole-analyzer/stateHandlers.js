@@ -681,3 +681,21 @@ export const updateFoundationType = (
 ) => {
   setFoundationType({ ...foundationType, ...updates });
 };
+
+// FUNCTION: Update foundation square caisson type data
+export const updateSqrCaissonType = (
+  sqrCaissonType,
+  updates,
+  setSqrCaissonType,
+) => {
+  setSqrCaissonType({ ...sqrCaissonType, ...updates });
+};
+
+// FUNCTION: Update foundation round caisson type data
+export const updateRoundCaissonType = (
+  roundCaissonType,
+  updates,
+  setRoundCaissonType,
+) => {
+  setRoundCaissonType({ ...roundCaissonType, ...updates });
+};

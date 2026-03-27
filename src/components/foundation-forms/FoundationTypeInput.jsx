@@ -33,8 +33,8 @@ export function FoundationTypeInput({ foundationType, onUpdate, errors }) {
               Select Foundation Type
             </option>
 
+            <option value="square-caisson">Square Caisson Type</option>
             <option value="round-caisson">Round Caisson Type</option>
-            <option value="nemaki">Nemaki Type</option>
           </select>
           <ErrorText show={errors.type} text="Required field" />
         </div>

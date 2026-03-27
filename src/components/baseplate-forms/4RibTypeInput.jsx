@@ -55,7 +55,7 @@ export function FourRibTypeInput({
             {/* INPUT */}
             <div className="grid grid-cols-2 gap-6">
               {/* Width of the Baseplate in the EW direction (BL1) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Width of the Baseplate in the EW direction (BL1)
                 </label>
@@ -75,7 +75,7 @@ export function FourRibTypeInput({
               </div>
 
               {/* Width of the Baseplate in the NS direction (BL2) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Width of the Baseplate in the NS direction (BL2)
                 </label>
@@ -95,7 +95,7 @@ export function FourRibTypeInput({
               </div>
 
               {/* Anchor pitch in the EW direction (Ap1) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Anchor pitch in the EW direction (Ap1)
                 </label>
@@ -115,7 +115,7 @@ export function FourRibTypeInput({
               </div>
 
               {/* Anchor pitch in the NS direction (Ap2) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Anchor pitch in the NS direction (Ap2)
                 </label>
@@ -135,7 +135,7 @@ export function FourRibTypeInput({
               </div>
 
               {/* Diameter of Anchor Bolt */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Diameter of Anchor Bolt
                 </label>
@@ -155,7 +155,7 @@ export function FourRibTypeInput({
               </div>
 
               {/* Number of anchor bolts (n) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Number of anchor bolts (n)
                 </label>
@@ -175,7 +175,7 @@ export function FourRibTypeInput({
               </div>
 
               {/* Number of anchor bolts on the tension side (n') */}
-              <div className="col-span-2">
+              <div className="col-span-2 relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Number of anchor bolts on the tension side (n')
                 </label>
@@ -203,7 +203,7 @@ export function FourRibTypeInput({
             <img
               src="/images/4rib-topview.png"
               alt="Top View"
-              className="max-h-[300px] object-contain"
+              className="max-h-[250px] object-contain"
             />
           </div>
 
@@ -211,7 +211,7 @@ export function FourRibTypeInput({
           <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
             <div className="grid grid-cols-2 gap-6">
               {/* Thickness of the Baseplate (Tb) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Thickness of the Baseplate (Tb)
                 </label>
@@ -230,7 +230,7 @@ export function FourRibTypeInput({
               </div>
 
               {/* Height of the Rib Plate (Hr) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Height of the Rib Plate (Hr)
                 </label>
@@ -249,7 +249,7 @@ export function FourRibTypeInput({
               </div>
 
               {/* Rib Plate scallop (Lrs) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Rib Plate scallop (Lrs)
                 </label>
@@ -268,7 +268,7 @@ export function FourRibTypeInput({
               </div>
 
               {/* Weld leg length (Lk) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Weld leg length (Lk)
                 </label>
@@ -287,7 +287,7 @@ export function FourRibTypeInput({
               </div>
 
               {/* Length of the Rib Plate (Lr) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Length of the Rib Plate (Lr)
                 </label>
@@ -306,7 +306,7 @@ export function FourRibTypeInput({
               </div>
 
               {/* Thickness of the Rib Plate (Tr) */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Thickness of the Rib Plate (Tr)
                 </label>

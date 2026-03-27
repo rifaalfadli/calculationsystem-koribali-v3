@@ -1,7 +1,7 @@
 import { RotateCcw, ChevronRight, Calculator } from "lucide-react";
 
-export function BoxTypeInput({
-  opBoxType,
+export function RoundCaissonTypeInput({
+  roundCaissonType,
   onUpdate,
   errors,
   onCalculate,
@@ -9,14 +9,16 @@ export function BoxTypeInput({
   isCalculated,
   buttonLabel,
 }) {
-  // Reset all Opening Box Type fields
+  // Reset all Round Caisson Type fields
   const handleReset = () => {
     onUpdate({
-      boxWidth: "",
-      opWidth: "",
-      boxHeight: "",
-      opSurfaceHeight: "",
-      opLength: "",
+      width2a: "",
+      width2b: "",
+      embedmentDepth: "",
+      nValue: "",
+      yValue: "",
+      ycValue: "",
+      alphaValue: "",
     });
   };
 
@@ -45,110 +47,141 @@ export function BoxTypeInput({
           {/* ================= LEFT : INPUT ================= */}
           <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
             {/* STACK INPUT (VERTICAL) */}
-            <div className="flex flex-col gap-5">
-              {/* Box Width */}
+            <div className="grid grid-cols-2 gap-6">
+              {/* Foundation Width (2a) */}
               <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Box Width (a)
+                  Foundation Width (2a)
                 </label>
                 <div className="relative">
                   <input
                     type="number"
-                    value={opBoxType.boxWidth}
-                    onChange={(e) => onUpdate({ boxWidth: e.target.value })}
+                    value={roundCaissonType.width2a}
+                    onChange={(e) => onUpdate({ width2a: e.target.value })}
                     onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.boxWidth)} pr-12`}
+                    className={`${inputClass(errors.width2a)} pr-12`}
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.boxWidth} text="Required field" />
+                <ErrorText show={errors.width2a} text="Required field" />
               </div>
 
-              {/* Opening Width */}
+              {/* Foundation Width (2b) */}
               <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Opening Width (b)
+                  Foundation Width (2b)
                 </label>
                 <div className="relative">
                   <input
                     type="number"
-                    value={opBoxType.opWidth}
-                    onChange={(e) => onUpdate({ opWidth: e.target.value })}
+                    value={roundCaissonType.width2b}
+                    onChange={(e) => onUpdate({ width2b: e.target.value })}
                     onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.opWidth)} pr-12`}
+                    className={`${inputClass(errors.width2b)} pr-12`}
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.opWidth} text="Required field" />
+                <ErrorText show={errors.width2b} text="Required field" />
               </div>
 
-              {/* Box Height */}
-              <div className="relative">
+              {/* Embedment Depth (L) */}
+              <div className="col-span-2 relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Box Height (tb)
+                  Embedment Depth (L)
                 </label>
                 <div className="relative">
                   <input
                     type="number"
-                    value={opBoxType.boxHeight}
-                    onChange={(e) => onUpdate({ boxHeight: e.target.value })}
-                    onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.boxHeight)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
-                    mm
-                  </span>
-                </div>
-                <ErrorText show={errors.boxHeight} text="Required field" />
-              </div>
-
-              {/* Opening Surface Height */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Opening Surface Height (HOp)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={opBoxType.opSurfaceHeight}
+                    value={roundCaissonType.embedmentDepth}
                     onChange={(e) =>
-                      onUpdate({ opSurfaceHeight: e.target.value })
+                      onUpdate({ embedmentDepth: e.target.value })
                     }
                     onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.opSurfaceHeight)} pr-12`}
+                    className={`${inputClass(errors.embedmentDepth)} pr-12`}
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
                     mm
                   </span>
                 </div>
-                <ErrorText
-                  show={errors.opSurfaceHeight}
-                  text="Required field"
-                />
+                <ErrorText show={errors.embedmentDepth} text="Required field" />
               </div>
 
-              {/* Opening Length */}
-              <div className="relative">
+              {/* N Value */}
+              <div className="relative col-span-2 ">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Opening Length (LOp)
+                  N Value
                 </label>
                 <div className="relative">
                   <input
                     type="number"
-                    value={opBoxType.opLength}
-                    onChange={(e) => onUpdate({ opLength: e.target.value })}
+                    value={roundCaissonType.nValue}
+                    onChange={(e) => onUpdate({ nValue: e.target.value })}
                     onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.opLength)} pr-12`}
+                    className={`${inputClass(errors.nValue)}`}
+                  />
+                </div>
+                <ErrorText show={errors.nValue} text="Required field" />
+              </div>
+
+              {/* γ */}
+              <div className="relative">
+                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
+                  γ
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={roundCaissonType.yValue}
+                    onChange={(e) => onUpdate({ yValue: e.target.value })}
+                    onWheel={(e) => e.target.blur()}
+                    className={`${inputClass(errors.yValue)} pr-16`}
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
-                    mm
+                    kN/m3
                   </span>
                 </div>
-                <ErrorText show={errors.opLength} text="Required field" />
+                <ErrorText show={errors.yValue} text="Required field" />
+              </div>
+
+              {/* γc */}
+              <div className="relative">
+                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
+                  γc
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={roundCaissonType.ycValue}
+                    onChange={(e) => onUpdate({ ycValue: e.target.value })}
+                    onWheel={(e) => e.target.blur()}
+                    className={`${inputClass(errors.ycValue)} pr-16`}
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
+                    kN/m3
+                  </span>
+                </div>
+                <ErrorText show={errors.ycValue} text="Required field" />
+              </div>
+
+              {/* α */}
+              <div className="col-span-2  relative">
+                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
+                  α
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={roundCaissonType.alphaValue}
+                    onChange={(e) => onUpdate({ alphaValue: e.target.value })}
+                    onWheel={(e) => e.target.blur()}
+                    className={`${inputClass(errors.alphaValue)} `}
+                  />
+                </div>
+                <ErrorText show={errors.alphaValue} text="Required field" />
               </div>
             </div>
           </div>
@@ -158,7 +191,7 @@ export function BoxTypeInput({
             {/* TOP VIEW */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 flex items-center justify-center hover:shadow-sm transition">
               <img
-                src="/images/opBox-top-view.png"
+                src="/images/caisson-round-topview.png"
                 alt="Top View"
                 className="max-h-44 object-contain"
               />
@@ -167,7 +200,7 @@ export function BoxTypeInput({
             {/* SIDE VIEW */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 flex items-center justify-center hover:shadow-sm transition">
               <img
-                src="/images/op-side-view.png"
+                src="/images/caisson-round-sideview.png"
                 alt="Side View"
                 className="max-h-44 object-contain"
               />

@@ -14,7 +14,6 @@ export const handleCalculateResults = (
   condition,
   showToast,
   structuralDesign,
-  structuralDesignComplete,
   sections,
   handleIsSectionComplete,
   directObjects,
@@ -38,15 +37,6 @@ export const handleCalculateResults = (
     arm: false,
     armObject: false,
   };
-
-  // =========================
-  // STRUCTURAL DESIGN VALIDATION
-  // =========================
-  if (!structuralDesignComplete()) {
-    showToast("Please complete all Pole Specification fields.");
-    errors.structuralDesign = true;
-  }
-
   // =========================
   // POLE VALIDATION (ONLY CUSTOM MODE)
   // =========================

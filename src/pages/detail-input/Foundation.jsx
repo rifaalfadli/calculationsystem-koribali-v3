@@ -2,14 +2,44 @@ import { Helmet } from "react-helmet";
 import { useState } from "react";
 import { useProjectStorage } from "../../components/pole-analyzer/hooks/useProjectStorage";
 import { ChevronDown, ChevronUp, Box } from "lucide-react";
-import { useParams } from "react-router-dom";
-import { FoundationTypeInput } from "../../components/foundation-forms/FoundationTypeInput";
+import { useParams, useNavigate } from "react-router-dom";
 import { HeaderCalculationPage } from "../../components/pole-analyzer/PoleAnalyzerHeader";
+import { FoundationTypeInput } from "../../components/foundation-forms/FoundationTypeInput";
+import { SquareCaissonTypeInput } from "../../components/foundation-forms/SquareCaissonTypeInput";
+import { RoundCaissonTypeInput } from "../../components/foundation-forms/RoundCaissonTypeInput";
 import * as Utils from "../../utils/pole-analyzer";
+import * as Modal from "../../components/pole-analyzer/PoleAnalyzerModal";
 
 export default function FoundationPage() {
   const { type: projectType } = useParams();
+  const navigate = useNavigate();
 
+  // STATE: Retrieve persisted calculation results from previous steps (Pole Page)
+  const condition = JSON.parse(
+    sessionStorage.getItem(`${projectType}_condition`) || "{}",
+  );
+  const [results] = useProjectStorage(projectType, "results", []);
+  const [resultsDo] = useProjectStorage(projectType, "resultsDo", []);
+  const [resultsOhw] = useProjectStorage(projectType, "resultsOhw", []);
+  const [resultsArm] = useProjectStorage(projectType, "resultsArm", []);
+  const [structuralDesign] = useProjectStorage(
+    projectType,
+    "structuralDesign",
+    {},
+  );
+
+  // STATE: Cover information
+  const [cover, setCover] = useProjectStorage(projectType, "cover", {
+    managementMark: "",
+    calculationNumber: "",
+    projectName: "",
+    contentr2: "",
+    contentr3: "",
+    date: "",
+  });
+  const [coverErrors, setCoverErrors] = useState({});
+
+  // STATE: foundationType for calculation
   const [foundationType, setFoundationType] = useProjectStorage(
     projectType,
     "foundationType",
@@ -18,8 +48,44 @@ export default function FoundationPage() {
     },
   );
 
+  // STATE: sqrCaissonType for calculation
+  const [sqrCaissonType, setSqrCaissonType] = useProjectStorage(
+    projectType,
+    "sqrCaissonType",
+    {
+      width2a: "",
+      width2b: "",
+      embedmentDepth: "",
+      nValue: "",
+      yValue: "",
+      ycValue: "",
+      alphaValue: "",
+    },
+  );
+
+  // STATE: roundCaissonType for calculation
+  const [roundCaissonType, setRoundCaissonType] = useProjectStorage(
+    projectType,
+    "roundCaissonType",
+    {
+      width2a: "",
+      width2b: "",
+      embedmentDepth: "",
+      nValue: "",
+      yValue: "",
+      ycValue: "",
+      alphaValue: "",
+    },
+  );
+
   // STATE: Validation errors for foundationType form
   const [foundationTypeErrors, setFoundationTypeErrors] = useState({});
+
+  // STATE: Validation errors for sqrCaissonType form
+  const [sqrCaissonTypeErrors, setSqrCaissonTypeErrors] = useState({});
+
+  // STATE: Validation errors for roundCaissonType form
+  const [roundCaissonTypeErrors, setRoundCaissonTypeErrors] = useState({});
 
   // STATE: Toggle expand/collapse for foundationType section UI
   const [isExpandedFoundationType, setIsExpandedFoundationType] =
@@ -28,16 +94,162 @@ export default function FoundationPage() {
   // STATE: Toggle expand/collapse for SelectFoundationType section UI
   const [isExpandedSelectFoundationType, setIsExpandedSelectFoundationType] =
     useState(true);
+  const [isCalculated, setIsCalculated] = useState(false);
+  const [toast, setToast] = useState(null); // toast notifications { message, type }
+  const [showCoverPopup, setShowCoverPopup] = useState(false); // show cover popup
+  const showToast = (message, type = "error") => {
+    setToast({ message, type });
+  };
 
   // ------------------------ Function for Foundation Input ------------------------
+  // FUNCTION: Step navigation helper (dynamic flow control)
+  const { buttonLabel, nextStep, isLast } = Utils.getStepNavigation(
+    condition,
+    "foundation",
+  );
+
   // FUNCTION: Update FoundationType data
   const handleFoundationTypeUpdate = (updates) => {
     Utils.updateFoundationType(foundationType, updates, setFoundationType);
   };
 
+  // FUNCTION: Update SqrCaissonType data
+  const handleSqrCaissonTypeUpdate = (updates) => {
+    Utils.updateSqrCaissonType(sqrCaissonType, updates, setSqrCaissonType);
+    Utils.clearError(updates, setSqrCaissonTypeErrors);
+  };
+
+  // FUNCTION: Update RoundCaissonType data
+  const handleRoundCaissonTypeUpdate = (updates) => {
+    Utils.updateRoundCaissonType(
+      roundCaissonType,
+      updates,
+      setRoundCaissonType,
+    );
+    Utils.clearError(updates, setRoundCaissonTypeErrors);
+  };
+
+  // FUNCTION: Check if SqrCaissonType form is complete
+  const handleSqrCaissonTypeComplete = () => {
+    return Utils.sqrCaissonTypeComplete(sqrCaissonType);
+  };
+
+  // FUNCTION: Check if RoundCaissonType form is complete
+  const handleRoundCaissonTypeComplete = () => {
+    return Utils.roundCaissonTypeComplete(roundCaissonType);
+  };
+
+  // HANDLE: Execute calculation and enable next step
+  const handleCalculate = () => {
+    // RESET ERROR
+    setFoundationTypeErrors({});
+    setSqrCaissonTypeErrors({});
+    setRoundCaissonTypeErrors({});
+
+    // VALIDASI TYPE DULU
+    if (!foundationType.type) {
+      showToast("Please select foundation type first.");
+      setFoundationTypeErrors({ type: true });
+      return;
+    }
+
+    // VALIDASI BERDASARKAN TYPE
+    if (foundationType.type === "square-caisson") {
+      if (!handleSqrCaissonTypeComplete()) {
+        showToast("Please complete all Square Caisson Type fields.");
+        setSqrCaissonTypeErrors(Utils.getSqrCaissonTypeErrors(sqrCaissonType));
+        return;
+      }
+    }
+
+    if (foundationType.type === "round-caisson") {
+      if (!handleRoundCaissonTypeComplete()) {
+        showToast("Please complete all Round Caisson Type fields.");
+        setRoundCaissonTypeErrors(
+          Utils.getRoundCaissonTypeErrors(roundCaissonType),
+        );
+        return;
+      }
+    }
+
+    // LOLOS VALIDASI
+    setIsCalculated(true);
+  };
+
+  // HANDLE: Proceed to next step or trigger report if last step
+  const handleFinish = () => {
+    if (!isCalculated) return;
+
+    if (isLast) {
+      handleOpenCoverPopup(); // atau generateReport()
+    } else {
+      navigate(`/calculation/${projectType}/${nextStep}`);
+    }
+  };
+
+  // ------------------------ Function for CoverInput ------------------------
+  // FUNCTION: Update cover data
+  const handleCoverUpdate = (updates) => {
+    Utils.updateCover(cover, updates, setCover);
+    Utils.clearError(updates, setCoverErrors);
+  };
+
+  // FUNCTION: Check if cover information form is complete
+  const handleIsCoverComplete = () => {
+    return Utils.isCoverComplete(cover);
+  };
+
+  // FUNCTION: Open Cover Input
+  const handleOpenCoverPopup = () => {
+    setShowCoverPopup(true);
+  };
+
+  // FUNCTION: Close Cover Input
+  const handleCloseCoverPopup = () => {
+    setShowCoverPopup(false);
+  };
+
+  // HANDLE: Execute make report
+  const handleMakeReport = () => {
+    // RESET ERROR
+    setCoverErrors({});
+
+    // VALIDASI RESULTS
+    if (!results || results.length === 0) {
+      showToast("No calculation results available.");
+      return;
+    }
+
+    // VALIDASI COVER
+    if (!handleIsCoverComplete()) {
+      showToast("Please complete the Cover Information first.");
+      setCoverErrors(Utils.getCoverErrors(cover));
+      return;
+    }
+
+    // VALIDASI OPENING
+    if (!isCalculated) {
+      showToast("Please calculate foundation first.");
+      return;
+    }
+
+    // SUCCESS => NAVIGATE
+    navigate("/report", {
+      state: {
+        results,
+        resultsDo,
+        resultsOhw,
+        resultsArm,
+        cover,
+        condition,
+        structuralDesign,
+      },
+    });
+  };
+
   const typeLabelMap = {
+    "square-caisson": "Square Caisson Type",
     "round-caisson": "Round Caisson Type",
-    nemaki: "Nemaki Type",
   };
 
   return (
@@ -163,10 +375,45 @@ export default function FoundationPage() {
               )}
 
               {/* ================= FORM BASED ON TYPE ================= */}
+              {foundationType.type === "square-caisson" && (
+                <SquareCaissonTypeInput
+                  sqrCaissonType={sqrCaissonType}
+                  onUpdate={handleSqrCaissonTypeUpdate}
+                  errors={sqrCaissonTypeErrors}
+                  onCalculate={handleCalculate}
+                  onNext={handleFinish}
+                  isCalculated={isCalculated}
+                  buttonLabel={buttonLabel}
+                />
+              )}
+
+              {foundationType.type === "round-caisson" && (
+                <RoundCaissonTypeInput
+                  roundCaissonType={roundCaissonType}
+                  onUpdate={handleRoundCaissonTypeUpdate}
+                  errors={roundCaissonTypeErrors}
+                  onCalculate={handleCalculate}
+                  onNext={handleFinish}
+                  isCalculated={isCalculated}
+                  buttonLabel={buttonLabel}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
+      {/* Cover Input Modal */}
+      <Modal.CoverInputModal
+        open={showCoverPopup}
+        onClose={handleCloseCoverPopup}
+        cover={cover}
+        onUpdateCover={handleCoverUpdate}
+        onMakeReport={handleMakeReport}
+        coverErrors={coverErrors}
+      />
+
+      {/* Toast Modal */}
+      <Modal.ToastModal toast={toast} onClose={() => setToast(null)} />
     </>
   );
 }

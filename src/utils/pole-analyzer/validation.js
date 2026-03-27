@@ -674,3 +674,54 @@ export const getEightRibTypeErrors = (eightRibType) => ({
   lrs: isEmpty(eightRibType.lrs),
   lk: isEmpty(eightRibType.lk),
 });
+
+// ====================================================
+// Function for Foundation Input
+// ====================================================
+// FUNCTION: Check if square caisson type information form is complete
+export const sqrCaissonTypeComplete = (sqrCaissonType) => {
+  return [
+    sqrCaissonType.width2a,
+    sqrCaissonType.width2b,
+    sqrCaissonType.embedmentDepth,
+    sqrCaissonType.nValue,
+    sqrCaissonType.yValue,
+    sqrCaissonType.ycValue,
+    sqrCaissonType.alphaValue,
+  ].every((v) => !isEmpty(v));
+};
+
+// FUNCTION: Create an error checker helper for the square caisson type
+export const getSqrCaissonTypeErrors = (sqrCaissonType) => ({
+  width2a: isEmpty(sqrCaissonType.width2a),
+  width2b: isEmpty(sqrCaissonType.width2b),
+  embedmentDepth: isEmpty(sqrCaissonType.embedmentDepth),
+  nValue: isEmpty(sqrCaissonType.nValue),
+  yValue: isEmpty(sqrCaissonType.yValue),
+  ycValue: isEmpty(sqrCaissonType.ycValue),
+  alphaValue: isEmpty(sqrCaissonType.alphaValue),
+});
+
+// FUNCTION: Check if round caisson type information form is complete
+export const roundCaissonTypeComplete = (roundCaissonType) => {
+  return [
+    roundCaissonType.width2a,
+    roundCaissonType.width2b,
+    roundCaissonType.embedmentDepth,
+    roundCaissonType.nValue,
+    roundCaissonType.yValue,
+    roundCaissonType.ycValue,
+    roundCaissonType.alphaValue,
+  ].every((v) => !isEmpty(v));
+};
+
+// FUNCTION: Create an error checker helper for the round caisson type
+export const getRoundCaissonTypeErrors = (roundCaissonType) => ({
+  width2a: isEmpty(roundCaissonType.width2a),
+  width2b: isEmpty(roundCaissonType.width2b),
+  embedmentDepth: isEmpty(roundCaissonType.embedmentDepth),
+  nValue: isEmpty(roundCaissonType.nValue),
+  yValue: isEmpty(roundCaissonType.yValue),
+  ycValue: isEmpty(roundCaissonType.ycValue),
+  alphaValue: isEmpty(roundCaissonType.alphaValue),
+});

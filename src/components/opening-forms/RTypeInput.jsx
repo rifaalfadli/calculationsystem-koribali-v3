@@ -37,92 +37,99 @@ export function RTypeInput({
 
   return (
     <div className="bg-white rounded-b-2xl shadow-sm border border-gray-200 hp:rounded-b-xl">
-      <div className="p-6 space-y-6 hp:space-y-4 hp:p-4">
-        {/* ================= INPUT (1 ROW) ================= */}
-        <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {/* Opening Width */}
-            <div>
-              <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                Opening Width (b)
-              </label>
+      <div className="p-6 shadow-sm space-y-6 hp:space-y-4 hp:p-4">
+        {/* GRID 2 KOLOM */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6">
+          {/* ================= LEFT : INPUT ================= */}
+          <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
+            {/* STACK INPUT (VERTICAL) */}
+            <div className="flex flex-col gap-5">
+              {/* Opening Width */}
               <div className="relative">
-                <input
-                  type="number"
-                  value={opRType.opWidth}
-                  onChange={(e) => onUpdate({ opWidth: e.target.value })}
-                  onWheel={(e) => e.target.blur()}
-                  className={`${inputClass(errors.opWidth)} pr-12`}
-                />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm hp:text-xs">
-                  mm
-                </span>
+                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
+                  Opening Width (b)
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={opRType.opWidth}
+                    onChange={(e) => onUpdate({ opWidth: e.target.value })}
+                    onWheel={(e) => e.target.blur()}
+                    className={`${inputClass(errors.opWidth)} pr-12`}
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm hp:text-xs">
+                    mm
+                  </span>
+                </div>
+                <ErrorText show={errors.opWidth} text="Required field" />
               </div>
-              <ErrorText show={errors.opWidth} text="Required field" />
-            </div>
 
-            {/* Opening Surface Height */}
-            <div>
-              <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                Opening Surface Height (HOp)
-              </label>
+              {/* Opening Surface Height */}
               <div className="relative">
-                <input
-                  type="number"
-                  value={opRType.opSurfaceHeight}
-                  onChange={(e) =>
-                    onUpdate({ opSurfaceHeight: e.target.value })
-                  }
-                  onWheel={(e) => e.target.blur()}
-                  className={`${inputClass(errors.opSurfaceHeight)} pr-12`}
+                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
+                  Opening Surface Height (HOp)
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={opRType.opSurfaceHeight}
+                    onChange={(e) =>
+                      onUpdate({ opSurfaceHeight: e.target.value })
+                    }
+                    onWheel={(e) => e.target.blur()}
+                    className={`${inputClass(errors.opSurfaceHeight)} pr-12`}
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm hp:text-xs">
+                    mm
+                  </span>
+                </div>
+                <ErrorText
+                  show={errors.opSurfaceHeight}
+                  text="Required field"
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm hp:text-xs">
-                  mm
-                </span>
               </div>
-              <ErrorText show={errors.opSurfaceHeight} text="Required field" />
-            </div>
 
-            {/* Opening Length */}
-            <div>
-              <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                Opening Length (LOp)
-              </label>
+              {/* Opening Length */}
               <div className="relative">
-                <input
-                  type="number"
-                  value={opRType.opLength}
-                  onChange={(e) => onUpdate({ opLength: e.target.value })}
-                  onWheel={(e) => e.target.blur()}
-                  className={`${inputClass(errors.opLength)} pr-12`}
-                />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm hp:text-xs">
-                  mm
-                </span>
+                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
+                  Opening Length (LOp)
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={opRType.opLength}
+                    onChange={(e) => onUpdate({ opLength: e.target.value })}
+                    onWheel={(e) => e.target.blur()}
+                    className={`${inputClass(errors.opLength)} pr-12`}
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm hp:text-xs">
+                    mm
+                  </span>
+                </div>
+                <ErrorText show={errors.opLength} text="Required field" />
               </div>
-              <ErrorText show={errors.opLength} text="Required field" />
             </div>
           </div>
-        </div>
 
-        {/* ================= IMAGE (1 ROW) ================= */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* TOP VIEW */}
-          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex items-center justify-center">
-            <img
-              src="/images/opR-top-view.png"
-              alt="Top View"
-              className="h-44 object-contain"
-            />
-          </div>
+          {/* ================= IMAGE (1 ROW) ================= */}
+          <div className="flex flex-col justify-center gap-6">
+            {/* TOP VIEW */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex items-center justify-center">
+              <img
+                src="/images/opR-top-view.png"
+                alt="Top View"
+                className="h-44 object-contain"
+              />
+            </div>
 
-          {/* SIDE VIEW */}
-          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex items-center justify-center">
-            <img
-              src="/images/op-side-view.png"
-              alt="Side View"
-              className="h-44 object-contain"
-            />
+            {/* SIDE VIEW */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex items-center justify-center">
+              <img
+                src="/images/op-side-view.png"
+                alt="Side View"
+                className="h-44 object-contain"
+              />
+            </div>
           </div>
         </div>
 

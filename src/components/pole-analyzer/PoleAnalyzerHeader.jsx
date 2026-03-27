@@ -56,6 +56,7 @@ export function HeaderCalculationPage() {
       "results",
       "resultsDo",
       "resultsOhw",
+      "resultsArm",
       "showResults",
       "opType",
       "opBoxType",
@@ -64,6 +65,8 @@ export function HeaderCalculationPage() {
       "fourRibType",
       "eightRibType",
       "foundationType",
+      "sqrCaissonType",
+      "roundCaissonType",
     ];
 
     keys.forEach((key) => sessionStorage.removeItem(`${type}_${key}`));

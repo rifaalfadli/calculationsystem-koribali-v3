@@ -1,11 +1,11 @@
 import { Helmet } from "react-helmet";
 import React, { useState, useEffect } from "react";
 import { useProjectStorage } from "../../components/pole-analyzer/hooks/useProjectStorage";
-import { BoxTypeInput } from "../../components/opening-forms/BoxTypeInput";
 import { ChevronDown, ChevronUp, Box } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { HeaderCalculationPage } from "../../components/pole-analyzer/PoleAnalyzerHeader";
 import { OpeningTypeInput } from "../../components/opening-forms/OpeningTypeInput";
+import { BoxTypeInput } from "../../components/opening-forms/BoxTypeInput";
 import { RTypeInput } from "../../components/opening-forms/RTypeInput";
 import * as Utils from "../../utils/pole-analyzer";
 import * as Modal from "../../components/pole-analyzer/PoleAnalyzerModal";

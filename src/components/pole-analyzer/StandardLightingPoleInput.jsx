@@ -63,7 +63,7 @@ export function PoleBasicForm({ poleBasic, onUpdate, handleStepNext }) {
       <div className="mb-6">
         <h3 className="text-[#0d3b66] mb-4 flex items-center gap-2 text-sm font-medium">
           <div className="w-1 h-5 bg-[#3399cc] rounded-full"></div>
-          Select Pole Shape
+          Select Pole Type
         </h3>
 
         <div className="border border-slate-200 rounded-xl p-6 bg-white shadow-sm">
@@ -106,7 +106,7 @@ export function PoleBasicForm({ poleBasic, onUpdate, handleStepNext }) {
             {/* Section Title */}
             <h3 className="text-[#0d3b66] mb-4 flex items-center gap-2 text-sm font-medium hp:text-xs hp:gap-1">
               <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
-              Select Pole Type
+              Select Pole Standard
             </h3>
 
             {/* Container */}

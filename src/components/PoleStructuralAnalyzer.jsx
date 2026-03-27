@@ -719,6 +719,19 @@ export function PoleStructuralAnalyzer() {
       overheadWires: finalOhw,
     } = resolveStandardData();
 
+    // =========================
+    // STRUCTURAL DESIGN VALIDATION
+    // =========================
+    const isStructuralValid = handleStructuralDesignComplete();
+
+    if (!isStructuralValid) {
+      setStructuralDesignErrors(
+        Utils.getStructuralDesignErrors(structuralDesign),
+      );
+      showToast("Please complete Structural Design first.");
+      return;
+    }
+
     // Safety check kalau standard tapi tidak ditemukan di JSON
     if (
       condition.method === "standard" &&
@@ -735,7 +748,6 @@ export function PoleStructuralAnalyzer() {
       condition,
       showToast,
       structuralDesign,
-      handleStructuralDesignComplete,
       finalSections,
       handleIsSectionComplete,
       finalDo,
@@ -753,7 +765,10 @@ export function PoleStructuralAnalyzer() {
     );
 
     // Defensive guard (prevent crash if undefined)
-    if (!result) return;
+    if (!result || typeof result.isValid === "undefined") {
+      console.error("Invalid calculation result:", result);
+      return;
+    }
 
     const { isValid, errors } = result;
 
@@ -761,30 +776,24 @@ export function PoleStructuralAnalyzer() {
     // IF INVALID => MAP ERRORS TO UI
     // =========================
     if (!isValid) {
-      if (errors.structuralDesign) {
-        setStructuralDesignErrors(
-          Utils.getStructuralDesignErrors(structuralDesign),
-        );
-      }
-
       if (errors.section && condition.method !== "standard") {
-        setSectionsErrors(Utils.getSectionsErrors(sections));
+        setSectionsErrors(Utils.getSectionsErrors(finalSections));
       }
 
       if (errors.directObject && condition.method !== "standard") {
-        setDoErrors(Utils.getDoErrors(directObjects));
+        setDoErrors(Utils.getDoErrors(finalDo));
       }
 
       if (errors.overheadWire && condition.method !== "standard") {
-        setOhwErrors(Utils.getOhwErrors(overheadWires));
+        setOhwErrors(Utils.getOhwErrors(finalOhw));
       }
 
       if (errors.arm && condition.method !== "standard") {
-        setArmsErrors(Utils.getArmsErrors(arms));
+        setArmsErrors(Utils.getArmsErrors(finalArms));
       }
 
       if (errors.armObject && condition.method !== "standard") {
-        setAoErrors(Utils.getAoErrors(arms));
+        setAoErrors(Utils.getAoErrors(finalArms));
       }
 
       return;
@@ -793,14 +802,9 @@ export function PoleStructuralAnalyzer() {
     // =========================
     // SUCCESS => SCROLL TO RESULT
     // =========================
+    setIsCalculated(true);
     const target = document.getElementById("results-section");
     target?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  // FUNCTION: Execute calculation and update calculation state
-  const handleCalculate = () => {
-    calculateResults();
-    setIsCalculated(true);
   };
 
   // FUNCTION: Complete current step and navigate or generate report
@@ -1643,7 +1647,7 @@ export function PoleStructuralAnalyzer() {
 
           {/* Calculate (CENTER - PRIMARY ACTION) */}
           <button
-            onClick={handleCalculate}
+            onClick={calculateResults}
             className="flex items-center gap-2 px-7 py-2.5
             bg-gradient-to-r from-[#0d3b66] to-[#3399cc]
             text-white rounded-lg text-sm
