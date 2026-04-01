@@ -11,6 +11,7 @@ import { validatePole } from "./validation";
 // FUNCTION: Perform calculation for all form
 // ===============================================================================
 export const handleCalculateResults = (
+  poleTypeStandard,
   condition,
   showToast,
   structuralDesign,
@@ -23,6 +24,8 @@ export const handleCalculateResults = (
   arms,
   handleIsArmComplete,
   handleIsAoComplete,
+  stepPoleStandard,
+  handleStepPoleStandardComplete,
   setResults,
   setResultsDo,
   setResultsOhw,
@@ -36,6 +39,7 @@ export const handleCalculateResults = (
     overheadWire: false,
     arm: false,
     armObject: false,
+    stepPoleStandard: false,
   };
   // =========================
   // POLE VALIDATION (ONLY CUSTOM MODE)
@@ -117,6 +121,19 @@ export const handleCalculateResults = (
     }
   }
 
+  // =========================
+  // STEP POLE STANDRAD VALIDATION
+  // =========================
+  if (
+    condition.method !== "custom" &&
+    poleTypeStandard.poleShape === "straight"
+  ) {
+    if (!handleStepPoleStandardComplete(stepPoleStandard)) {
+      showToast("Please complete all Stepped Pole Type Specification fields.");
+      errors.stepPoleStandard = true;
+    }
+  }
+
   const isValid = Object.values(errors).every((v) => v === false);
 
   if (!isValid) {
@@ -144,6 +161,7 @@ export const handleCalculateResults = (
 // FUNCTION: Validate all inputs before generating the final report
 // ===============================================================================
 export const makeReport = (
+  poleTypeStandard,
   condition,
   results,
   showToast,
@@ -158,6 +176,8 @@ export const makeReport = (
   overheadWires,
   handleIsOhwComplete,
   handleIsAoComplete,
+  stepPoleStandard,
+  handleStepPoleStandardComplete,
 ) => {
   const errors = {
     results: false,
@@ -168,6 +188,7 @@ export const makeReport = (
     overheadWire: false,
     arm: false,
     armObject: false,
+    stepPoleStandard: false,
   };
 
   // CHECK 1: Results
@@ -248,6 +269,18 @@ export const makeReport = (
       if (errors.armObject) break;
     }
   }
+
+  // CHECK 11: Stepped Pole Standard
+  if (
+    condition.method !== "custom" &&
+    poleTypeStandard.poleShape === "straight"
+  ) {
+    if (!handleStepPoleStandardComplete(stepPoleStandard)) {
+      showToast("Please complete all Stepped Pole Type first.");
+      errors.stepPoleStandard = true;
+    }
+  }
+
   const isValid = Object.values(errors).every((v) => v === false);
 
   return { isValid, errors };
@@ -365,5 +398,45 @@ export const deleteReport = (
   sessionStorage.removeItem("resultsArm");
   sessionStorage.removeItem("method");
   sessionStorage.removeItem("poleBasic");
+  sessionStorage.removeItem("projectType");
+};
+
+export const clearCalculationSession = (projectType) => {
+  const keys = [
+    "cover",
+    "condition",
+    "structuralDesign",
+    "sections",
+    "directObjects",
+    "overheadWires",
+    "results",
+    "resultsDo",
+    "resultsOhw",
+    "resultsArm",
+    "showResults",
+    "opType",
+    "opBoxType",
+    "opRType",
+    "bpType",
+    "fourRibType",
+    "eightRibType",
+    "foundationType",
+    "sqrCaissonType",
+    "roundCaissonType",
+    "poleTypeStandard",
+    "arms",
+    "poleBasic",
+    "stepPoleStandard",
+    "hasReport",
+    "showResultsOp",
+    "calculatedOp",
+    "showResultsBp",
+    "calculatedFoundation",
+    "showResultsFoundation",
+  ];
+
+  keys.forEach((key) => sessionStorage.removeItem(`${projectType}_${key}`));
+
+  sessionStorage.removeItem(`${projectType}_calculation_config`);
   sessionStorage.removeItem("projectType");
 };

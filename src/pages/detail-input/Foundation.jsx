@@ -7,6 +7,7 @@ import { HeaderCalculationPage } from "../../components/pole-analyzer/PoleAnalyz
 import { FoundationTypeInput } from "../../components/foundation-forms/FoundationTypeInput";
 import { SquareCaissonTypeInput } from "../../components/foundation-forms/SquareCaissonTypeInput";
 import { RoundCaissonTypeInput } from "../../components/foundation-forms/RoundCaissonTypeInput";
+import { ResultsTableFoundation } from "../../components/result-table-component/ResultsTableFoundation";
 import * as Utils from "../../utils/pole-analyzer";
 import * as Modal from "../../components/pole-analyzer/PoleAnalyzerModal";
 
@@ -76,6 +77,19 @@ export default function FoundationPage() {
       ycValue: "",
       alphaValue: "",
     },
+  );
+
+  // STATE: Results table
+  const [calculatedFoundation, setCalculatedFoundation] = useProjectStorage(
+    projectType,
+    "calculatedFoundation",
+    null,
+  );
+
+  const [showResultsFoundation, setShowResultsFoundation] = useProjectStorage(
+    projectType,
+    "showResultsFoundation",
+    false,
   );
 
   // STATE: Validation errors for foundationType form
@@ -173,7 +187,13 @@ export default function FoundationPage() {
     }
 
     // LOLOS VALIDASI
+    setCalculatedFoundation({
+      foundationType: { ...foundationType },
+    });
     setIsCalculated(true);
+    setShowResultsFoundation(true);
+    const target = document.getElementById("results-foundation");
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   // HANDLE: Proceed to next step or trigger report if last step
@@ -233,7 +253,8 @@ export default function FoundationPage() {
       return;
     }
 
-    // SUCCESS => NAVIGATE
+    // SUCCESS
+    sessionStorage.setItem(`${projectType}_hasReport`, "true");
     navigate("/report", {
       state: {
         results,
@@ -396,6 +417,15 @@ export default function FoundationPage() {
                   onNext={handleFinish}
                   isCalculated={isCalculated}
                   buttonLabel={buttonLabel}
+                />
+              )}
+            </div>
+
+            {/* TABEL HASIL KALKULASI */}
+            <div id="results-foundation">
+              {showResultsFoundation && (
+                <ResultsTableFoundation
+                  foundationType={calculatedFoundation?.foundationType}
                 />
               )}
             </div>

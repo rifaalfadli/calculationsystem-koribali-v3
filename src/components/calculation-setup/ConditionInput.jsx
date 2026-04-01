@@ -6,7 +6,6 @@ import {
   Circle,
   DoorOpen,
   CheckCircle,
-  CircleDashed,
   Square,
   Layers,
 } from "lucide-react";

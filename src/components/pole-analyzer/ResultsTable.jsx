@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { FileText, FileSpreadsheet, CheckCircle2 } from "lucide-react";
+import { FileSpreadsheet, CheckCircle2 } from "lucide-react";
 import { PoleSpecificationTable } from "../results-table/PoleSpecificationTable";
 import { DirectObjectCalculationTable } from "../results-table/DirectObjectCalculationTable";
 import { OverheadWireCalculationTable } from "../results-table/OverheadWireCalculationTable";
 import { ArmSpecificationTable } from "../results-table/ArmSpecificationTable";
 import { ArmObjectCalculationTable } from "../results-table/ArmObjectCalculationTable";
+import { StepLoadSummaryTable } from "../results-table/SummaryCalculationTable";
+
 export function ResultsTable({ results, resultsDo, resultsOhw, resultsArm }) {
   const [page] = useState(0);
   const r = results[page]; // current Pole
@@ -62,6 +64,10 @@ export function ResultsTable({ results, resultsDo, resultsOhw, resultsArm }) {
       {resultsArm?.map((arm, armIndex) => (
         <ArmObjectCalculationTable arm={arm} armIndex={armIndex} />
       ))}
+
+      <div className="border-t border-gray-200 my-8" />
+
+      {results.length > 0 && <StepLoadSummaryTable results={results} />}
 
       {/* ===================== EMPTY STATE ===================== */}
       {results.length === 0 && (

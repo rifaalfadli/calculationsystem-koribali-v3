@@ -7,6 +7,7 @@ import { BaseplateTypeInput } from "../../components/baseplate-forms/BaseplateTy
 import { HeaderCalculationPage } from "../../components/pole-analyzer/PoleAnalyzerHeader";
 import { FourRibTypeInput } from "../../components/baseplate-forms/4RibTypeInput";
 import { EightRibTypeInput } from "../../components/baseplate-forms/8RibTypeInput";
+import { ResultsTableBaseplate } from "../../components/result-table-component/ResultsTableBaseplate";
 import * as Utils from "../../utils/pole-analyzer";
 import * as Modal from "../../components/pole-analyzer/PoleAnalyzerModal";
 
@@ -85,6 +86,13 @@ export default function BaseplatePage() {
       lrs: "",
       lk: "",
     },
+  );
+
+  // STATE: Results table
+  const [showResultsBp, setShowResultsBp] = useProjectStorage(
+    projectType,
+    "showResultsBp",
+    false,
   );
 
   // STATE: Validation errors for bpType form
@@ -175,6 +183,9 @@ export default function BaseplatePage() {
 
     // LOLOS VALIDASI
     setIsCalculated(true);
+    setShowResultsBp(true);
+    const target = document.getElementById("results-bp");
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   // HANDLE: Proceed to next step or trigger report if last step
@@ -234,7 +245,8 @@ export default function BaseplatePage() {
       return;
     }
 
-    // SUCCESS => NAVIGATE
+    // SUCCESS
+    sessionStorage.setItem(`${projectType}_hasReport`, "true");
     navigate("/report", {
       state: {
         results,
@@ -394,6 +406,11 @@ export default function BaseplatePage() {
                   buttonLabel={buttonLabel}
                 />
               )}
+            </div>
+
+            {/* TABEL HASIL KALKULASI */}
+            <div id="results-bp">
+              {showResultsBp && <ResultsTableBaseplate />}
             </div>
           </div>
         </div>

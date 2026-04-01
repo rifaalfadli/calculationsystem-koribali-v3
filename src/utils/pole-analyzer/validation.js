@@ -82,8 +82,50 @@ export const getStructuralDesignErrors = (structuralDesign) => ({
 });
 
 // ====================================================
+// Function for Pole Type Standard Input
+// ====================================================
+// FUNCTION: Check if Pole Type Standard information form is complete
+export const poleTypeStandardComplete = (poleTypeStandard) => {
+  return [poleTypeStandard.poleShape].every((v) => !isEmpty(v));
+};
+
+// ====================================================
 // Function for Pole Input
 // ====================================================
+// FUNCTION: Check if Stepped Pole Type Standard form is complete
+export const stepPoleStandardComplete = (stepPoleStandard) => {
+  const isEmbedment = stepPoleStandard.installationType === "embedment";
+
+  const fields = [
+    stepPoleStandard.upperThickness,
+    stepPoleStandard.upperLength,
+    stepPoleStandard.lowerThickness,
+    stepPoleStandard.lowerLength,
+    stepPoleStandard.installationType,
+    ...(isEmbedment ? [stepPoleStandard.embedmentLength] : []),
+  ];
+
+  return fields.every((v) => v && v.toString().trim() !== "");
+};
+
+// FUNCTION: Create an error checker helper for the Stepped Pole Type Standard
+export const getStepPoleStandardErrors = (stepPoleStandard) => {
+  const isEmbedment = stepPoleStandard.installationType === "embedment";
+
+  return {
+    upperThickness: isEmpty(stepPoleStandard.upperThickness),
+    upperLength: isEmpty(stepPoleStandard.upperLength),
+    lowerThickness: isEmpty(stepPoleStandard.lowerThickness),
+    lowerLength: isEmpty(stepPoleStandard.lowerLength),
+    installationType: isEmpty(stepPoleStandard.installationType),
+
+    // conditional validation
+    embedmentLength: isEmbedment
+      ? isEmpty(stepPoleStandard.embedmentLength)
+      : false,
+  };
+};
+
 // FUNCTION: Validate Pole Input
 export const validatePole = (sections, structuralDesign) => {
   const lPole = Number(structuralDesign.lowestStep);

@@ -1,5 +1,6 @@
 import * as Modal from "../pole-analyzer/PoleAnalyzerModal";
-import React, { useState, useEffect } from "react";
+import { clearCalculationSession } from "../../utils/pole-analyzer";
+import React, { useState } from "react";
 import {
   ArrowLeft,
   RotateCcw,
@@ -19,19 +20,8 @@ export function HeaderCalculationPage() {
   const configKey = `${type}_calculation_config`;
 
   // STATE
-  const [config, setConfig] = useState(null);
   const [showDraftModal, setShowDraftModal] = useState(false);
   const [confirmResetAll, setConfirmResetAll] = useState(false); // reset all confirmation
-
-  // LOAD CONFIG (reactive)
-  useEffect(() => {
-    const stored = sessionStorage.getItem(configKey);
-    if (stored) {
-      setConfig(JSON.parse(stored));
-    } else {
-      setConfig(null);
-    }
-  }, [location.pathname, configKey]);
 
   // HANDLERS
   const handleBackClick = () => {
@@ -44,41 +34,13 @@ export function HeaderCalculationPage() {
   };
 
   // FUNCTION: Removes all calculation results and hides the results table.
-  const handleDeleteReport = () => {
-    // Hapus semua sessionStorage
-    const keys = [
-      "cover",
-      "condition",
-      "structuralDesign",
-      "sections",
-      "directObjects",
-      "overheadWires",
-      "results",
-      "resultsDo",
-      "resultsOhw",
-      "resultsArm",
-      "showResults",
-      "opType",
-      "opBoxType",
-      "opRType",
-      "bpType",
-      "fourRibType",
-      "eightRibType",
-      "foundationType",
-      "sqrCaissonType",
-      "roundCaissonType",
-    ];
-
-    keys.forEach((key) => sessionStorage.removeItem(`${type}_${key}`));
-    sessionStorage.removeItem(`${type}_calculation_config`);
-    sessionStorage.removeItem("arms");
-    sessionStorage.removeItem("armObjects");
-    sessionStorage.removeItem("resultsArm");
-    sessionStorage.removeItem("method");
-    sessionStorage.removeItem("poleBasic");
-    sessionStorage.removeItem("projectType");
+  const handleDelete = () => {
+    clearCalculationSession(type);
     navigate("/calculation");
   };
+
+  // LOAD CONFIG (reactive)
+  const config = JSON.parse(sessionStorage.getItem(configKey) || "null");
 
   // NAVIGATION
   const navItems = config
@@ -200,7 +162,7 @@ export function HeaderCalculationPage() {
       <Modal.ConfirmResetAllModal
         confirmResetAll={confirmResetAll}
         onClose={() => setConfirmResetAll(false)}
-        handleDeleteReport={handleDeleteReport}
+        handleDeleteReport={handleDelete}
       />
     </div>
   );

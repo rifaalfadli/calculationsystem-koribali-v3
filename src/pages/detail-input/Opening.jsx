@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useProjectStorage } from "../../components/pole-analyzer/hooks/useProjectStorage";
 import { ChevronDown, ChevronUp, Box } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { HeaderCalculationPage } from "../../components/pole-analyzer/PoleAnalyz
 import { OpeningTypeInput } from "../../components/opening-forms/OpeningTypeInput";
 import { BoxTypeInput } from "../../components/opening-forms/BoxTypeInput";
 import { RTypeInput } from "../../components/opening-forms/RTypeInput";
+import { ResultsTableOp } from "../../components/result-table-component/ResultsTableOp";
 import * as Utils from "../../utils/pole-analyzer";
 import * as Modal from "../../components/pole-analyzer/PoleAnalyzerModal";
 
@@ -63,6 +64,19 @@ export default function OpeningPage() {
     opSurfaceHeight: "",
     opLength: "",
   });
+
+  // STATE: Results table
+  const [calculatedOp, setCalculatedOp] = useProjectStorage(
+    projectType,
+    "calculatedOp",
+    null,
+  );
+
+  const [showResultsOp, setShowResultsOp] = useProjectStorage(
+    projectType,
+    "showResultsOp",
+    false,
+  );
 
   // STATE: Validation errors for opType form
   const [opTypeErrors, setOpTypeErrors] = useState({});
@@ -161,7 +175,15 @@ export default function OpeningPage() {
     }
 
     // LOLOS VALIDASI
+    setCalculatedOp({
+      opType: { ...opType },
+      opBoxType: { ...opBoxType },
+      opRType: { ...opRType },
+    });
     setIsCalculated(true);
+    setShowResultsOp(true);
+    const target = document.getElementById("results-op");
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   // HANDLE: Proceed to next step or trigger report if last step
@@ -221,7 +243,8 @@ export default function OpeningPage() {
       return;
     }
 
-    // SUCCESS => NAVIGATE
+    // SUCCESS
+    sessionStorage.setItem(`${projectType}_hasReport`, "true");
     navigate("/report", {
       state: {
         results,
@@ -378,6 +401,13 @@ export default function OpeningPage() {
                   isCalculated={isCalculated}
                   buttonLabel={buttonLabel}
                 />
+              )}
+            </div>
+
+            {/* TABEL HASIL KALKULASI */}
+            <div id="results-op">
+              {showResultsOp && (
+                <ResultsTableOp opType={calculatedOp?.opType} />
               )}
             </div>
           </div>

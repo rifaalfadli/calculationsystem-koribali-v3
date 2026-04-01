@@ -32,28 +32,13 @@ export function getStepNavigation(condition, currentStep) {
 // Function for Condition Input
 // ====================================================
 // FUNCTIONS: Go to Pole Input after Condition
-export const conditionNext = (isComplete, projectType, condition) => {
+export const conditionNext = (isComplete) => {
   if (!isComplete) {
     return {
       isValid: false,
-      errors: {
-        condition: true,
-      },
+      errors: { condition: true },
     };
   }
-
-  // KEY: Dynamic config key based on project type
-  const configKey = `${projectType}_calculation_config`;
-
-  // STORE: Save enabled components configuration
-  sessionStorage.setItem(
-    configKey,
-    JSON.stringify({
-      opening: condition.openingEnabled,
-      baseplate: condition.baseplateEnabled,
-      foundation: condition.foundationEnabled,
-    }),
-  );
 
   return {
     isValid: true,

@@ -4,6 +4,7 @@ import LightingPoleReport from "./report/lightingpole/LightingPoleReport";
 import AcemastReport from "./report/acemast/AcemastReport";
 import SignboardReport from "./report/signboard/SignboardReport";
 import MultipleReport from "./report/multiple/MultipleReport";
+import { clearCalculationSession } from "../utils/pole-analyzer";
 import {
   ArrowLeft,
   Download,
@@ -20,27 +21,33 @@ export function ReportPage() {
 
   // Ambil data cover, condition, results, sections dari state router
   // Jika tidak ada, fallback ke array kosong untuk mencegah error
-  const reportData = location.state || {
-    results: JSON.parse(
-      sessionStorage.getItem(`${projectType}_results`) || "[]",
-    ),
-    resultsDo: JSON.parse(
-      sessionStorage.getItem(`${projectType}_resultsDo`) || "[]",
-    ),
-    resultsOhw: JSON.parse(
-      sessionStorage.getItem(`${projectType}_resultsOhw`) || "[]",
-    ),
-    cover: JSON.parse(sessionStorage.getItem(`${projectType}_cover`) || "{}"),
-    condition: JSON.parse(
-      sessionStorage.getItem(`${projectType}_condition`) || "{}",
-    ),
-    structuralDesign: JSON.parse(
-      sessionStorage.getItem(`${projectType}_structuralDesign`) || "{}",
-    ),
-  };
+  const reportData = location.state;
 
-  const { results, resultsDo, resultsOhw, cover, condition, structuralDesign } =
-    reportData;
+  const results =
+    reportData?.results ||
+    JSON.parse(sessionStorage.getItem(`${projectType}_results`) || "[]");
+
+  const resultsDo =
+    reportData?.resultsDo ||
+    JSON.parse(sessionStorage.getItem(`${projectType}_resultsDo`) || "[]");
+
+  const resultsOhw =
+    reportData?.resultsOhw ||
+    JSON.parse(sessionStorage.getItem(`${projectType}_resultsOhw`) || "[]");
+
+  const cover =
+    reportData?.cover ||
+    JSON.parse(sessionStorage.getItem(`${projectType}_cover`) || "{}");
+
+  const condition =
+    reportData?.condition ||
+    JSON.parse(sessionStorage.getItem(`${projectType}_condition`) || "{}");
+
+  const structuralDesign =
+    reportData?.structuralDesign ||
+    JSON.parse(
+      sessionStorage.getItem(`${projectType}_structuralDesign`) || "{}",
+    );
 
   // // Tombol kembali ke calculation page
   // const onBack = () => navigate("/calculation");
@@ -56,7 +63,9 @@ export function ReportPage() {
   // State pop-up delete confirmation
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   // Flag apakah report masih ada atau sudah dihapus
-  const [hasReport, setHasReport] = useState(true);
+  const [hasReport, setHasReport] = useState(
+    sessionStorage.getItem(`${projectType}_hasReport`) === "true",
+  );
 
   // Fungsi print + rename file PDF via dokumen.title (workaround umum)
   const handlePrint = () => {
@@ -71,28 +80,7 @@ export function ReportPage() {
     setHasReport(false);
     setShowDeleteConfirm(false);
 
-    // Hapus semua sessionStorage
-    const keys = [
-      "cover",
-      "condition",
-      "structuralDesign",
-      "sections",
-      "directObjects",
-      "overheadWires",
-      "results",
-      "resultsDo",
-      "resultsOhw",
-      "showResults",
-    ];
-
-    keys.forEach((key) => sessionStorage.removeItem(`${projectType}_${key}`));
-    sessionStorage.removeItem(`${projectType}_calculation_config`);
-    sessionStorage.removeItem("arms");
-    sessionStorage.removeItem("armObjects");
-    sessionStorage.removeItem("resultsArm");
-    sessionStorage.removeItem("method");
-    sessionStorage.removeItem("poleBasic");
-    sessionStorage.removeItem("projectType");
+    clearCalculationSession(projectType);
     navigate("/calculation");
   };
 

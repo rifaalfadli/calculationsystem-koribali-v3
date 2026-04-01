@@ -27,6 +27,32 @@ export const updateStructuralDesign = (
 };
 
 // ====================================================
+// Function for Pole Type Standard Input
+// ====================================================
+// FUNCTION: Update pole type standard data
+export const updatePoleTypeStandard = (
+  poleTypeStandard,
+  updates,
+  setPoleTypeStandard,
+) => {
+  setPoleTypeStandard({ ...poleTypeStandard, ...updates });
+};
+
+// FUNCTION: Update stepped pole type standard data
+export const updateStepPoleStandard = (
+  stepPoleStandard,
+  updates,
+  setStepPoleStandard,
+) => {
+  setStepPoleStandard({ ...stepPoleStandard, ...updates });
+};
+
+// FUNCTION: Update taper pole type standard data
+export const updatePoleBasic = (poleBasic, updates, setPoleBasic) => {
+  setPoleBasic({ ...poleBasic, ...updates });
+};
+
+// ====================================================
 // Function for Pole Input
 // ====================================================
 // FUNCTION: Add a new step (max 6 step)

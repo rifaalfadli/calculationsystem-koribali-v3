@@ -50,6 +50,7 @@ export default function CalculationSetup() {
 
   // STATE: confirm disable additional components
   const [confirmDisable, setConfirmDisable] = useState(null);
+  const [prevCondition, setPrevCondition] = useState({ ...condition });
 
   // EFFECT: Validate project type on mount/change and clean invalid session
   useEffect(() => {
@@ -78,7 +79,19 @@ export default function CalculationSetup() {
   };
 
   const proceedFinish = () => {
-    // CLEANUP
+    // 1. SET CONFIG (SOURCE OF TRUTH HEADER)
+    const newConfig = {
+      opening: !!localCondition.openingEnabled,
+      baseplate: !!localCondition.baseplateEnabled,
+      foundation: !!localCondition.foundationEnabled,
+    };
+
+    sessionStorage.setItem(
+      `${projectType}_calculation_config`,
+      JSON.stringify(newConfig),
+    );
+
+    // 2. CLEANUP
     if (!localCondition.openingEnabled) {
       sessionStorage.removeItem(`${projectType}_opType`);
       sessionStorage.removeItem(`${projectType}_opBoxType`);
@@ -97,7 +110,10 @@ export default function CalculationSetup() {
       sessionStorage.removeItem(`${projectType}_roundCaissonType`);
     }
 
+    // 3. COMMIT CONDITION
     setCondition(localCondition);
+
+    // 4. NAVIGATE
     navigate(`/calculation/${projectType}/pole`);
   };
 
@@ -121,11 +137,7 @@ export default function CalculationSetup() {
   const handleConditionNext = () => {
     setConditionErrors({});
 
-    const result = Utils.conditionNext(
-      handleIsConditionComplete(),
-      projectType,
-      localCondition,
-    );
+    const result = Utils.conditionNext(handleIsConditionComplete());
 
     if (!result.isValid) {
       showToast("Please complete all initial input fields.");
@@ -135,14 +147,14 @@ export default function CalculationSetup() {
       return;
     }
 
-    // cek perubahan true → false
+    // cek perubahan true => false
     const disabledComponents = getDisabledComponents();
 
     if (disabledComponents.length > 0) {
+      setPrevCondition({ ...condition });
       setConfirmDisable(disabledComponents);
-      return; // STOP dulu, tunggu konfirmasi
+      return;
     }
-
     // kalau tidak ada perubahan → langsung lanjut
     proceedFinish();
   };
@@ -216,7 +228,10 @@ export default function CalculationSetup() {
 
         <ConfirmDisableComponentModal
           data={confirmDisable}
-          onClose={() => setConfirmDisable(null)}
+          onClose={() => {
+            setConfirmDisable(null);
+            setLocalCondition({ ...prevCondition });
+          }}
           onConfirm={() => {
             setConfirmDisable(null);
             proceedFinish();

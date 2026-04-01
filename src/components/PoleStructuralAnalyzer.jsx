@@ -13,6 +13,8 @@ import { ArmInput } from "./pole-analyzer/ArmInput";
 import { useProjectStorage } from "./pole-analyzer/hooks/useProjectStorage";
 import STANDARD_POLE_DATA from "../data/specStandardPole.json";
 import { PoleBasicForm } from "./pole-analyzer/StandardLightingPoleInput";
+import { PoleTypeStandardInput } from "./pole-analyzer/PoleTypeStandardInput";
+import { StepPoleTypeInput } from "./pole-analyzer/StepPoleTypeInput";
 
 // UTILS & MODALS: Shared logic and overlays
 import * as Modal from "./pole-analyzer/PoleAnalyzerModal";
@@ -83,17 +85,49 @@ export function PoleStructuralAnalyzer() {
   ]);
   const [sectionsErrors, setSectionsErrors] = useState({});
 
+  // STATE: Standard pole type
+  const [poleTypeStandard, setPoleTypeStandard] = useProjectStorage(
+    projectType,
+    "poleTypeStandard",
+    [
+      {
+        poleShape: "",
+      },
+    ],
+  );
+
   // STATE: Standarad pole input
-  const [poleBasic, setPoleBasic] = useState(() => {
-    const saved = sessionStorage.getItem("poleBasic");
-    return saved
-      ? JSON.parse(saved)
-      : {
-          poleType: "",
-          groundPosition: "",
-          height: "",
-        };
-  });
+  const [poleBasic, setPoleBasic] = useProjectStorage(
+    projectType,
+    "poleBasic",
+    [
+      {
+        poleType: "",
+        groundPosition: "",
+        height: "",
+      },
+    ],
+  );
+
+  // STATE: Standarad pole input
+  const [stepPoleStandard, setStepPoleStandard] = useProjectStorage(
+    projectType,
+    "stepPoleStandard",
+    [
+      {
+        poleType: "",
+        combinationGroup: "",
+        combination: "",
+        upperThickness: "",
+        upperLength: "",
+        lowerThickness: "",
+        lowerLength: "",
+        installationType: "",
+        embedmentLength: "",
+      },
+    ],
+  );
+  const [stepPoleStandardErrors, setStepPoleStandardErrors] = useState({});
 
   // STATE: Direct Object input
   const [directObjects, setDirectObjects] = useProjectStorage(
@@ -112,10 +146,7 @@ export function PoleStructuralAnalyzer() {
   const [ohwErrors, setOhwErrors] = useState({});
 
   // STATE: Arm input
-  const [arms, setArms] = useState(() => {
-    const saved = sessionStorage.getItem("arms");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [arms, setArms] = useProjectStorage(projectType, "arms", []);
   const [armsErrors, setArmsErrors] = useState({});
 
   // STATE: Arm Object input
@@ -139,10 +170,11 @@ export function PoleStructuralAnalyzer() {
   );
 
   // STATE: Results all arm
-  const [resultsArm, setResultsArm] = useState(() => {
-    const saved = sessionStorage.getItem("resultsArm");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [resultsArm, setResultsArm] = useProjectStorage(
+    projectType,
+    "resultsArm",
+    [],
+  );
 
   // STATE: Results table
   const [showResults, setShowResults] = useProjectStorage(
@@ -153,27 +185,7 @@ export function PoleStructuralAnalyzer() {
 
   //
   // ==========================================================================
-  // 2. PERSISTENCE (SESSION STORAGE)
-  // ==========================================================================
-  //
-  // PERSISTENCE: Form input standard calculation pole
-  useEffect(() => {
-    sessionStorage.setItem("poleBasic", JSON.stringify(poleBasic));
-  }, [poleBasic]);
-
-  // PERSISTENCE: Arm Input
-  useEffect(() => {
-    sessionStorage.setItem("arms", JSON.stringify(arms));
-  }, [arms]);
-
-  // PERSISTENCE: Results all arm
-  useEffect(() => {
-    sessionStorage.setItem("resultsArm", JSON.stringify(resultsArm));
-  }, [resultsArm]);
-
-  //
-  // ==========================================================================
-  // 3. UI CONTROL STATES (Modals, Toggles, & Temp Data)
+  // 2. UI CONTROL STATES (Modals, Toggles, & Temp Data)
   // ==========================================================================
   //
   // --- Step Pole Controls ---
@@ -231,7 +243,7 @@ export function PoleStructuralAnalyzer() {
 
   //
   // ==========================================================================
-  // 4. DATA INITIALIZATION & LIFECYCLE SYNC
+  // 3. DATA INITIALIZATION & LIFECYCLE SYNC
   // ==========================================================================
   //
   // --- ID Recovery: Sync Refs with Session Storage to prevent ID conflict ---
@@ -365,13 +377,39 @@ export function PoleStructuralAnalyzer() {
   };
 
   // ------------------------ Function for PoleInput ------------------------
-  // FUNCTION: State updater function and persistence handler
-  const handleUpdatePoleBasic = (updatedFields) => {
-    setPoleBasic((prev) => {
-      const updated = { ...prev, ...updatedFields };
-      sessionStorage.setItem("poleBasic", JSON.stringify(updated));
-      return updated;
-    });
+  // FUNCTION: Update pole type standrad data
+  const handleUpdatePoleTypeStandard = (updates) => {
+    Utils.updatePoleTypeStandard(
+      poleTypeStandard,
+      updates,
+      setPoleTypeStandard,
+    );
+  };
+
+  // FUNCTION: Check if pole type standard form is complete
+  const handlePoleTypeStandardComplete = () => {
+    return Utils.poleTypeStandardComplete(poleTypeStandard);
+  };
+
+  // FUNCTION: State updater function and persistence handler Stepped Pole Standard
+  const handleUpdateStepPoleStandard = (updates) => {
+    Utils.updateStepPoleStandard(
+      stepPoleStandard,
+      updates,
+      setStepPoleStandard,
+    );
+
+    Utils.clearError(updates, setStepPoleStandardErrors);
+  };
+
+  // FUNCTION: Check if stepPoleStandard form is complete
+  const handleStepPoleStandardComplete = () => {
+    return Utils.stepPoleStandardComplete(stepPoleStandard);
+  };
+
+  // FUNCTION: State updater function and persistence handler Taper Pole Standard
+  const handleUpdatePoleBasic = (updates) => {
+    Utils.updatePoleBasic(poleBasic, updates, setPoleBasic);
   };
 
   // FUNCTION: Add a new section (max 4 section)
@@ -403,11 +441,6 @@ export function PoleStructuralAnalyzer() {
   // FUNCTION: Check if a section pole is complete
   const handleIsSectionComplete = (section) => {
     return Utils.isSectionComplete(section);
-  };
-
-  // FUNCTION: Go to Direct Object Input after Step Pole
-  const handleStepNext = () => {
-    Utils.stepPoleNext(setIsExpandedPole, setIsExpandedDo);
   };
 
   // ------------------------ Function for DirectObjectInput ------------------------
@@ -471,11 +504,6 @@ export function PoleStructuralAnalyzer() {
   // FUNCTION: Check if a direct object is complete
   const handleIsDoComplete = (directObject) => {
     return Utils.isDoComplete(directObject);
-  };
-
-  // FUNCTION: Go to Direct Object Input after Step Pole
-  const handleArmNext = () => {
-    Utils.armNext(setIsExpandedArm);
   };
 
   // ------------------------ Function for OverheadWireInput ------------------------
@@ -573,11 +601,6 @@ export function PoleStructuralAnalyzer() {
     Utils.resetCurrentArm(setArms, arms, activeTabArm);
   };
 
-  // FUNCTION: Go to the next arm tab
-  const handleNextArm = () => {
-    Utils.goToNextArm(arms, activeTabArm, setActiveTabArm);
-  };
-
   // FUNCTION: Check if a arm is complete
   const handleIsArmComplete = (arm) => {
     return Utils.isArmComplete(arm);
@@ -657,8 +680,21 @@ export function PoleStructuralAnalyzer() {
   };
 
   // ------------------------ Function for All Form ------------------------
+  // helper biar bersih
+  const emptyData = () => ({
+    sections: [],
+    directObjects: [],
+    arms: [],
+    overheadWires: [],
+  });
+
+  // ------------------------
   // FUNCTION: Resolve standard data pole
+  // ------------------------
   const resolveStandardData = () => {
+    // =========================
+    // NON STANDARD => pakai input user
+    // =========================
     if (condition.method !== "standard") {
       return {
         sections,
@@ -668,27 +704,85 @@ export function PoleStructuralAnalyzer() {
       };
     }
 
-    const selectedPole =
-      STANDARD_POLE_DATA?.[poleBasic.poleType]?.[poleBasic.groundPosition]?.[
-        poleBasic.height
-      ];
+    const shape = poleTypeStandard.poleShape;
 
-    if (!selectedPole) {
-      showToast("Standard pole data not found.");
+    // =========================
+    // TAPER (FULL STATIC)
+    // =========================
+    if (shape === "taper") {
+      const selectedPole =
+        STANDARD_POLE_DATA?.taper?.[poleBasic.poleType]?.[
+          poleBasic.groundPosition
+        ]?.[poleBasic.height];
+
+      if (!selectedPole) {
+        showToast("Standard taper pole data not found.");
+        return emptyData();
+      }
+
       return {
-        sections: [],
+        sections: selectedPole.sections || [],
+        directObjects: selectedPole.directObjects || [],
+        arms: selectedPole.arms || [],
+        overheadWires: selectedPole.overheadWires || [],
+      };
+    }
+
+    // =========================
+    // STRAIGHT (HYBRID)
+    // =========================
+    if (shape === "straight") {
+      const key = stepPoleStandard.combination;
+
+      if (!key) {
+        showToast("Please select pole combination.");
+        return emptyData();
+      }
+
+      const selectedPole = STANDARD_POLE_DATA?.straight?.[key];
+
+      if (!selectedPole) {
+        showToast("Standard straight pole data not found.");
+        return emptyData();
+      }
+
+      const sections = selectedPole.sections.map((sec, index) => {
+        let thickness = "";
+        let height = "";
+
+        // =========================
+        // SECTION 1 => UPPER
+        // =========================
+        if (index === 0) {
+          thickness = stepPoleStandard.upperThickness;
+          height = stepPoleStandard.upperLength;
+        }
+
+        // =========================
+        // SECTION 2 => LOWER
+        // =========================
+        if (index === 1) {
+          thickness = stepPoleStandard.lowerThickness;
+          height = stepPoleStandard.lowerLength;
+        }
+
+        return {
+          ...sec,
+          thicknessLower: thickness,
+          thicknessUpper: thickness,
+          height,
+        };
+      });
+
+      return {
+        sections,
         directObjects: [],
         arms: [],
         overheadWires: [],
       };
     }
 
-    return {
-      sections: selectedPole.sections || [],
-      directObjects: selectedPole.directObjects || [],
-      arms: selectedPole.arms || [],
-      overheadWires: selectedPole.overheadWires || [],
-    };
+    return emptyData();
   };
 
   // FUNCTION: Step navigation helper (dynamic flow control)
@@ -708,6 +802,7 @@ export function PoleStructuralAnalyzer() {
     setOhwErrors({});
     setArmsErrors({});
     setAoErrors({});
+    setStepPoleStandardErrors({});
 
     // =========================
     // RESOLVE DATA SOURCE (MANUAL / STANDARD)
@@ -732,6 +827,16 @@ export function PoleStructuralAnalyzer() {
       return;
     }
 
+    // =========================
+    // POLE TYPE STANDARD VALIDATION
+    // =========================
+    const isPoleTypeStandardValid = handlePoleTypeStandardComplete();
+
+    if (!isPoleTypeStandardValid) {
+      showToast("Please select the pole type first.");
+      return;
+    }
+
     // Safety check kalau standard tapi tidak ditemukan di JSON
     if (
       condition.method === "standard" &&
@@ -745,6 +850,7 @@ export function PoleStructuralAnalyzer() {
     // CALL VALIDATION + CALCULATION ENGINE
     // =========================
     const result = Utils.handleCalculateResults(
+      poleTypeStandard,
       condition,
       showToast,
       structuralDesign,
@@ -757,6 +863,8 @@ export function PoleStructuralAnalyzer() {
       finalArms,
       handleIsArmComplete,
       handleIsAoComplete,
+      stepPoleStandard,
+      handleStepPoleStandardComplete,
       setResults,
       setResultsDo,
       setResultsOhw,
@@ -796,6 +904,16 @@ export function PoleStructuralAnalyzer() {
         setAoErrors(Utils.getAoErrors(finalArms));
       }
 
+      if (
+        errors.stepPoleStandard &&
+        condition.method !== "custom" &&
+        poleTypeStandard.poleShape === "straight"
+      ) {
+        setStepPoleStandardErrors(
+          Utils.getStepPoleStandardErrors(stepPoleStandard),
+        );
+      }
+
       return;
     }
 
@@ -828,6 +946,7 @@ export function PoleStructuralAnalyzer() {
     setOhwErrors({});
     setArmsErrors({});
     setAoErrors({});
+    setStepPoleStandardErrors({});
 
     // resolve data source (custom or standard)
     const {
@@ -848,6 +967,7 @@ export function PoleStructuralAnalyzer() {
 
     // call report validation engine
     const result = Utils.makeReport(
+      poleTypeStandard,
       condition,
       results,
       showToast,
@@ -862,6 +982,8 @@ export function PoleStructuralAnalyzer() {
       finalOhw,
       handleIsOhwComplete,
       handleIsAoComplete,
+      stepPoleStandard,
+      handleStepPoleStandardComplete,
     );
 
     // Defensive guard (pravent crash if undefined)
@@ -908,11 +1030,21 @@ export function PoleStructuralAnalyzer() {
         setAoErrors(Utils.getAoErrors(arms));
       }
 
+      if (
+        errors.stepPoleStandard &&
+        condition.method !== "custom" &&
+        poleTypeStandard.poleShape === "straight"
+      ) {
+        setStepPoleStandardErrors(
+          Utils.getStepPoleStandardErrors(stepPoleStandard),
+        );
+      }
+
       return;
     }
 
     // success => navigate to report
-    sessionStorage.setItem("hasReport", "true");
+    sessionStorage.setItem(`${projectType}_hasReport`, "true");
 
     navigate("/report", {
       state: {
@@ -1013,11 +1145,25 @@ export function PoleStructuralAnalyzer() {
               condition.method === "standard" && (
                 <>
                   <div className="pt-6 hp:pt-4"></div>
-                  <PoleBasicForm
-                    poleBasic={poleBasic}
-                    onUpdate={handleUpdatePoleBasic}
-                    handleStepNext={handleStepNext}
+                  <PoleTypeStandardInput
+                    poleTypeStandard={poleTypeStandard}
+                    onUpdate={handleUpdatePoleTypeStandard}
                   />
+
+                  {poleTypeStandard.poleShape === "taper" && (
+                    <PoleBasicForm
+                      poleBasic={poleBasic}
+                      onUpdate={handleUpdatePoleBasic}
+                    />
+                  )}
+
+                  {poleTypeStandard.poleShape === "straight" && (
+                    <StepPoleTypeInput
+                      stepPoleStandard={stepPoleStandard}
+                      onUpdate={handleUpdateStepPoleStandard}
+                      errors={stepPoleStandardErrors}
+                    />
+                  )}
                 </>
               )}
 
@@ -1353,7 +1499,7 @@ export function PoleStructuralAnalyzer() {
         {/* ============================================================
           FORM ARM (Bagian input arm)
         ============================================================ */}
-        {isCustomPoleMode && (
+        {projectType !== "acemast" && isCustomPoleMode && (
           <>
             <div
               className={`bg-gradient-to-r from-[#0d3b66] to-[#3399cc] p-4 flex items-center justify-between cursor-pointer mt-20 transition-all duration-500 ease-in-out ${

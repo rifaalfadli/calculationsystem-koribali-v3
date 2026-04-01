@@ -202,7 +202,7 @@ export function FourRibTypeInput({
           <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex items-center justify-center h-full">
             <img
               src="/images/4rib-topview.png"
-              alt="Top View"
+              alt="Baseplate 4 rib top view"
               className="max-h-[250px] object-contain"
             />
           </div>
@@ -331,6 +331,7 @@ export function FourRibTypeInput({
             <img
               src="/images/4rib-sideview.png"
               className="max-h-[150px] object-contain"
+              alt="Baseplate 4 rib side view"
             />
           </div>
         </div>

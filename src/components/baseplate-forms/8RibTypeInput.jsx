@@ -223,7 +223,7 @@ export function EightRibTypeInput({
           <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex items-center justify-center h-full">
             <img
               src="/images/8rib-topview.png"
-              alt="Top View"
+              alt="Baseplate 8 rib top view"
               className="max-h-[250px] object-contain"
             />
           </div>
@@ -351,6 +351,7 @@ export function EightRibTypeInput({
           <div className="bg-gray-50 border rounded-2xl p-4 flex items-center justify-center h-full">
             <img
               src="/images/8rib-sideview.png"
+              alt="Baseplate 8 rib side view"
               className="max-h-[150px] object-contain"
             />
           </div>

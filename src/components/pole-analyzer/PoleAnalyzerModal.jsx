@@ -23,9 +23,16 @@ export const ConfirmDisableComponentModal = ({ data, onClose, onConfirm }) => {
         {/* Description */}
         <p className="text-center text-gray-600 text-sm mb-6">
           You are about to disable:
-          <br />
-          <span className="font-semibold text-red-500">{data.join(", ")}</span>
-          <br />
+          <div className="flex flex-wrap justify-center gap-2 my-3">
+            {data.map((item) => (
+              <span
+                key={item}
+                className="px-3 py-1 text-xs font-semibold bg-red-100 text-red-600 rounded-full"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
           All related data will be permanently deleted.
         </p>
 
@@ -42,13 +49,14 @@ export const ConfirmDisableComponentModal = ({ data, onClose, onConfirm }) => {
             onClick={onConfirm}
             className="flex-1 py-3 font-bold text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
           >
-            Yes, Continue
+            Yes, Disable
           </button>
         </div>
       </div>
     </div>
   );
 };
+
 // ====================================================
 // COVER INPUT MODAL
 // ====================================================

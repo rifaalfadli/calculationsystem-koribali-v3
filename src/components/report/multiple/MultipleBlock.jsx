@@ -1628,7 +1628,7 @@ export const createBlocks = (
   blocks.push({
     id: "c28",
     node: (
-      <section className="pt-[20px]">
+      <section className="pt-[40px]">
         {/* Main-section: 基礎部に加わる応力 (Stress applied to the foundation) */}
         <h2 className="page1-title">
           <span className="page1-number">{4 + sectionCounter++}.</span>
@@ -1649,6 +1649,16 @@ export const createBlocks = (
           <div className="flex justify-start ml-[44px]">
             <div className="flex flex-col mb-0 mr-8">
               <div className="page1-text tracking-[0.05em] jp">・鉛直力</div>
+              <div className="page1-text tracking-[0.05em]">
+                <span className="jp">【</span>X-<span className="jp">軸】</span>
+              </div>
+              <div className="page1-text tracking-[0.05em] jp">・水平力</div>
+              <div className="page1-text tracking-[0.05em] jp">
+                ・曲げモーメント
+              </div>
+              <div className="page1-text tracking-[0.05em]">
+                <span className="jp">【</span>Y-<span className="jp">軸】</span>
+              </div>
               <div className="page1-text tracking-[0.05em] jp">・水平力</div>
               <div className="page1-text tracking-[0.05em] jp">
                 ・曲げモーメント
@@ -1656,18 +1666,219 @@ export const createBlocks = (
             </div>
             <div className="flex flex-col mb-0 mr-1">
               <div className="page1-text">N</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">P</div>
+              <div className="page1-text">M</div>
+              <div className="min-h-[20px]"></div>
               <div className="page1-text">P</div>
               <div className="page1-text">M</div>
             </div>
             <div className="flex flex-col mb-0 mr-1">
               <div className="page1-text">=</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">=</div>
+              <div className="page1-text">=</div>
+              <div className="min-h-[20px]"></div>
               <div className="page1-text">=</div>
               <div className="page1-text">=</div>
             </div>
             <div className="flex flex-col mb-0">
-              <div className="page1-text">353.1 N</div>
-              <div className="page1-text">1596.0 N</div>
-              <div className="page1-text">1596.0 N・m</div>
+              <div className="page1-text">1660.3 N</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">3177.0 N</div>
+              <div className="page1-text">13102.1 N・m</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">0.0 N</div>
+              <div className="page1-text">127.0 N・m</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    ),
+  });
+
+  // c29 = 基礎部に加わる応力 (Stress applied to the foundation)
+  blocks.push({
+    id: "c29",
+    node: (
+      <section className="pt-[20px]">
+        <div className="flex flex-col">
+          <div className="flex justify-start ml-[22px] mb-0">
+            <span className="page1-number">
+              2<span className="jp">)</span>.
+            </span>
+            <span className="page1-text tracking-[0.05em]">
+              <span className="jp">直風時</span>B
+            </span>
+          </div>
+          <div className="flex justify-start ml-[44px]">
+            <div className="flex flex-col mb-0 mr-8">
+              <div className="page1-text tracking-[0.05em] jp">・鉛直力</div>
+              <div className="page1-text tracking-[0.05em]">
+                <span className="jp">【</span>X-<span className="jp">軸】</span>
+              </div>
+              <div className="page1-text tracking-[0.05em] jp">・水平力</div>
+              <div className="page1-text tracking-[0.05em] jp">
+                ・曲げモーメント
+              </div>
+              <div className="page1-text tracking-[0.05em]">
+                <span className="jp">【</span>Y-<span className="jp">軸】</span>
+              </div>
+              <div className="page1-text tracking-[0.05em] jp">・水平力</div>
+              <div className="page1-text tracking-[0.05em] jp">
+                ・曲げモーメント
+              </div>
+            </div>
+            <div className="flex flex-col mb-0 mr-1">
+              <div className="page1-text">N</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">P</div>
+              <div className="page1-text">M</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">P</div>
+              <div className="page1-text">M</div>
+            </div>
+            <div className="flex flex-col mb-0 mr-1">
+              <div className="page1-text">=</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">=</div>
+              <div className="page1-text">=</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">=</div>
+              <div className="page1-text">=</div>
+            </div>
+            <div className="flex flex-col mb-0">
+              <div className="page1-text">1660.3 N</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">0.0 N</div>
+              <div className="page1-text">127.0 N・m</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">3177.0 N</div>
+              <div className="page1-text">13102.1 N・m</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    ),
+  });
+
+  // c30 = 基礎部に加わる応力 (Stress applied to the foundation)
+  blocks.push({
+    id: "c30",
+    node: (
+      <section className="pt-[20px]">
+        <div className="flex flex-col">
+          <div className="flex justify-start ml-[22px] mb-0">
+            <span className="page1-number">
+              3<span className="jp">)</span>.
+            </span>
+            <span className="page1-text tracking-[0.05em] jp">斜風時</span>
+          </div>
+          <div className="flex justify-start ml-[44px]">
+            <div className="flex flex-col mb-0 mr-8">
+              <div className="page1-text tracking-[0.05em] jp">・鉛直力</div>
+              <div className="page1-text tracking-[0.05em]">
+                <span className="jp">【</span>X-<span className="jp">軸】</span>
+              </div>
+              <div className="page1-text tracking-[0.05em] jp">・水平力</div>
+              <div className="page1-text tracking-[0.05em] jp">
+                ・曲げモーメント
+              </div>
+              <div className="page1-text tracking-[0.05em]">
+                <span className="jp">【</span>Y-<span className="jp">軸】</span>
+              </div>
+              <div className="page1-text tracking-[0.05em] jp">・水平力</div>
+              <div className="page1-text tracking-[0.05em] jp">
+                ・曲げモーメント
+              </div>
+            </div>
+            <div className="flex flex-col mb-0 mr-1">
+              <div className="page1-text">N</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">P</div>
+              <div className="page1-text">M</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">P</div>
+              <div className="page1-text">M</div>
+            </div>
+            <div className="flex flex-col mb-0 mr-1">
+              <div className="page1-text">=</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">=</div>
+              <div className="page1-text">=</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">=</div>
+              <div className="page1-text">=</div>
+            </div>
+            <div className="flex flex-col mb-0">
+              <div className="page1-text">1660.3 N</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">2055.1 N</div>
+              <div className="page1-text">8521.7 N・m</div>
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">2055.1 N</div>
+              <div className="page1-text">8521.7 N・m</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    ),
+  });
+
+  // c31 = 基礎部に加わる応力 (Stress applied to the foundation)
+  blocks.push({
+    id: "c31",
+    node: (
+      <section className="pt-[20px]">
+        <div className="flex flex-col">
+          <div className="flex justify-start ml-[22px] mb-0">
+            <span className="page1-number">
+              4<span className="jp">)</span>.
+            </span>
+            <span className="page1-text tracking-[0.05em] jp">合成応カ</span>
+          </div>
+          <div className="flex justify-start ml-[44px]">
+            <div className="flex flex-col mb-0 mr-8">
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text tracking-[0.05em] jp">・鉛直力</div>
+              <div className="page1-text tracking-[0.05em] jp">・水平力</div>
+              <div className="page1-text tracking-[0.05em] jp">
+                ・曲げモーメント
+              </div>
+            </div>
+            <div className="flex flex-col mb-0 mr-1">
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">N</div>
+              <div className="page1-text">P</div>
+              <div className="page1-text">M</div>
+            </div>
+            <div className="flex flex-col mb-0 mr-8">
+              <div className="min-h-[20px]"></div>
+              <div className="page1-text">=</div>
+              <div className="page1-text">=</div>
+              <div className="page1-text">=</div>
+            </div>
+            <div className="flex flex-col mb-0 mr-8">
+              <div className="page1-text tracking-[0.05em]">
+                <span className="jp">直風時</span>A
+              </div>
+              <div className="page1-text">1660.3 N</div>
+              <div className="page1-text">3177.0 N</div>
+              <div className="page1-text">13102.7 N・m</div>
+            </div>
+            <div className="flex flex-col mb-0 mr-8">
+              <div className="page1-text tracking-[0.05em]">
+                <span className="jp">直風時</span>B
+              </div>
+              <div className="page1-text">1660.3 N</div>
+              <div className="page1-text">3177.0 N</div>
+              <div className="page1-text">13102.7 N・m</div>
+            </div>
+            <div className="flex flex-col mb-0">
+              <div className="page1-text tracking-[0.05em] jp">斜風時</div>
+              <div className="page1-text">1660.3 N</div>
+              <div className="page1-text">2906.4 N</div>
+              <div className="page1-text">12051.5 N・m</div>
             </div>
           </div>
         </div>
