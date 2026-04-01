@@ -12,16 +12,18 @@ import PoleStructurePage from "./pages/detail-input/PoleStructure";
 import OpeningPage from "./pages/detail-input/Opening";
 import BaseplatePage from "./pages/detail-input/Baseplate";
 import FoundationPage from "./pages/detail-input/Foundation";
+import NotFoundPage from "./pages/404";
 
 function App() {
   return (
     <>
       <ScrollToTop />
       <Routes>
+        {/* PUBLIC ROUTES */}
         <Route path="/entry" element={<Entry />} />
         <Route path="/login" element={<Login />} />
 
-        {/* Protected + Layout wrapper */}
+        {/* PROTECTED ROUTES */}
         <Route
           element={
             <ProtectedRoute>
@@ -45,8 +47,12 @@ function App() {
             element={<FoundationPage />}
           />
           <Route path="/report" element={<Report />} />
+
+          {/* 404 KHUSUS USER YANG SUDAH LOGIN */}
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
 
+        {/* ROOT */}
         <Route path="/" element={<Navigate to="/entry" />} />
       </Routes>
     </>

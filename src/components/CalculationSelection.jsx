@@ -1,30 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-
-const projectTypes = [
-  {
-    id: "lighting-pole",
-    title: "Lighting Pole",
-  },
-  {
-    id: "signboard",
-    title: "Signboard",
-  },
-  {
-    id: "acemast",
-    title: "Acemast",
-  },
-  {
-    id: "multiple",
-    title: "Multiple",
-  },
-];
+import { PROJECT_TYPES } from "./constants/projectTypes";
 
 export default function CalculationSelection() {
   const navigate = useNavigate();
 
   const handleSelectProject = (projectId) => {
+    const isValid = PROJECT_TYPES.some((p) => p.id === projectId);
+
+    if (!isValid) {
+      navigate("/404");
+      return;
+    }
+
     sessionStorage.setItem("projectType", projectId);
     navigate(`/calculation/${projectId}`);
   };
@@ -49,7 +38,7 @@ export default function CalculationSelection() {
 
       {/* Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-12">
-        {projectTypes.map((project, index) => (
+        {PROJECT_TYPES.map((project, index) => (
           <motion.div
             key={project.id}
             initial={{ opacity: 0, scale: 0.95 }}

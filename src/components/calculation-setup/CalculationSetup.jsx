@@ -7,14 +7,18 @@ import { ConditionInput } from "./ConditionInput";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { ToastModal } from "../pole-analyzer/PoleAnalyzerModal";
 import { ConfirmDisableComponentModal } from "../pole-analyzer/PoleAnalyzerModal";
+import { PROJECT_TYPES } from "../constants/projectTypes";
 import * as Utils from "../../utils/pole-analyzer";
-
-// CONSTANT: List of allowed project types
-const VALID_TYPES = ["lighting-pole", "acemast", "signboard", "multiple"];
 
 export default function CalculationSetup() {
   const navigate = useNavigate();
   const { type: projectType } = useParams();
+
+  // VALID TYPE dari constants
+  const VALID_TYPES = PROJECT_TYPES.map((item) => item.id);
+
+  // ambil dari session
+  const savedType = sessionStorage.getItem("projectType");
 
   // STATE: Condition for calculation
   const [condition, setCondition] = useProjectStorage(
@@ -51,13 +55,6 @@ export default function CalculationSetup() {
   // STATE: confirm disable additional components
   const [confirmDisable, setConfirmDisable] = useState(null);
   const [prevCondition, setPrevCondition] = useState({ ...condition });
-
-  // EFFECT: Validate project type on mount/change and clean invalid session
-  useEffect(() => {
-    if (!VALID_TYPES.includes(projectType)) {
-      sessionStorage.removeItem("projectType");
-    }
-  }, [projectType]);
 
   // ------------------------ Function for ConditionInput ------------------------
   const getDisabledComponents = () => {
@@ -160,8 +157,8 @@ export default function CalculationSetup() {
   };
 
   // GUARD: Redirect if project type is invalid
-  if (!VALID_TYPES.includes(projectType)) {
-    return <Navigate to="/calculation" replace />;
+  if (!VALID_TYPES.includes(projectType) || projectType !== savedType) {
+    return <Navigate to="/404" replace />;
   }
 
   return (

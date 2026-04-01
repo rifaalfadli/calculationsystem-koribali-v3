@@ -26,7 +26,7 @@ const springTransition = {
   mass: 1,
 };
 
-export default function Layout({ children }) {
+export default function Layout() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
@@ -57,7 +57,7 @@ export default function Layout({ children }) {
     location.pathname.startsWith("/calculation") && formattedProjectType
       ? formattedProjectType
       : menuItems.find((item) => location.pathname.startsWith(item.path))
-          ?.name || "Project";
+          ?.name || "Page Not Found";
 
   const getMenuPath = (path) => {
     if (path === "/calculation" && projectType) {
