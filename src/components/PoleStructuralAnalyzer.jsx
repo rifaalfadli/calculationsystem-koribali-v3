@@ -832,7 +832,7 @@ export function PoleStructuralAnalyzer() {
     // =========================
     const isPoleTypeStandardValid = handlePoleTypeStandardComplete();
 
-    if (!isPoleTypeStandardValid) {
+    if (condition.method === "standard" && !isPoleTypeStandardValid) {
       showToast("Please select the pole type first.");
       return;
     }
