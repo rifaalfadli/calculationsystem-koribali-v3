@@ -1,15 +1,8 @@
-import React, {
-  useRef,
-  useMemo,
-  useState,
-  useLayoutEffect,
-  lazy,
-  Suspense,
-} from "react";
+import React, { useRef, useMemo, useState, useLayoutEffect } from "react";
 import { createBlocks } from "./SignboardBlock";
 import { paginateA4Signboard } from "../hooks/useReportPagination";
+import SignboardPages from "./SignboardPages";
 import "../../../styles/page.css";
-const SignboardPages = lazy(() => import("./SignboardPages"));
 
 export default function SignboardReport({
   cover,
@@ -60,19 +53,11 @@ export default function SignboardReport({
 
   // 6. Fase 2 - final render
   return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center h-[60vh] text-sm text-gray-500">
-          Loading report pages...
-        </div>
-      }
-    >
-      <SignboardPages
-        cover={cover}
-        condition={condition}
-        results={results}
-        pages={pages}
-      />
-    </Suspense>
+    <SignboardPages
+      cover={cover}
+      condition={condition}
+      results={results}
+      pages={pages}
+    />
   );
 }
