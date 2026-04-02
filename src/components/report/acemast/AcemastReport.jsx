@@ -1,7 +1,6 @@
-import React, { lazy, Suspense } from "react";
+import React from "react";
+import AcemastPages from "./AcemastPages";
 import "../../../styles/page.css";
-
-const AcemastPages = lazy(() => import("./AcemastPages"));
 
 export default function AcemastReport({
   cover,
@@ -12,13 +11,8 @@ export default function AcemastReport({
   resultsOhw,
 }) {
   return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center h-[60vh] text-sm text-gray-500">
-          Loading report pages...
-        </div>
-      }
-    >
+    <>
+      {/* Render actual A4 pages using paginated data */}
       <AcemastPages
         cover={cover}
         condition={condition}
@@ -27,6 +21,6 @@ export default function AcemastReport({
         resultsDo={resultsDo}
         structuralDesign={structuralDesign}
       />
-    </Suspense>
+    </>
   );
 }
