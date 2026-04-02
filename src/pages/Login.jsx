@@ -94,8 +94,10 @@ export default function Login() {
             <div className="flex items-center gap-4 mb-16">
               <div className="bg-white p-2 rounded-xl shadow-lg">
                 <img
-                  src="/images/koribali-logo.png"
-                  alt="Logo"
+                  src="/images/koribali-logo.webp"
+                  alt="koribali icon"
+                  width={32}
+                  height={32}
                   className="w-8 h-8 object-contain"
                 />
               </div>
@@ -134,8 +136,10 @@ export default function Login() {
           <div className="flex md:hidden items-center gap-3 mb-8">
             <div className="bg-slate-50 p-1 rounded-lg border border-slate-100 shadow-sm">
               <img
-                src="/images/koribali-logo.png"
-                alt="Logo"
+                src="/images/koribali-logo.webp"
+                alt="koribali icon"
+                width={32}
+                height={32}
                 className="w-8 h-8 object-contain"
               />
             </div>

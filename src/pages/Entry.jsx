@@ -20,7 +20,7 @@ export default function Entry() {
         name: "Guest User",
         email: "",
         role: "guest",
-      })
+      }),
     );
 
     navigate("/calculation");
@@ -31,7 +31,6 @@ export default function Entry() {
       onMouseMove={handleMouseMove}
       className="relative min-h-screen flex items-center justify-center bg-slate-50 overflow-hidden"
     >
-
       {/* Background Gradient Motion */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-0 opacity-40"
@@ -39,30 +38,28 @@ export default function Entry() {
           background: useTransform(
             [mouseX, mouseY],
             ([x, y]) =>
-              `radial-gradient(500px circle at ${x}px ${y}px, rgba(13,59,102,0.12), transparent 70%)`
+              `radial-gradient(500px circle at ${x}px ${y}px, rgba(13,59,102,0.12), transparent 70%)`,
           ),
         }}
       />
 
       {/* CARD (TIDAK DIUBAH) */}
       <div className="relative z-10 bg-white p-10 rounded-2xl shadow-lg w-[420px] text-center">
-
         <img
-          src="/images/koribali-logo.png"
-          alt="logo"
+          src="/images/koribali-logo.webp"
+          alt="koribali icon"
+          width={64}
+          height={64}
           className="w-16 mx-auto mb-4"
         />
 
-        <h1 className="text-2xl font-bold text-slate-800">
-          KORI BALI
-        </h1>
+        <h1 className="text-2xl font-bold text-slate-800">KORI BALI</h1>
 
         <p className="text-sm text-slate-500 mb-8">
           Pole Structure Calculation System
         </p>
 
         <div className="flex flex-col gap-3">
-
           <button
             onClick={() => navigate("/login")}
             className="bg-[#0d3b66] text-white py-3 rounded-lg font-semibold hover:bg-[#0b3154]"
@@ -76,11 +73,8 @@ export default function Entry() {
           >
             Continue as Guest
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 }
