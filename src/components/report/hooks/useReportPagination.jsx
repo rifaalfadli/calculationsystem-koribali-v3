@@ -28,8 +28,10 @@ export function paginateA4LightingPole({ blocks, measureRef }) {
     "background: #222; color: #bada55; font-weight: bold;",
   );
 
-  children.forEach((child) => {
-    let h = child.getBoundingClientRect().height;
+  const heights = children.map((child) => child.getBoundingClientRect().height);
+
+  children.forEach((child, index) => {
+    let h = heights[index];
     const block = blockMap.get(child.dataset.id);
     if (!block) return;
 
@@ -113,8 +115,10 @@ export function paginateA4Signboard({ blocks, measureRef }) {
     "background: #222; color: #bada55; font-weight: bold;",
   );
 
-  children.forEach((child) => {
-    let h = child.getBoundingClientRect().height;
+  const heights = children.map((child) => child.getBoundingClientRect().height);
+
+  children.forEach((child, index) => {
+    let h = heights[index];
     const block = blockMap.get(child.dataset.id);
     if (!block) return;
 
