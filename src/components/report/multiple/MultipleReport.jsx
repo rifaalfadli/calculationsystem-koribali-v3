@@ -1,8 +1,15 @@
-import React, { useRef, useMemo, useState, useLayoutEffect } from "react";
+import React, {
+  useRef,
+  useMemo,
+  useState,
+  useLayoutEffect,
+  lazy,
+  Suspense,
+} from "react";
 import { createBlocks } from "./MultipleBlock";
 import { paginateA4LightingPole } from "../hooks/useReportPagination";
-import MultiplePages from "./MultiplePages";
 import "../../../styles/page.css";
+const MultiplePages = lazy(() => import("./MultiplePages"));
 
 export default function MultipleReport({
   cover,
@@ -53,11 +60,19 @@ export default function MultipleReport({
 
   // 6. FASE 2 — FINAL RENDER (HANYA SEKALI)
   return (
-    <MultiplePages
-      cover={cover}
-      condition={condition}
-      results={results}
-      pages={pages}
-    />
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-[60vh] text-sm text-gray-500">
+          Loading report pages...
+        </div>
+      }
+    >
+      <MultiplePages
+        cover={cover}
+        condition={condition}
+        results={results}
+        pages={pages}
+      />
+    </Suspense>
   );
 }

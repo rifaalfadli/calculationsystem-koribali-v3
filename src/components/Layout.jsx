@@ -101,6 +101,7 @@ export default function Layout() {
 
   const handleLogout = () => {
     localStorage.removeItem("user_session");
+    sessionStorage.removeItem("projectType");
     navigate("/login");
   };
 

@@ -97,7 +97,7 @@ export function paginateA4Signboard({ blocks, measureRef }) {
 
   const ptValue = 15;
   const paddingBottomPx = mmToPx(15);
-  const pageHeader = 22.53;
+  const pageHeader = 21.53;
   const paddingTopMargin = mmToPx(15);
 
   const pageLimit =
