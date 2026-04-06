@@ -93,36 +93,53 @@ export const poleTypeStandardComplete = (poleTypeStandard) => {
 // Function for Pole Input
 // ====================================================
 // FUNCTION: Check if Stepped Pole Type Standard form is complete
-export const stepPoleStandardComplete = (stepPoleStandard) => {
-  const isEmbedment = stepPoleStandard.installationType === "embedment";
+export const stepPoleStandardComplete = (stepPoleStandard, condition) => {
+  const isBase = condition.baseplateEnabled;
+  const isEmbedment = !condition.baseplateEnabled;
+  const isUnderGL = stepPoleStandard.groundPosition === "underGL";
 
   const fields = [
     stepPoleStandard.upperThickness,
     stepPoleStandard.upperLength,
     stepPoleStandard.lowerThickness,
     stepPoleStandard.lowerLength,
-    stepPoleStandard.installationType,
+
+    // ===== EMBEDMENT =====
     ...(isEmbedment ? [stepPoleStandard.embedmentLength] : []),
+
+    // ===== BASE =====
+    ...(isBase ? [stepPoleStandard.groundPosition] : []),
+
+    // ===== UNDER GL ONLY =====
+    ...(isBase && isUnderGL ? [stepPoleStandard.heightDepth] : []),
   ];
 
   return fields.every((v) => v && v.toString().trim() !== "");
 };
 
 // FUNCTION: Create an error checker helper for the Stepped Pole Type Standard
-export const getStepPoleStandardErrors = (stepPoleStandard) => {
-  const isEmbedment = stepPoleStandard.installationType === "embedment";
+export const getStepPoleStandardErrors = (stepPoleStandard, condition) => {
+  const isBase = condition.baseplateEnabled;
+  const isEmbedment = !condition.baseplateEnabled;
+  const isUnderGL = stepPoleStandard.groundPosition === "underGL";
 
   return {
     upperThickness: isEmpty(stepPoleStandard.upperThickness),
     upperLength: isEmpty(stepPoleStandard.upperLength),
     lowerThickness: isEmpty(stepPoleStandard.lowerThickness),
     lowerLength: isEmpty(stepPoleStandard.lowerLength),
-    installationType: isEmpty(stepPoleStandard.installationType),
 
-    // conditional validation
+    // ===== EMBEDMENT =====
     embedmentLength: isEmbedment
       ? isEmpty(stepPoleStandard.embedmentLength)
       : false,
+
+    // ===== BASE =====
+    groundPosition: isBase ? isEmpty(stepPoleStandard.groundPosition) : false,
+
+    // heightDepth cuma dicek kalau UNDER GL
+    heightDepth:
+      isBase && isUnderGL ? isEmpty(stepPoleStandard.heightDepth) : false,
   };
 };
 
@@ -174,7 +191,7 @@ export const validatePole = (sections, structuralDesign) => {
     // ERROR 3 — Lowest step melewati tinggi pole terakhir (pole paling bawah)
     if (i === sections.length - 1) {
       if (lPole >= hCurrent) {
-        return `Pole ${poleNumber}: Lowest step (${lPole}) must be lower than the bottom step height (${hCurrent}). Please review your configuration.`;
+        return `Pole ${poleNumber}: Lowest height (${lPole}) must be lower than the bottom step height (${hCurrent}). Please review your configuration.`;
       }
     }
 

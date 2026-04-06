@@ -104,7 +104,7 @@ export function OverheadWireInput({
               </span>
               <span className="text-slate-400">/</span>
               <span className="text-slate-600">8 Overhead Wires</span>
-          </div>
+            </div>
 
             <input
               type="number"
@@ -344,6 +344,7 @@ export function OverheadWireInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={overheadWire.weightOhw}
                       onChange={(e) =>
                         onUpdate(overheadWire.idOhw, {
@@ -368,6 +369,7 @@ export function OverheadWireInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={overheadWire.diameterOhw}
                       onChange={(e) =>
                         onUpdate(overheadWire.idOhw, {
@@ -395,6 +397,7 @@ export function OverheadWireInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={overheadWire.fixheightOhw}
                       onChange={(e) =>
                         onUpdate(overheadWire.idOhw, {
@@ -422,6 +425,7 @@ export function OverheadWireInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={overheadWire.spanOhw}
                       onChange={(e) =>
                         onUpdate(overheadWire.idOhw, {
@@ -446,6 +450,7 @@ export function OverheadWireInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={overheadWire.saggingOhw}
                       onChange={(e) =>
                         onUpdate(overheadWire.idOhw, {
@@ -469,6 +474,7 @@ export function OverheadWireInput({
                   </label>
                   <input
                     type="number"
+                    min={0}
                     value={overheadWire.nncOhw}
                     onChange={(e) =>
                       onUpdate(overheadWire.idOhw, {

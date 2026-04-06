@@ -52,6 +52,7 @@ export function RTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={opRType.opWidth}
                     onChange={(e) => onUpdate({ opWidth: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -72,6 +73,7 @@ export function RTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={opRType.opSurfaceHeight}
                     onChange={(e) =>
                       onUpdate({ opSurfaceHeight: e.target.value })
@@ -97,6 +99,7 @@ export function RTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={opRType.opLength}
                     onChange={(e) => onUpdate({ opLength: e.target.value })}
                     onWheel={(e) => e.target.blur()}

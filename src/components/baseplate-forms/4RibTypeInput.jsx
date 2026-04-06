@@ -62,6 +62,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.bl1}
                     onChange={(e) => onUpdate({ bl1: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -82,6 +83,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.bl2}
                     onChange={(e) => onUpdate({ bl2: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -102,6 +104,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.ap1}
                     onChange={(e) => onUpdate({ ap1: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -122,6 +125,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.ap2}
                     onChange={(e) => onUpdate({ ap2: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -142,6 +146,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.dab}
                     onChange={(e) => onUpdate({ dab: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -162,6 +167,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.nab}
                     onChange={(e) => onUpdate({ nab: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -182,6 +188,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.nabTensionSide}
                     onChange={(e) =>
                       onUpdate({ nabTensionSide: e.target.value })
@@ -218,6 +225,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.tb}
                     onChange={(e) => onUpdate({ tb: e.target.value })}
                     className={`${inputClass(errors.tb)} pr-12`}
@@ -237,6 +245,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.hr}
                     onChange={(e) => onUpdate({ hr: e.target.value })}
                     className={`${inputClass(errors.hr)} pr-12`}
@@ -256,6 +265,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.lrs}
                     onChange={(e) => onUpdate({ lrs: e.target.value })}
                     className={`${inputClass(errors.lrs)} pr-12`}
@@ -275,6 +285,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.lk}
                     onChange={(e) => onUpdate({ lk: e.target.value })}
                     className={`${inputClass(errors.lk)} pr-12`}
@@ -294,6 +305,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.lr}
                     onChange={(e) => onUpdate({ lr: e.target.value })}
                     className={`${inputClass(errors.lr)} pr-12`}
@@ -313,6 +325,7 @@ export function FourRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={fourRibType.tr}
                     onChange={(e) => onUpdate({ tr: e.target.value })}
                     className={`${inputClass(errors.tr)} pr-12`}

@@ -84,7 +84,7 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
                       height: "",
                     });
                   }}
-                  className={`rounded-lg border px-4 py-3 text-sm font-medium transition-all
+                  className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition-all
                     ${
                       active
                         ? "border-blue-500 bg-blue-50 text-blue-600 shadow-sm"
@@ -113,7 +113,7 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
           <div className="grid md:grid-cols-2 gap-8">
             {/* ================= Ground Position ================= */}
             <div>
-              <h4 className="block text-gray-700 text-sm mb-2 hp:text-xs hp:mb-1">
+              <h4 className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
                 Ground Position
               </h4>
 
@@ -125,7 +125,7 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
                   const active = poleBasic.groundPosition === item.id;
 
                   return (
-                    <div
+                    <button
                       key={item.id}
                       onClick={() => {
                         onUpdate({
@@ -133,7 +133,7 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
                           height: "",
                         });
                       }}
-                      className={`cursor-pointer rounded-lg border px-4 py-3 transition-all flex items-center gap-3
+                      className={`w-full cursor-pointer rounded-lg border px-4 py-2.5 transition-all flex items-center gap-3
                         ${
                           active
                             ? "border-blue-500 bg-blue-50"
@@ -153,7 +153,7 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
                       <span className="text-sm font-medium text-slate-700">
                         {item.label}
                       </span>
-                    </div>
+                    </button>
                   );
                 })}
               </div>
@@ -161,7 +161,7 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
 
             {/* ================= Height ================= */}
             <div>
-              <h4 className="block text-gray-700 text-sm mb-2 hp:text-xs hp:mb-1">
+              <h4 className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
                 Height of Structure
               </h4>
 
@@ -169,7 +169,7 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
                 <select
                   value={poleBasic.height}
                   onChange={(e) => onUpdate({ height: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm min-h-[45px] focus:border-blue-500 outline-none transition-all bg-white hp:p-2 hp:rounded-md hp:text-xs"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm min-h-[42px] focus:border-blue-500 outline-none transition-all bg-white hp:p-2 hp:rounded-md hp:text-xs"
                 >
                   <option value="" disabled>
                     Select Height
@@ -182,7 +182,7 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
                   ))}
                 </select>
               ) : (
-                <div className="border border-slate-200 rounded-lg px-5 bg-slate-50 min-h-[45px] flex items-center">
+                <div className="border border-slate-200 rounded-lg px-5 bg-slate-50 min-h-[42px] flex items-center">
                   <p className="text-sm text-slate-400">
                     Select ground position first
                   </p>

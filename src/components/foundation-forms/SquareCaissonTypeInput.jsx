@@ -56,6 +56,7 @@ export function SquareCaissonTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={sqrCaissonType.width2a}
                     onChange={(e) => onUpdate({ width2a: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -76,6 +77,7 @@ export function SquareCaissonTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={sqrCaissonType.width2b}
                     onChange={(e) => onUpdate({ width2b: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -89,13 +91,14 @@ export function SquareCaissonTypeInput({
               </div>
 
               {/* Embedment Depth (L) */}
-              <div className="col-span-2 relative">
+              <div className="relative">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   Embedment Depth (L)
                 </label>
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={sqrCaissonType.embedmentDepth}
                     onChange={(e) =>
                       onUpdate({ embedmentDepth: e.target.value })
@@ -111,13 +114,14 @@ export function SquareCaissonTypeInput({
               </div>
 
               {/* N Value */}
-              <div className="relative col-span-2 ">
+              <div className="relative ">
                 <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
                   N Value
                 </label>
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={sqrCaissonType.nValue}
                     onChange={(e) => onUpdate({ nValue: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -135,6 +139,7 @@ export function SquareCaissonTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={sqrCaissonType.yValue}
                     onChange={(e) => onUpdate({ yValue: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -155,6 +160,7 @@ export function SquareCaissonTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={sqrCaissonType.ycValue}
                     onChange={(e) => onUpdate({ ycValue: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -175,6 +181,7 @@ export function SquareCaissonTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={sqrCaissonType.alphaValue}
                     onChange={(e) => onUpdate({ alphaValue: e.target.value })}
                     onWheel={(e) => e.target.blur()}

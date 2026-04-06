@@ -6,9 +6,9 @@ import {
   Circle,
   DoorOpen,
   CheckCircle,
-  Square,
   Layers,
 } from "lucide-react";
+import { BaseplateIcon } from "../../utils/pole-analyzer/icon";
 
 export function ConditionInput({
   projectType,
@@ -21,13 +21,13 @@ export function ConditionInput({
   const options = [
     {
       id: "standard",
-      title: "Standard Input",
+      title: "Lighting Pole Standard",
       desc: "Predefined configurations for common pole types",
       icon: FileText,
     },
     {
       id: "custom",
-      title: "Custom Input",
+      title: "Custom Pole",
       desc: "Advanced configuration with detailed specifications",
       icon: Settings,
     },
@@ -65,6 +65,7 @@ export function ConditionInput({
     onUpdate({
       designStandard: "",
       windSpeed: "",
+      airDensity: "",
       method: "",
       openingEnabled: false,
       baseplateEnabled: false,
@@ -131,6 +132,7 @@ export function ConditionInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={condition.windSpeed}
                     onChange={(e) => onUpdate({ windSpeed: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -151,11 +153,15 @@ export function ConditionInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={condition.airDensity}
                     onChange={(e) => onUpdate({ airDensity: e.target.value })}
                     onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.airDensity)} hp:px-3`}
+                    className={`${inputClass(errors.airDensity)} pr-24 hp:px-3`}
                   />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
+                    N・sec<sup>2</sup>/m<sup>4</sup>
+                  </span>
                 </div>
                 <ErrorText show={errors.airDensity} text="Required field" />
               </div>
@@ -167,7 +173,7 @@ export function ConditionInput({
         <div>
           <h3 className="text-[#0d3b66] mb-4 flex items-center gap-2 text-sm font-medium hp:text-xs hp:gap-1">
             <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
-            Pole Input Type
+            Select Pole Type
           </h3>
           <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -176,22 +182,21 @@ export function ConditionInput({
                 const isActive = condition.method === option.id;
 
                 return (
-                  <div
+                  <button
                     key={option.id}
-                    onClick={() =>
-                      onUpdate({
-                        method: option.id,
-                      })
-                    }
+                    type="button"
+                    onClick={() => onUpdate({ method: option.id })}
                     className={`
-                relative cursor-pointer rounded-lg border p-4
-                transition-all duration-200
-                ${
-                  isActive
-                    ? "border-blue-500 bg-blue-50 ring-1 ring-blue-200"
-                    : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
-                }
-              `}
+                      w-full text-left bg-transparent appearance-none
+                      relative cursor-pointer rounded-lg border p-4
+                      transition-all duration-200 focus:outline-none
+
+                      ${
+                        isActive
+                          ? "border-blue-500 bg-blue-50 ring-1 ring-blue-200"
+                          : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                      }
+                    `}
                   >
                     {/* Circle Indicator */}
                     <div className="absolute top-4 right-4">
@@ -225,7 +230,7 @@ export function ConditionInput({
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -313,7 +318,7 @@ export function ConditionInput({
                     <div
                       className={`p-2 rounded-lg ${condition.baseplateEnabled ? "bg-blue-100 text-blue-600" : "bg-slate-200 text-slate-500"}`}
                     >
-                      <Square size={16} />
+                      <BaseplateIcon size={18} />
                     </div>
 
                     <div>

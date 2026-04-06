@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation, useNavigate, Outlet } from "react-router-dom";
 import {
   Calculator,
-  BarChart2,
+  FileText,
   ChevronLeft,
   Menu,
   User,
@@ -16,7 +16,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const menuItems = [
   { name: "Pole Calculation", icon: Calculator, path: "/calculation" },
-  { name: "Data Reports", icon: BarChart2, path: "/report" },
+  { name: "Data Reports", icon: FileText, path: "/report" },
 ];
 
 const springTransition = {

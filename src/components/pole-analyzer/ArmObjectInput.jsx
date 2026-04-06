@@ -365,6 +365,7 @@ export function ArmObjectInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={armObject.frontAreaAo}
                       onChange={(e) =>
                         onUpdate(armObject.idAo, {
@@ -390,6 +391,7 @@ export function ArmObjectInput({
                     <div className="relative">
                       <input
                         type="number"
+                        min={0}
                         value={armObject.sideAreaAo}
                         onChange={(e) =>
                           onUpdate(armObject.idAo, {
@@ -418,6 +420,7 @@ export function ArmObjectInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={armObject.weightAo}
                       onChange={(e) =>
                         onUpdate(armObject.idAo, {
@@ -442,6 +445,7 @@ export function ArmObjectInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={armObject.heightAo}
                       onChange={(e) =>
                         onUpdate(armObject.idAo, {
@@ -494,6 +498,7 @@ export function ArmObjectInput({
                   </label>
                   <input
                     type="number"
+                    min={0}
                     value={armObject.nncAo}
                     onChange={(e) =>
                       onUpdate(armObject.idAo, { nncAo: e.target.value })
@@ -512,6 +517,7 @@ export function ArmObjectInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={armObject.qtyAo}
                       onChange={(e) =>
                         onUpdate(armObject.idAo, { qtyAo: e.target.value })

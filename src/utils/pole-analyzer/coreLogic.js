@@ -54,13 +54,28 @@ export const handleCalculateResults = (
     }
   }
 
+  // =========================
+  // STEP POLE STANDRAD VALIDATION
+  // =========================
+  if (
+    condition.method !== "custom" &&
+    poleTypeStandard.poleShape === "straight"
+  ) {
+    if (!handleStepPoleStandardComplete(stepPoleStandard, condition)) {
+      showToast("Please complete all Stepped Pole Type Specification fields.");
+      errors.stepPoleStandard = true;
+    }
+  }
+
   // POLE VALIDATION (custom error check)
   const validatePoleError = validatePole(sections, structuralDesign);
 
-  if (validatePoleError) {
-    showToast(validatePoleError);
-    errors.section = true;
-    return { isValid: false, errors };
+  if (condition.method !== "standard") {
+    if (validatePoleError) {
+      showToast(validatePoleError);
+      errors.section = true;
+      return { isValid: false, errors };
+    }
   }
 
   // =========================
@@ -118,19 +133,6 @@ export const handleCalculateResults = (
       }
 
       if (errors.armObject) break;
-    }
-  }
-
-  // =========================
-  // STEP POLE STANDRAD VALIDATION
-  // =========================
-  if (
-    condition.method !== "custom" &&
-    poleTypeStandard.poleShape === "straight"
-  ) {
-    if (!handleStepPoleStandardComplete(stepPoleStandard)) {
-      showToast("Please complete all Stepped Pole Type Specification fields.");
-      errors.stepPoleStandard = true;
     }
   }
 
@@ -275,7 +277,7 @@ export const makeReport = (
     condition.method !== "custom" &&
     poleTypeStandard.poleShape === "straight"
   ) {
-    if (!handleStepPoleStandardComplete(stepPoleStandard)) {
+    if (!handleStepPoleStandardComplete(stepPoleStandard, condition)) {
       showToast("Please complete all Stepped Pole Type first.");
       errors.stepPoleStandard = true;
     }

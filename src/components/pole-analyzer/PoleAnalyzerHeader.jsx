@@ -7,9 +7,9 @@ import {
   LayoutDashboard,
   TowerControl,
   DoorOpen,
-  Square,
   Layers,
 } from "lucide-react";
+import { BaseplateIcon } from "../../utils/pole-analyzer/icon";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 export function HeaderCalculationPage() {
@@ -69,7 +69,7 @@ export function HeaderCalculationPage() {
               {
                 label: "Baseplate",
                 path: `/calculation/${type}/baseplate`,
-                icon: Square,
+                icon: BaseplateIcon,
               },
             ]
           : []),

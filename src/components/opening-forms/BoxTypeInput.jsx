@@ -54,6 +54,7 @@ export function BoxTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={opBoxType.boxWidth}
                     onChange={(e) => onUpdate({ boxWidth: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -74,6 +75,7 @@ export function BoxTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={opBoxType.opWidth}
                     onChange={(e) => onUpdate({ opWidth: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -94,6 +96,7 @@ export function BoxTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={opBoxType.boxHeight}
                     onChange={(e) => onUpdate({ boxHeight: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -114,6 +117,7 @@ export function BoxTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={opBoxType.opSurfaceHeight}
                     onChange={(e) =>
                       onUpdate({ opSurfaceHeight: e.target.value })
@@ -139,6 +143,7 @@ export function BoxTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={opBoxType.opLength}
                     onChange={(e) => onUpdate({ opLength: e.target.value })}
                     onWheel={(e) => e.target.blur()}

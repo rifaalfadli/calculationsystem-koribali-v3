@@ -100,6 +100,7 @@ export function PoleInput({ section, onUpdate, errors }) {
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={section.diameterLower}
                     onChange={(e) =>
                       onUpdate({
@@ -125,6 +126,7 @@ export function PoleInput({ section, onUpdate, errors }) {
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={section.thicknessLower}
                     onChange={(e) =>
                       onUpdate({
@@ -153,6 +155,7 @@ export function PoleInput({ section, onUpdate, errors }) {
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={section.diameterLower}
                     onChange={(e) =>
                       onUpdate({ diameterLower: e.target.value })
@@ -175,6 +178,7 @@ export function PoleInput({ section, onUpdate, errors }) {
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={section.diameterUpper}
                     onChange={(e) =>
                       onUpdate({ diameterUpper: e.target.value })
@@ -197,6 +201,7 @@ export function PoleInput({ section, onUpdate, errors }) {
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={section.thicknessLower}
                     onChange={(e) =>
                       onUpdate({ thicknessLower: e.target.value })
@@ -219,6 +224,7 @@ export function PoleInput({ section, onUpdate, errors }) {
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={section.thicknessUpper}
                     onChange={(e) =>
                       onUpdate({ thicknessUpper: e.target.value })
@@ -254,6 +260,7 @@ export function PoleInput({ section, onUpdate, errors }) {
               <div className="relative">
                 <input
                   type="number"
+                  min={0}
                   value={section.height}
                   onChange={(e) => onUpdate({ height: e.target.value })}
                   onWheel={(e) => e.target.blur()}

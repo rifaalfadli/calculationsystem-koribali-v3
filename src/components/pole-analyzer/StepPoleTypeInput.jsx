@@ -1,7 +1,12 @@
 import React from "react";
 import { RotateCcw } from "lucide-react";
 
-export function StepPoleTypeInput({ stepPoleStandard, onUpdate, errors }) {
+export function StepPoleTypeInput({
+  stepPoleStandard,
+  onUpdate,
+  errors,
+  condition,
+}) {
   const poleTypes = [{ id: "stepPole", label: "Stepped Pole" }];
 
   const combinationGroup = ["114.3", "139.8", "165.2"];
@@ -99,7 +104,7 @@ export function StepPoleTypeInput({ stepPoleStandard, onUpdate, errors }) {
                       poleType: type.id,
                     })
                   }
-                  className={`rounded-lg border px-4 py-3 text-sm font-medium transition-all
+                  className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition-all
                     ${
                       active
                         ? "border-blue-500 bg-blue-50 text-blue-600 shadow-sm"
@@ -168,37 +173,40 @@ export function StepPoleTypeInput({ stepPoleStandard, onUpdate, errors }) {
                     Select Pole Combination
                   </h4>
 
-                  <div className="relative">
-                    <select
-                      value={stepPoleStandard.combination}
-                      onChange={(e) =>
-                        onUpdate({
-                          combination: e.target.value,
-                          upperThickness: "",
-                          lowerThickness: "",
-                        })
-                      }
-                      disabled={!stepPoleStandard.combinationGroup}
-                      className={`${inputClass(errors.combination)} min-h-[42px]`}
-                    >
-                      <option value="">Select Combination</option>
-                      {stepPoleStandard.combinationGroup &&
-                        combinations[stepPoleStandard.combinationGroup].map(
-                          (c) => (
-                            <option key={c} value={c}>
-                              {c}
-                            </option>
-                          ),
-                        )}
-                    </select>
+                  {stepPoleStandard.combinationGroup ? (
+                    <div className="relative">
+                      <select
+                        value={stepPoleStandard.combination}
+                        onChange={(e) =>
+                          onUpdate({
+                            combination: e.target.value,
+                            upperThickness: "",
+                            lowerThickness: "",
+                          })
+                        }
+                        className={`${inputClass(errors.combination)} min-h-[42px]`}
+                      >
+                        <option value="" disabled>
+                          Select Combination
+                        </option>
 
-                    {/* Helper Text (pojok kanan bawah) */}
-                    {!stepPoleStandard.combinationGroup && (
-                      <span className="absolute right-0 -top-6 text-[11px] text-gray-500">
+                        {stepPoleStandard.combinationGroup &&
+                          combinations[stepPoleStandard.combinationGroup].map(
+                            (c) => (
+                              <option key={c} value={c}>
+                                {c}
+                              </option>
+                            ),
+                          )}
+                      </select>
+                    </div>
+                  ) : (
+                    <div className="border border-slate-200 rounded-lg px-5 bg-slate-50 min-h-[42px] flex items-center">
+                      <p className="text-sm text-slate-400">
                         Select lower pole diameter first
-                      </span>
-                    )}
-                  </div>
+                      </p>
+                    </div>
+                  )}
 
                   <ErrorText show={errors.combination} text="Required field" />
                 </div>
@@ -206,44 +214,59 @@ export function StepPoleTypeInput({ stepPoleStandard, onUpdate, errors }) {
 
               {/* ===== Upper & Lower ===== */}
               <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                   {/* Upper */}
-                  <div>
-                    <h4 className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
-                      Upper Pole
-                    </h4>
-
-                    <div className="space-y-5">
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
                       {/* Thickness */}
-                      <div className="relative">
-                        <select
-                          value={stepPoleStandard.upperThickness}
-                          onChange={(e) =>
-                            onUpdate({ upperThickness: e.target.value })
-                          }
-                          disabled={!stepPoleStandard.combination}
-                          className={`${inputClass(
-                            errors.upperThickness,
-                          )} min-h-[42px]`}
-                        >
-                          <option value="">Select Thickness</option>
-                          {upperOptions.map((t) => (
-                            <option key={t} value={t}>
-                              {t} mm
+                      <h4 className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
+                        Upper Pole Thickness
+                      </h4>
+                      {stepPoleStandard.combination ? (
+                        <div className="relative">
+                          <select
+                            value={stepPoleStandard.upperThickness}
+                            onChange={(e) =>
+                              onUpdate({ upperThickness: e.target.value })
+                            }
+                            className={`${inputClass(
+                              errors.upperThickness,
+                            )} min-h-[42px]`}
+                          >
+                            <option value="" disabled>
+                              Select Thickness
                             </option>
-                          ))}
-                        </select>
-                        <ErrorText
-                          show={errors.upperThickness}
-                          text="Required field"
-                        />
-                      </div>
 
+                            {upperOptions.map((t) => (
+                              <option key={t} value={t}>
+                                {t} mm
+                              </option>
+                            ))}
+                          </select>
+                          <ErrorText
+                            show={errors.upperThickness}
+                            text="Required field"
+                          />
+                        </div>
+                      ) : (
+                        <div className="border border-slate-200 rounded-lg px-5 bg-slate-50 min-h-[42px] flex items-center">
+                          <p className="text-sm text-slate-400">
+                            Select pole combination first
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
                       {/* Length */}
+                      <h4 className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
+                        Upper Pole Length
+                      </h4>
                       <div className="relative">
                         <div className="relative">
                           <input
                             type="number"
+                            min={0}
                             placeholder="Input Length"
                             value={stepPoleStandard.upperLength}
                             onChange={(e) =>
@@ -265,42 +288,57 @@ export function StepPoleTypeInput({ stepPoleStandard, onUpdate, errors }) {
                   </div>
 
                   {/* Lower */}
-                  <div>
-                    <h4 className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
-                      Lower Pole
-                    </h4>
-
-                    <div className="space-y-5">
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
                       {/* Thickness */}
-                      <div className="relative">
-                        <select
-                          value={stepPoleStandard.lowerThickness}
-                          onChange={(e) =>
-                            onUpdate({ lowerThickness: e.target.value })
-                          }
-                          disabled={!stepPoleStandard.combination}
-                          className={`${inputClass(
-                            errors.lowerThickness,
-                          )} min-h-[42px]`}
-                        >
-                          <option value="">Select Thickness</option>
-                          {lowerOptions.map((t) => (
-                            <option key={t} value={t}>
-                              {t} mm
+                      <h4 className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
+                        Lower Pole Thickness
+                      </h4>
+                      {stepPoleStandard.combination ? (
+                        <div className="relative">
+                          <select
+                            value={stepPoleStandard.lowerThickness}
+                            onChange={(e) =>
+                              onUpdate({ lowerThickness: e.target.value })
+                            }
+                            className={`${inputClass(
+                              errors.lowerThickness,
+                            )} min-h-[42px]`}
+                          >
+                            <option value="" disabled>
+                              Select Thickness
                             </option>
-                          ))}
-                        </select>
-                        <ErrorText
-                          show={errors.lowerThickness}
-                          text="Required field"
-                        />
-                      </div>
 
+                            {lowerOptions.map((t) => (
+                              <option key={t} value={t}>
+                                {t} mm
+                              </option>
+                            ))}
+                          </select>
+                          <ErrorText
+                            show={errors.lowerThickness}
+                            text="Required field"
+                          />
+                        </div>
+                      ) : (
+                        <div className="border border-slate-200 rounded-lg px-5 bg-slate-50 min-h-[42px] flex items-center">
+                          <p className="text-sm text-slate-400">
+                            Select pole combination first
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
                       {/* Length */}
+                      <h4 className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
+                        Lower Pole Length
+                      </h4>
                       <div className="relative">
                         <div className="relative">
                           <input
                             type="number"
+                            min={0}
                             placeholder="Input Length"
                             value={stepPoleStandard.lowerLength}
                             onChange={(e) =>
@@ -330,83 +368,135 @@ export function StepPoleTypeInput({ stepPoleStandard, onUpdate, errors }) {
           <div>
             <h3 className="text-[#0d3b66] mb-4 flex items-center gap-2 text-sm font-medium">
               <div className="w-1 h-5 bg-[#3399cc] rounded-full"></div>
-              Pole Installation
+              {condition.baseplateEnabled
+                ? "Base Type Pole Installation"
+                : "Embedment Type Pole Installation"}
             </h3>
 
             <div className="border border-slate-200 rounded-xl p-6 bg-white shadow-sm">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Type */}
-                <div className="relative">
-                  <label className="block text-sm text-gray-700 mb-3">
-                    Installation Type
-                  </label>
-
-                  <select
-                    value={stepPoleStandard.installationType}
-                    onChange={(e) =>
-                      onUpdate({
-                        installationType: e.target.value,
-                        embedmentLength: "",
-                      })
-                    }
-                    className={`${inputClass(
-                      errors.installationType,
-                    )} min-h-[42px]`}
-                  >
-                    <option value="">Select Installation Type</option>
-                    <option value="embedment">Embedment</option>
-                    <option value="base">Base</option>
-                  </select>
-
-                  <ErrorText
-                    show={errors.installationType}
-                    text="Required field"
-                  />
-                </div>
-
-                {/* Length */}
-                <div className="relative">
-                  <label className="block text-sm text-gray-700 mb-3">
-                    Embedment Length
-                  </label>
-                  {stepPoleStandard.installationType === "base" && (
-                    <span className="absolute right-0 top-2 text-[11px] text-gray-500">
-                      Not required for base
-                    </span>
-                  )}
+              {/* ===== EMBEDMENT MODE ===== */}
+              {!condition.baseplateEnabled && (
+                <div className="grid grid-cols-1">
+                  {/* Embedment Length */}
                   <div className="relative">
-                    <input
-                      type="number"
-                      placeholder="Input Length"
-                      value={stepPoleStandard.embedmentLength}
-                      onChange={(e) =>
-                        onUpdate({ embedmentLength: e.target.value })
-                      }
-                      disabled={stepPoleStandard.installationType === "base"}
-                      onWheel={(e) => e.target.blur()}
-                      className={`${inputClass(errors.embedmentLength)} ${
-                        stepPoleStandard.installationType === "base"
-                          ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200"
-                          : ""
-                      }`}
+                    <label className="block text-sm text-gray-700 mb-3">
+                      Embedment Length
+                    </label>
+
+                    <div className="relative">
+                      <input
+                        type="number"
+                        min={0}
+                        placeholder="Input Length"
+                        value={stepPoleStandard.embedmentLength}
+                        onChange={(e) =>
+                          onUpdate({
+                            embedmentLength: e.target.value,
+                          })
+                        }
+                        onWheel={(e) => e.target.blur()}
+                        className={inputClass(errors.embedmentLength)}
+                      />
+
+                      <span className="absolute right-4 text-black-400 text-sm top-1/2 -translate-y-1/2 hp:text-xs">
+                        mm
+                      </span>
+                    </div>
+
+                    <ErrorText
+                      show={errors.embedmentLength}
+                      text="Required field"
                     />
-                    <span
-                      className={`absolute right-4 text-sm top-1/2 -translate-y-1/2 hp:text-xs ${
-                        stepPoleStandard.installationType === "base"
-                          ? "text-gray-300"
-                          : "text-black-400"
-                      }`}
-                    >
-                      mm
-                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* ===== BASEPLATE MODE ===== */}
+              {condition.baseplateEnabled && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* ================= Ground Position ================= */}
+                  <div>
+                    <h4 className="block text-sm text-gray-700 mb-3">
+                      Ground Position
+                    </h4>
+
+                    <div className="space-y-3">
+                      {[
+                        { id: "onGL", label: "On GL" },
+                        { id: "underGL", label: "Under GL" },
+                      ].map((item) => {
+                        const active =
+                          stepPoleStandard.groundPosition === item.id;
+
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => {
+                              onUpdate({
+                                groundPosition: item.id,
+                              });
+                            }}
+                            className={`w-full cursor-pointer rounded-lg border px-4 py-2.5 transition-all flex items-center gap-3
+                        ${
+                          active
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                        }
+                      `}
+                          >
+                            <div
+                              className={`w-4 h-4 rounded-full border-2 flex items-center justify-center
+                          ${active ? "border-blue-500" : "border-gray-400"}
+                        `}
+                            >
+                              {active && (
+                                <div className="w-2 h-2 rounded-full bg-blue-500" />
+                              )}
+                            </div>
+                            <span className="text-sm font-medium text-slate-700">
+                              {item.label}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  <ErrorText
-                    show={errors.embedmentLength}
-                    text="Required field"
-                  />
+                  {/* ================= Height ================= */}
+                  {stepPoleStandard.groundPosition === "underGL" && (
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-3">
+                        Height Depth
+                      </label>
+
+                      <div className="relative">
+                        <input
+                          type="number"
+                          min={0}
+                          placeholder="Input Length"
+                          value={stepPoleStandard.heightDepth}
+                          onChange={(e) =>
+                            onUpdate({
+                              heightDepth: e.target.value,
+                            })
+                          }
+                          onWheel={(e) => e.target.blur()}
+                          className={inputClass(errors.heightDepth)}
+                        />
+
+                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm">
+                          mm
+                        </span>
+
+                        <ErrorText
+                          show={errors.heightDepth}
+                          text="Required field"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -424,8 +514,9 @@ export function StepPoleTypeInput({ stepPoleStandard, onUpdate, errors }) {
               upperLength: "",
               lowerThickness: "",
               lowerLength: "",
-              installationType: "",
               embedmentLength: "",
+              groundPosition: "",
+              heightDepth: "",
             })
           }
           className="flex items-center text-sm gap-2 px-7 py-2.5 bg-[#eef2f6] text-[#0d3b66]

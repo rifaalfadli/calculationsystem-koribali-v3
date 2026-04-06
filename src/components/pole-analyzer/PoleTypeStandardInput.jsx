@@ -23,7 +23,7 @@ export function PoleTypeStandardInput({ poleTypeStandard, onUpdate }) {
                     poleShape: item.id,
                   })
                 }
-                className={`rounded-lg border px-4 py-3 text-sm font-medium transition-all
+                className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition-all
               ${
                 active
                   ? "border-blue-500 bg-blue-50 text-blue-600 shadow-sm"

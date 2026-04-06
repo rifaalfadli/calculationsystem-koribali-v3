@@ -25,11 +25,12 @@ export function StructuralDesign({ structuralDesign, onUpdate, errors }) {
           {/* FIELD : Lowest Step (Height) */}
           <div className="relative">
             <label className="block text-gray-700 text-sm mb-2 hp:text-xs hp:mb-1">
-              Lowest Step (Height)
+              Lowest Height
             </label>
             <div className="relative">
               <input
                 type="number"
+                min={0}
                 value={structuralDesign.lowestStep}
                 onChange={(e) => onUpdate({ lowestStep: e.target.value })}
                 onWheel={(e) => e.target.blur()}
@@ -45,19 +46,17 @@ export function StructuralDesign({ structuralDesign, onUpdate, errors }) {
           {/* FIELD : Overdesign (Factor) */}
           <div className="relative">
             <label className="block text-gray-700 text-sm mb-2 hp:text-xs hp:mb-1">
-              Overdesign (Factor)
+              Overdesign Factor
             </label>
             <div className="relative">
               <input
                 type="number"
+                min={0}
                 value={structuralDesign.overDesign}
                 onChange={(e) => onUpdate({ overDesign: e.target.value })}
                 onWheel={(e) => e.target.blur()}
-                className={`${inputClass(errors.overDesign)} pr-14 hp:pr-10`}
+                className={`${inputClass(errors.overDesign)} hp:pr-10`}
               />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
-                m/s
-              </span>
             </div>
             <ErrorText show={errors.overDesign} text="Required field" />
           </div>

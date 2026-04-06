@@ -150,7 +150,7 @@ export function DirectObjectInput({
               )}
               OK
             </button>
-          </div> 
+          </div>
         </div>
       </div>
 
@@ -365,6 +365,7 @@ export function DirectObjectInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={directObject.frontAreaDo}
                       onChange={(e) =>
                         onUpdate(directObject.idDo, {
@@ -390,6 +391,7 @@ export function DirectObjectInput({
                     <div className="relative">
                       <input
                         type="number"
+                        min={0}
                         value={directObject.sideAreaDo}
                         onChange={(e) =>
                           onUpdate(directObject.idDo, {
@@ -418,6 +420,7 @@ export function DirectObjectInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={directObject.weightDo}
                       onChange={(e) =>
                         onUpdate(directObject.idDo, {
@@ -442,6 +445,7 @@ export function DirectObjectInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={directObject.heightDo}
                       onChange={(e) =>
                         onUpdate(directObject.idDo, {
@@ -465,6 +469,7 @@ export function DirectObjectInput({
                   </label>
                   <input
                     type="number"
+                    min={0}
                     value={directObject.nncDo}
                     onChange={(e) =>
                       onUpdate(directObject.idDo, { nncDo: e.target.value })
@@ -483,6 +488,7 @@ export function DirectObjectInput({
                   <div className="relative">
                     <input
                       type="number"
+                      min={0}
                       value={directObject.qtyDo}
                       onChange={(e) =>
                         onUpdate(directObject.idDo, { qtyDo: e.target.value })

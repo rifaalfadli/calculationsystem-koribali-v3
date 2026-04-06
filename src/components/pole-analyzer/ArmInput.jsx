@@ -79,6 +79,7 @@ export function ArmInput({ arm, onUpdate, armError }) {
           <div className="relative">
             <input
               type="number"
+              min={0}
               value={arm.diameterArm}
               onChange={(e) =>
                 onUpdate({
@@ -103,6 +104,7 @@ export function ArmInput({ arm, onUpdate, armError }) {
           <div className="relative">
             <input
               type="number"
+              min={0}
               value={arm.thicknessArm}
               onChange={(e) =>
                 onUpdate({
@@ -127,6 +129,7 @@ export function ArmInput({ arm, onUpdate, armError }) {
           <div className="relative">
             <input
               type="number"
+              min={0}
               value={arm.lengthArm}
               onChange={(e) =>
                 onUpdate({
@@ -151,6 +154,7 @@ export function ArmInput({ arm, onUpdate, armError }) {
           <div className="relative">
             <input
               type="number"
+              min={0}
               value={arm.expLengthArm}
               onChange={(e) =>
                 onUpdate({
@@ -175,6 +179,7 @@ export function ArmInput({ arm, onUpdate, armError }) {
           <div className="relative">
             <input
               type="number"
+              min={0}
               value={arm.heightArm}
               onChange={(e) =>
                 onUpdate({
@@ -199,6 +204,7 @@ export function ArmInput({ arm, onUpdate, armError }) {
           <div className="relative">
             <input
               type="number"
+              min={0}
               value={arm.hDistanceArm}
               onChange={(e) =>
                 onUpdate({
@@ -246,6 +252,7 @@ export function ArmInput({ arm, onUpdate, armError }) {
           </label>
           <input
             type="number"
+            min={0}
             value={arm.nncArm}
             onChange={(e) =>
               onUpdate({
@@ -266,6 +273,7 @@ export function ArmInput({ arm, onUpdate, armError }) {
           <div className="relative">
             <input
               type="number"
+              min={0}
               value={arm.qtyArm}
               onChange={(e) =>
                 onUpdate({

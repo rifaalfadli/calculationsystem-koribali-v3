@@ -89,43 +89,38 @@ export function PoleStructuralAnalyzer() {
   const [poleTypeStandard, setPoleTypeStandard] = useProjectStorage(
     projectType,
     "poleTypeStandard",
-    [
-      {
-        poleShape: "",
-      },
-    ],
+    {
+      poleShape: "",
+    },
   );
 
   // STATE: Standarad pole input
   const [poleBasic, setPoleBasic] = useProjectStorage(
     projectType,
     "poleBasic",
-    [
-      {
-        poleType: "",
-        groundPosition: "",
-        height: "",
-      },
-    ],
+    {
+      poleType: "",
+      groundPosition: "",
+      height: "",
+    },
   );
 
   // STATE: Standarad pole input
   const [stepPoleStandard, setStepPoleStandard] = useProjectStorage(
     projectType,
     "stepPoleStandard",
-    [
-      {
-        poleType: "",
-        combinationGroup: "",
-        combination: "",
-        upperThickness: "",
-        upperLength: "",
-        lowerThickness: "",
-        lowerLength: "",
-        installationType: "",
-        embedmentLength: "",
-      },
-    ],
+    {
+      poleType: "stepPole",
+      combinationGroup: "",
+      combination: "",
+      upperThickness: "",
+      upperLength: "",
+      lowerThickness: "",
+      lowerLength: "",
+      embedmentLength: "",
+      groundPosition: "",
+      heightDepth: "",
+    },
   );
   const [stepPoleStandardErrors, setStepPoleStandardErrors] = useState({});
 
@@ -404,7 +399,7 @@ export function PoleStructuralAnalyzer() {
 
   // FUNCTION: Check if stepPoleStandard form is complete
   const handleStepPoleStandardComplete = () => {
-    return Utils.stepPoleStandardComplete(stepPoleStandard);
+    return Utils.stepPoleStandardComplete(stepPoleStandard, condition);
   };
 
   // FUNCTION: State updater function and persistence handler Taper Pole Standard
@@ -746,16 +741,24 @@ export function PoleStructuralAnalyzer() {
         return emptyData();
       }
 
+      // read lengths
+      const lengths = [
+        Number(stepPoleStandard.upperLength || 0),
+        Number(stepPoleStandard.lowerLength || 0),
+      ];
+
+      // convert to heights
+      const heights = lengths.map((_, i) =>
+        lengths.slice(i).reduce((sum, val) => sum + val, 0),
+      );
       const sections = selectedPole.sections.map((sec, index) => {
         let thickness = "";
-        let height = "";
 
         // =========================
         // SECTION 1 => UPPER
         // =========================
         if (index === 0) {
           thickness = stepPoleStandard.upperThickness;
-          height = stepPoleStandard.upperLength;
         }
 
         // =========================
@@ -763,14 +766,13 @@ export function PoleStructuralAnalyzer() {
         // =========================
         if (index === 1) {
           thickness = stepPoleStandard.lowerThickness;
-          height = stepPoleStandard.lowerLength;
         }
 
         return {
           ...sec,
           thicknessLower: thickness,
           thicknessUpper: thickness,
-          height,
+          height: heights[index],
         };
       });
 
@@ -884,6 +886,16 @@ export function PoleStructuralAnalyzer() {
     // IF INVALID => MAP ERRORS TO UI
     // =========================
     if (!isValid) {
+      if (
+        errors.stepPoleStandard &&
+        condition.method !== "custom" &&
+        poleTypeStandard.poleShape === "straight"
+      ) {
+        setStepPoleStandardErrors(
+          Utils.getStepPoleStandardErrors(stepPoleStandard, condition),
+        );
+      }
+
       if (errors.section && condition.method !== "standard") {
         setSectionsErrors(Utils.getSectionsErrors(finalSections));
       }
@@ -902,16 +914,6 @@ export function PoleStructuralAnalyzer() {
 
       if (errors.armObject && condition.method !== "standard") {
         setAoErrors(Utils.getAoErrors(finalArms));
-      }
-
-      if (
-        errors.stepPoleStandard &&
-        condition.method !== "custom" &&
-        poleTypeStandard.poleShape === "straight"
-      ) {
-        setStepPoleStandardErrors(
-          Utils.getStepPoleStandardErrors(stepPoleStandard),
-        );
       }
 
       return;
@@ -1036,7 +1038,7 @@ export function PoleStructuralAnalyzer() {
         poleTypeStandard.poleShape === "straight"
       ) {
         setStepPoleStandardErrors(
-          Utils.getStepPoleStandardErrors(stepPoleStandard),
+          Utils.getStepPoleStandardErrors(stepPoleStandard, condition),
         );
       }
 
@@ -1162,6 +1164,7 @@ export function PoleStructuralAnalyzer() {
                       stepPoleStandard={stepPoleStandard}
                       onUpdate={handleUpdateStepPoleStandard}
                       errors={stepPoleStandardErrors}
+                      condition={condition}
                     />
                   )}
                 </>

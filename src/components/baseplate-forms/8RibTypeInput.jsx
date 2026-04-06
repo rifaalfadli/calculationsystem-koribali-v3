@@ -63,6 +63,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.bl1}
                     onChange={(e) => onUpdate({ bl1: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -83,6 +84,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.bl2}
                     onChange={(e) => onUpdate({ bl2: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -103,6 +105,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.ap1}
                     onChange={(e) => onUpdate({ ap1: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -123,6 +126,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.ap2}
                     onChange={(e) => onUpdate({ ap2: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -143,6 +147,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.dab}
                     onChange={(e) => onUpdate({ dab: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -163,6 +168,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.nab}
                     onChange={(e) => onUpdate({ nab: e.target.value })}
                     onWheel={(e) => e.target.blur()}
@@ -183,6 +189,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.nabTensionSide}
                     onChange={(e) =>
                       onUpdate({ nabTensionSide: e.target.value })
@@ -239,6 +246,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.tb}
                     onChange={(e) => onUpdate({ tb: e.target.value })}
                     className={`${inputClass(errors.tb)} pr-12`}
@@ -258,6 +266,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.hr}
                     onChange={(e) => onUpdate({ hr: e.target.value })}
                     className={`${inputClass(errors.hr)} pr-12`}
@@ -277,6 +286,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.lrs}
                     onChange={(e) => onUpdate({ lrs: e.target.value })}
                     className={`${inputClass(errors.lrs)} pr-12`}
@@ -296,6 +306,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.lk}
                     onChange={(e) => onUpdate({ lk: e.target.value })}
                     className={`${inputClass(errors.lk)} pr-12`}
@@ -315,6 +326,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.lr}
                     onChange={(e) => onUpdate({ lr: e.target.value })}
                     className={`${inputClass(errors.lr)} pr-12`}
@@ -334,6 +346,7 @@ export function EightRibTypeInput({
                 <div className="relative">
                   <input
                     type="number"
+                    min={0}
                     value={eightRibType.tr}
                     onChange={(e) => onUpdate({ tr: e.target.value })}
                     className={`${inputClass(errors.tr)} pr-12`}
