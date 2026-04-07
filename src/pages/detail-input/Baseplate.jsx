@@ -247,16 +247,25 @@ export default function BaseplatePage() {
 
     // SUCCESS
     sessionStorage.setItem(`${projectType}_hasReport`, "true");
+
+    const reportPayload = {
+      results,
+      resultsDo,
+      resultsOhw,
+      resultsArm,
+      cover,
+      condition,
+      structuralDesign,
+    };
+
+    // save a special report snapshot
+    sessionStorage.setItem(
+      `${projectType}_reportSnapshot`,
+      JSON.stringify(reportPayload),
+    );
+
     navigate("/report", {
-      state: {
-        results,
-        resultsDo,
-        resultsOhw,
-        resultsArm,
-        cover,
-        condition,
-        structuralDesign,
-      },
+      state: reportPayload,
     });
   };
 

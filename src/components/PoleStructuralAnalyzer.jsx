@@ -245,57 +245,53 @@ export function PoleStructuralAnalyzer() {
   // Generates unique Pole IDs and syncs with sessionStorage on mount
   const sectionIdRef = useRef(1);
   useEffect(() => {
-    const saved = sessionStorage.getItem("sections");
+    const saved = sessionStorage.getItem(`${projectType}_sections`);
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (parsed.length > 0) {
-        sectionIdRef.current = Math.max(...parsed.map((s) => Number(s.id)));
-      }
+      const maxId = Math.max(0, ...parsed.map((s) => Number(s.id)));
+      sectionIdRef.current = maxId + 1;
     }
-  }, []);
+  }, [projectType]);
 
   // Generates unique Direct Object IDs and syncs with sessionStorage on mount
   const doIdRef = useRef(1);
   useEffect(() => {
-    const saved = sessionStorage.getItem("directObjects");
+    const saved = sessionStorage.getItem(`${projectType}_directObjects`);
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (parsed.length > 0) {
-        doIdRef.current = Math.max(...parsed.map((s) => Number(s.idDo)));
-      }
+      const maxId = Math.max(0, ...parsed.map((s) => Number(s.idDo)));
+      doIdRef.current = maxId + 1;
     }
-  }, []);
+  }, [projectType]);
 
   // Generates unique Overhead Wire IDs and syncs with sessionStorage on mount
   const ohwIdRef = useRef(1);
   useEffect(() => {
-    const saved = sessionStorage.getItem("overheadWires");
+    const saved = sessionStorage.getItem(`${projectType}_overheadWires`);
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (parsed.length > 0) {
-        ohwIdRef.current = Math.max(...parsed.map((s) => Number(s.idOhw)));
-      }
+      const maxId = Math.max(0, ...parsed.map((s) => Number(s.idOhw)));
+      ohwIdRef.current = maxId + 1;
     }
-  }, []);
+  }, [projectType]);
 
   // --- ID Recovery: Sync Refs with Session Storage to prevent ID conflict ---
   // Generates unique Arm IDs and syncs with sessionStorage on mount
   const armIdRef = useRef(1);
   useEffect(() => {
-    const saved = sessionStorage.getItem("arms");
+    const saved = sessionStorage.getItem(`${projectType}_arms`);
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (parsed.length > 0) {
-        armIdRef.current = Math.max(...parsed.map((s) => Number(s.idArm)));
-      }
+      const maxId = Math.max(0, ...parsed.map((s) => Number(s.idArm)));
+      armIdRef.current = maxId + 1;
     }
-  }, []);
+  }, [projectType]);
 
   // Generates unique Arm Object IDs and syncs with sessionStorage on mount
   const aoIdRef = useRef(1);
 
   useEffect(() => {
-    const saved = sessionStorage.getItem("arms");
+    const saved = sessionStorage.getItem(`${projectType}_arms`);
 
     if (!saved) return;
 
@@ -305,10 +301,9 @@ export function PoleStructuralAnalyzer() {
       (arm) => arm.armObjects?.map((o) => Number(o.idAo)) || [],
     );
 
-    if (allAoIds.length > 0) {
-      aoIdRef.current = Math.max(...allAoIds);
-    }
-  }, []);
+    const maxId = Math.max(0, ...allAoIds);
+    aoIdRef.current = maxId + 1;
+  }, [projectType]);
 
   // --- UI Guard: Ensure Active Tab always points to a valid pole ---
   useEffect(() => {
@@ -1048,20 +1043,24 @@ export function PoleStructuralAnalyzer() {
     // success => navigate to report
     sessionStorage.setItem(`${projectType}_hasReport`, "true");
 
+    const reportPayload = {
+      results,
+      resultsDo,
+      resultsOhw,
+      resultsArm,
+      cover,
+      condition,
+      structuralDesign,
+    };
+
+    // save a special report snapshot
+    sessionStorage.setItem(
+      `${projectType}_reportSnapshot`,
+      JSON.stringify(reportPayload),
+    );
+
     navigate("/report", {
-      state: {
-        results,
-        resultsDo,
-        resultsOhw,
-        resultsArm,
-        cover,
-        condition,
-        structuralDesign,
-        sections: finalSections,
-        directObjects: finalDo,
-        arms: finalArms,
-        overheadWires: finalOhw,
-      },
+      state: reportPayload,
     });
   };
 

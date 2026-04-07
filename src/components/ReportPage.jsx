@@ -21,33 +21,20 @@ export function ReportPage() {
 
   // Ambil data cover, condition, results, sections dari state router
   // Jika tidak ada, fallback ke array kosong untuk mencegah error
-  const reportData = location.state;
-
-  const results =
-    reportData?.results ||
-    JSON.parse(sessionStorage.getItem(`${projectType}_results`) || "[]");
-
-  const resultsDo =
-    reportData?.resultsDo ||
-    JSON.parse(sessionStorage.getItem(`${projectType}_resultsDo`) || "[]");
-
-  const resultsOhw =
-    reportData?.resultsOhw ||
-    JSON.parse(sessionStorage.getItem(`${projectType}_resultsOhw`) || "[]");
-
-  const cover =
-    reportData?.cover ||
-    JSON.parse(sessionStorage.getItem(`${projectType}_cover`) || "{}");
-
-  const condition =
-    reportData?.condition ||
-    JSON.parse(sessionStorage.getItem(`${projectType}_condition`) || "{}");
-
-  const structuralDesign =
-    reportData?.structuralDesign ||
+  // Ambil snapshot report (bukan live calculator data)
+  const reportData =
+    location.state ||
     JSON.parse(
-      sessionStorage.getItem(`${projectType}_structuralDesign`) || "{}",
+      sessionStorage.getItem(`${projectType}_reportSnapshot`) || "null",
     );
+
+  // kasih default biar aman
+  const results = reportData?.results || [];
+  const resultsDo = reportData?.resultsDo || [];
+  const resultsOhw = reportData?.resultsOhw || [];
+  const cover = reportData?.cover || {};
+  const condition = reportData?.condition || {};
+  const structuralDesign = reportData?.structuralDesign || {};
 
   // // Tombol kembali ke calculation page
   // const onBack = () => navigate("/calculation");
@@ -144,7 +131,7 @@ export function ReportPage() {
   };
 
   // Empty State - No Report
-  if (!hasReport || results.length === 0 || !projectType) {
+  if (!hasReport || results.length === 0 || !projectType || !reportData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-250">
         {/* Empty State Content */}

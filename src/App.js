@@ -1,5 +1,5 @@
 // App.js
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import Calculation from "./pages/Calculation";
 import CalculationTypeSetup from "./pages/CalculationType";
 import Report from "./pages/Report";
@@ -13,6 +13,7 @@ import OpeningPage from "./pages/detail-input/Opening";
 import BaseplatePage from "./pages/detail-input/Baseplate";
 import FoundationPage from "./pages/detail-input/Foundation";
 import NotFoundPage from "./pages/404";
+import TypeGuard from "./components/pole-analyzer/TypeGuard";
 
 function App() {
   return (
@@ -32,20 +33,21 @@ function App() {
           }
         >
           <Route path="/calculation" element={<Calculation />} />
-          <Route path="/calculation/:type" element={<CalculationTypeSetup />} />
+
           <Route
-            path="/calculation/:type/pole"
-            element={<PoleStructurePage />}
-          />
-          <Route path="/calculation/:type/opening" element={<OpeningPage />} />
-          <Route
-            path="/calculation/:type/baseplate"
-            element={<BaseplatePage />}
-          />
-          <Route
-            path="/calculation/:type/foundation"
-            element={<FoundationPage />}
-          />
+            path="/calculation/:type"
+            element={
+              <TypeGuard>
+                <Outlet />
+              </TypeGuard>
+            }
+          >
+            <Route index element={<CalculationTypeSetup />} />
+            <Route path="pole" element={<PoleStructurePage />} />
+            <Route path="opening" element={<OpeningPage />} />
+            <Route path="baseplate" element={<BaseplatePage />} />
+            <Route path="foundation" element={<FoundationPage />} />
+          </Route>
           <Route path="/report" element={<Report />} />
 
           {/* 404 KHUSUS USER YANG SUDAH LOGIN */}
