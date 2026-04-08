@@ -1,4 +1,5 @@
 import { RotateCcw, ChevronRight, Calculator } from "lucide-react";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function FourRibTypeInput({
   fourRibType,
@@ -72,7 +73,10 @@ export function FourRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.bl1} text="Required field" />
+                <ErrorText
+                  show={errors.bl1}
+                  text={getNumericError(fourRibType.bl1)}
+                />
               </div>
 
               {/* Width of the Baseplate in the NS direction (BL2) */}
@@ -93,7 +97,10 @@ export function FourRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.bl2} text="Required field" />
+                <ErrorText
+                  show={errors.bl2}
+                  text={getNumericError(fourRibType.bl2)}
+                />
               </div>
 
               {/* Anchor pitch in the EW direction (Ap1) */}
@@ -114,7 +121,10 @@ export function FourRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.ap1} text="Required field" />
+                <ErrorText
+                  show={errors.ap1}
+                  text={getNumericError(fourRibType.ap1)}
+                />
               </div>
 
               {/* Anchor pitch in the NS direction (Ap2) */}
@@ -135,7 +145,10 @@ export function FourRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.ap2} text="Required field" />
+                <ErrorText
+                  show={errors.ap2}
+                  text={getNumericError(fourRibType.ap2)}
+                />
               </div>
 
               {/* Diameter of Anchor Bolt */}
@@ -156,7 +169,10 @@ export function FourRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.dab} text="Required field" />
+                <ErrorText
+                  show={errors.dab}
+                  text={getNumericError(fourRibType.dab)}
+                />
               </div>
 
               {/* Number of anchor bolts (n) */}
@@ -177,7 +193,10 @@ export function FourRibTypeInput({
                     pcs
                   </span>
                 </div>
-                <ErrorText show={errors.nab} text="Required field" />
+                <ErrorText
+                  show={errors.nab}
+                  text={getNumericError(fourRibType.nab)}
+                />
               </div>
 
               {/* Number of anchor bolts on the tension side (n') */}
@@ -200,7 +219,10 @@ export function FourRibTypeInput({
                     pcs
                   </span>
                 </div>
-                <ErrorText show={errors.nabTensionSide} text="Required field" />
+                <ErrorText
+                  show={errors.nabTensionSide}
+                  text={getNumericError(fourRibType.nabTensionSide)}
+                />
               </div>
             </div>
           </div>
@@ -234,7 +256,10 @@ export function FourRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.tb} text="Required field" />
+                <ErrorText
+                  show={errors.tb}
+                  text={getNumericError(fourRibType.tb)}
+                />
               </div>
 
               {/* Height of the Rib Plate (Hr) */}
@@ -254,7 +279,10 @@ export function FourRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.hr} text="Required field" />
+                <ErrorText
+                  show={errors.hr}
+                  text={getNumericError(fourRibType.hr)}
+                />
               </div>
 
               {/* Rib Plate scallop (Lrs) */}
@@ -274,7 +302,10 @@ export function FourRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.lrs} text="Required field" />
+                <ErrorText
+                  show={errors.lrs}
+                  text={getNumericError(fourRibType.lrs)}
+                />
               </div>
 
               {/* Weld leg length (Lk) */}
@@ -294,7 +325,10 @@ export function FourRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.lk} text="Required field" />
+                <ErrorText
+                  show={errors.lk}
+                  text={getNumericError(fourRibType.lk)}
+                />
               </div>
 
               {/* Length of the Rib Plate (Lr) */}
@@ -314,7 +348,10 @@ export function FourRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.lr} text="Required field" />
+                <ErrorText
+                  show={errors.lr}
+                  text={getNumericError(fourRibType.lr)}
+                />
               </div>
 
               {/* Thickness of the Rib Plate (Tr) */}
@@ -334,7 +371,10 @@ export function FourRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.tr} text="Required field" />
+                <ErrorText
+                  show={errors.tr}
+                  text={getNumericError(fourRibType.tr)}
+                />
               </div>
             </div>
           </div>

@@ -9,6 +9,7 @@ import {
   Layers,
 } from "lucide-react";
 import { BaseplateIcon } from "../../utils/pole-analyzer/icon";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function ConditionInput({
   projectType,
@@ -142,7 +143,10 @@ export function ConditionInput({
                     m/s
                   </span>
                 </div>
-                <ErrorText show={errors.windSpeed} text="Required field" />
+                <ErrorText
+                  show={errors.windSpeed}
+                  text={getNumericError(condition.windSpeed)}
+                />
               </div>
 
               {/* FIELD : Air Density Input */}
@@ -163,7 +167,10 @@ export function ConditionInput({
                     N・sec<sup>2</sup>/m<sup>4</sup>
                   </span>
                 </div>
-                <ErrorText show={errors.airDensity} text="Required field" />
+                <ErrorText
+                  show={errors.airDensity}
+                  text={getNumericError(condition.airDensity)}
+                />
               </div>
             </div>
           </div>

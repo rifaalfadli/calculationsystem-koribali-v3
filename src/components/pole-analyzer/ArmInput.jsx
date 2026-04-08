@@ -1,4 +1,5 @@
 import React from "react";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function ArmInput({ arm, onUpdate, armError }) {
   // Function to helper class input
@@ -93,7 +94,10 @@ export function ArmInput({ arm, onUpdate, armError }) {
               mm
             </span>
           </div>
-          <ErrorText show={armError.diameterArm} text="Required field" />
+          <ErrorText
+            show={armError.diameterArm}
+            text={getNumericError(arm.diameterArm)}
+          />
         </div>
 
         {/* Thickness Arm Input */}
@@ -118,7 +122,10 @@ export function ArmInput({ arm, onUpdate, armError }) {
               mm
             </span>
           </div>
-          <ErrorText show={armError.thicknessArm} text="Required field" />
+          <ErrorText
+            show={armError.thicknessArm}
+            text={getNumericError(arm.thicknessArm)}
+          />
         </div>
 
         {/* Length Arm Input */}
@@ -143,7 +150,10 @@ export function ArmInput({ arm, onUpdate, armError }) {
               mm
             </span>
           </div>
-          <ErrorText show={armError.lengthArm} text="Required field" />
+          <ErrorText
+            show={armError.lengthArm}
+            text={getNumericError(arm.lengthArm)}
+          />
         </div>
 
         {/* Exp.Length Arm Input */}
@@ -168,7 +178,10 @@ export function ArmInput({ arm, onUpdate, armError }) {
               mm
             </span>
           </div>
-          <ErrorText show={armError.expLengthArm} text="Required field" />
+          <ErrorText
+            show={armError.expLengthArm}
+            text={getNumericError(arm.expLengthArm)}
+          />
         </div>
 
         {/* Height Arm Input */}
@@ -193,7 +206,10 @@ export function ArmInput({ arm, onUpdate, armError }) {
               mm
             </span>
           </div>
-          <ErrorText show={armError.heightArm} text="Required field" />
+          <ErrorText
+            show={armError.heightArm}
+            text={getNumericError(arm.heightArm)}
+          />
         </div>
 
         {/* H-Distance Arm Input */}
@@ -218,7 +234,10 @@ export function ArmInput({ arm, onUpdate, armError }) {
               mm
             </span>
           </div>
-          <ErrorText show={armError.hDistanceArm} text="Required field" />
+          <ErrorText
+            show={armError.hDistanceArm}
+            text={getNumericError(arm.hDistanceArm)}
+          />
         </div>
 
         {/* Fix Angle Arm Input */}
@@ -262,7 +281,10 @@ export function ArmInput({ arm, onUpdate, armError }) {
             onWheel={(e) => e.target.blur()}
             className={`${inputClass(armError.nncArm)}`}
           />
-          <ErrorText show={armError.nncArm} text="Required field" />
+          <ErrorText
+            show={armError.nncArm}
+            text={getNumericError(arm.nncArm)}
+          />
         </div>
 
         {/* Quantity Arm Input */}
@@ -287,7 +309,10 @@ export function ArmInput({ arm, onUpdate, armError }) {
               pcs
             </span>
           </div>
-          <ErrorText show={armError.qtyArm} text="Required field" />
+          <ErrorText
+            show={armError.qtyArm}
+            text={getNumericError(arm.qtyArm)}
+          />
         </div>
       </div>
     </div>

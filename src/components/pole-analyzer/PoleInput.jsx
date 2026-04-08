@@ -1,4 +1,5 @@
 import React from "react";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function PoleInput({ section, onUpdate, errors }) {
   // Function to helper class input
@@ -115,7 +116,10 @@ export function PoleInput({ section, onUpdate, errors }) {
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.diameterLower} text="Required field" />
+                <ErrorText
+                  show={errors.diameterLower}
+                  text={getNumericError(section.diameterLower)}
+                />
               </div>
 
               {/* Straight Thickness */}
@@ -141,7 +145,10 @@ export function PoleInput({ section, onUpdate, errors }) {
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.thicknessLower} text="Required field" />
+                <ErrorText
+                  show={errors.thicknessLower}
+                  text={getNumericError(section.thicknessLower)}
+                />
               </div>
             </div>
           ) : (
@@ -167,7 +174,10 @@ export function PoleInput({ section, onUpdate, errors }) {
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.diameterLower} text="Required field" />
+                <ErrorText
+                  show={errors.diameterLower}
+                  text={getNumericError(section.diameterLower)}
+                />
               </div>
 
               {/* Diameter Upper */}
@@ -190,7 +200,10 @@ export function PoleInput({ section, onUpdate, errors }) {
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.diameterUpper} text="Required field" />
+                <ErrorText
+                  show={errors.diameterUpper}
+                  text={getNumericError(section.diameterUpper)}
+                />
               </div>
 
               {/* Thickness Lower */}
@@ -213,7 +226,10 @@ export function PoleInput({ section, onUpdate, errors }) {
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.thicknessLower} text="Required field" />
+                <ErrorText
+                  show={errors.thicknessLower}
+                  text={getNumericError(section.thicknessLower)}
+                />
               </div>
 
               {/* Thickness Upper */}
@@ -236,7 +252,10 @@ export function PoleInput({ section, onUpdate, errors }) {
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.thicknessUpper} text="Required field" />
+                <ErrorText
+                  show={errors.thicknessUpper}
+                  text={getNumericError(section.thicknessUpper)}
+                />
               </div>
             </div>
           )}
@@ -270,7 +289,10 @@ export function PoleInput({ section, onUpdate, errors }) {
                   mm
                 </span>
               </div>
-              <ErrorText show={errors.height} text="Required field" />
+              <ErrorText
+                show={errors.height}
+                text={getNumericError(section.height)}
+              />
             </div>
 
             {/* Quantity input */}
@@ -293,7 +315,10 @@ export function PoleInput({ section, onUpdate, errors }) {
                 </span>
               </div>
 
-              <ErrorText show={errors.quantity} text="Required field" />
+              <ErrorText
+                show={errors.quantity}
+                text={getNumericError(section.quantity)}
+              />
             </div>
           </div>
         </div>

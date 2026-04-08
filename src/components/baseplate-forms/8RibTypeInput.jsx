@@ -1,4 +1,5 @@
 import { RotateCcw, ChevronRight, Calculator } from "lucide-react";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function EightRibTypeInput({
   eightRibType,
@@ -73,7 +74,10 @@ export function EightRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.bl1} text="Required field" />
+                <ErrorText
+                  show={errors.bl1}
+                  text={getNumericError(eightRibType.bl1)}
+                />
               </div>
 
               {/* Width of the Baseplate in the NS direction (BL2) */}
@@ -94,7 +98,10 @@ export function EightRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.bl2} text="Required field" />
+                <ErrorText
+                  show={errors.bl2}
+                  text={getNumericError(eightRibType.bl2)}
+                />
               </div>
 
               {/* Anchor pitch in the EW direction (Ap1) */}
@@ -115,7 +122,10 @@ export function EightRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.ap1} text="Required field" />
+                <ErrorText
+                  show={errors.ap1}
+                  text={getNumericError(eightRibType.ap1)}
+                />
               </div>
 
               {/* Anchor pitch in the NS direction (Ap2) */}
@@ -136,7 +146,10 @@ export function EightRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.ap2} text="Required field" />
+                <ErrorText
+                  show={errors.ap2}
+                  text={getNumericError(eightRibType.ap2)}
+                />
               </div>
 
               {/* Diameter of Anchor Bolt */}
@@ -157,7 +170,10 @@ export function EightRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.dab} text="Required field" />
+                <ErrorText
+                  show={errors.dab}
+                  text={getNumericError(eightRibType.dab)}
+                />
               </div>
 
               {/* Number of anchor bolts (n) */}
@@ -178,7 +194,10 @@ export function EightRibTypeInput({
                     pcs
                   </span>
                 </div>
-                <ErrorText show={errors.nab} text="Required field" />
+                <ErrorText
+                  show={errors.nab}
+                  text={getNumericError(eightRibType.nab)}
+                />
               </div>
 
               {/* Number of anchor bolts on the tension side (n') */}
@@ -201,7 +220,10 @@ export function EightRibTypeInput({
                     pcs
                   </span>
                 </div>
-                <ErrorText show={errors.nabTensionSide} text="Required field" />
+                <ErrorText
+                  show={errors.nabTensionSide}
+                  text={getNumericError(eightRibType.nabTensionSide)}
+                />
               </div>
 
               {/* Rib Angle (θ) */}
@@ -255,7 +277,10 @@ export function EightRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.tb} text="Required field" />
+                <ErrorText
+                  show={errors.tb}
+                  text={getNumericError(eightRibType.tb)}
+                />
               </div>
 
               {/* Height of the Rib Plate (Hr) */}
@@ -275,7 +300,10 @@ export function EightRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.hr} text="Required field" />
+                <ErrorText
+                  show={errors.hr}
+                  text={getNumericError(eightRibType.hr)}
+                />
               </div>
 
               {/* Rib Plate scallop (Lrs) */}
@@ -295,7 +323,10 @@ export function EightRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.lrs} text="Required field" />
+                <ErrorText
+                  show={errors.lrs}
+                  text={getNumericError(eightRibType.lrs)}
+                />
               </div>
 
               {/* Weld leg length (Lk) */}
@@ -315,7 +346,10 @@ export function EightRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.lk} text="Required field" />
+                <ErrorText
+                  show={errors.lk}
+                  text={getNumericError(eightRibType.lk)}
+                />
               </div>
 
               {/* Length of the Rib Plate (Lr) */}
@@ -335,7 +369,10 @@ export function EightRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.lr} text="Required field" />
+                <ErrorText
+                  show={errors.lr}
+                  text={getNumericError(eightRibType.lr)}
+                />
               </div>
 
               {/* Thickness of the Rib Plate (Tr) */}
@@ -355,7 +392,10 @@ export function EightRibTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.tr} text="Required field" />
+                <ErrorText
+                  show={errors.tr}
+                  text={getNumericError(eightRibType.tr)}
+                />
               </div>
             </div>
           </div>

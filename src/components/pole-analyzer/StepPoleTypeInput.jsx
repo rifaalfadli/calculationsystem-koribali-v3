@@ -1,5 +1,6 @@
 import React from "react";
 import { RotateCcw } from "lucide-react";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function StepPoleTypeInput({
   stepPoleStandard,
@@ -281,7 +282,7 @@ export function StepPoleTypeInput({
                         </div>
                         <ErrorText
                           show={errors.upperLength}
-                          text="Required field"
+                          text={getNumericError(stepPoleStandard.upperLength)}
                         />
                       </div>
                     </div>
@@ -354,7 +355,7 @@ export function StepPoleTypeInput({
 
                         <ErrorText
                           show={errors.lowerLength}
-                          text="Required field"
+                          text={getNumericError(stepPoleStandard.lowerLength)}
                         />
                       </div>
                     </div>
@@ -405,7 +406,7 @@ export function StepPoleTypeInput({
 
                     <ErrorText
                       show={errors.embedmentLength}
-                      text="Required field"
+                      text={getNumericError(stepPoleStandard.embedmentLength)}
                     />
                   </div>
                 </div>
@@ -490,7 +491,7 @@ export function StepPoleTypeInput({
 
                         <ErrorText
                           show={errors.heightDepth}
-                          text="Required field"
+                          text={getNumericError(stepPoleStandard.heightDepth)}
                         />
                       </div>
                     </div>

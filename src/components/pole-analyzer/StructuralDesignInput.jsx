@@ -1,3 +1,5 @@
+import { getNumericError } from "../../utils/pole-analyzer";
+
 export function StructuralDesign({ structuralDesign, onUpdate, errors }) {
   // Function to helper class input
   const inputClass = (hasError) =>
@@ -40,7 +42,10 @@ export function StructuralDesign({ structuralDesign, onUpdate, errors }) {
                 m
               </span>
             </div>
-            <ErrorText show={errors.lowestStep} text="Required field" />
+            <ErrorText
+              show={errors.lowestStep}
+              text={getNumericError(structuralDesign.lowestStep)}
+            />
           </div>
 
           {/* FIELD : Overdesign (Factor) */}
@@ -58,7 +63,10 @@ export function StructuralDesign({ structuralDesign, onUpdate, errors }) {
                 className={`${inputClass(errors.overDesign)} hp:pr-10`}
               />
             </div>
-            <ErrorText show={errors.overDesign} text="Required field" />
+            <ErrorText
+              show={errors.overDesign}
+              text={getNumericError(structuralDesign.overDesign)}
+            />
           </div>
         </div>
       </div>

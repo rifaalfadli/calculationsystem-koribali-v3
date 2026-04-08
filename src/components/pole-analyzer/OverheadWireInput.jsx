@@ -7,6 +7,7 @@ import {
   CheckCircle,
   Circle,
 } from "lucide-react";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function OverheadWireInput({
   overheadWires,
@@ -358,7 +359,10 @@ export function OverheadWireInput({
                       kg/m
                     </span>
                   </div>
-                  <ErrorText show={ohwError.weightOhw} text="Required field" />
+                  <ErrorText
+                    show={ohwError.weightOhw}
+                    text={getNumericError(overheadWire.weightOhw)}
+                  />
                 </div>
 
                 {/* Diameter Overhead Wire Input */}
@@ -385,7 +389,7 @@ export function OverheadWireInput({
                   </div>
                   <ErrorText
                     show={ohwError.diameterOhw}
-                    text="Required field"
+                    text={getNumericError(overheadWire.diameterOhw)}
                   />
                 </div>
 
@@ -413,7 +417,7 @@ export function OverheadWireInput({
                   </div>
                   <ErrorText
                     show={ohwError.fixheightOhw}
-                    text="Required field"
+                    text={getNumericError(overheadWire.fixheightOhw)}
                   />
                 </div>
 
@@ -439,7 +443,10 @@ export function OverheadWireInput({
                       mm
                     </span>
                   </div>
-                  <ErrorText show={ohwError.spanOhw} text="Required field" />
+                  <ErrorText
+                    show={ohwError.spanOhw}
+                    text={getNumericError(overheadWire.spanOhw)}
+                  />
                 </div>
 
                 {/* Sagging Ratio Overhead Wire Input */}
@@ -464,7 +471,10 @@ export function OverheadWireInput({
                       %
                     </span>
                   </div>
-                  <ErrorText show={ohwError.saggingOhw} text="Required field" />
+                  <ErrorText
+                    show={ohwError.saggingOhw}
+                    text={getNumericError(overheadWire.saggingOhw)}
+                  />
                 </div>
 
                 {/* nnC Overhead Wire Input */}
@@ -484,7 +494,10 @@ export function OverheadWireInput({
                     onWheel={(e) => e.target.blur()}
                     className={`${inputClass(ohwError.nncOhw)}`}
                   />
-                  <ErrorText show={ohwError.nncOhw} text="Required field" />
+                  <ErrorText
+                    show={ohwError.nncOhw}
+                    text={getNumericError(overheadWire.nncOhw)}
+                  />
                 </div>
 
                 {/* Fix Angle Overhead Wire Input */}

@@ -7,6 +7,7 @@ import {
   CheckCircle,
   Circle,
 } from "lucide-react";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function DirectObjectInput({
   directObjects = [],
@@ -379,7 +380,10 @@ export function DirectObjectInput({
                       m<sup>2</sup>
                     </span>
                   </div>
-                  <ErrorText show={doError.frontAreaDo} text="Required field" />
+                  <ErrorText
+                    show={doError.frontAreaDo}
+                    text={getNumericError(directObject.frontAreaDo)}
+                  />
                 </div>
 
                 {/* Side Area Direct Object Input */}
@@ -407,7 +411,7 @@ export function DirectObjectInput({
                     </div>
                     <ErrorText
                       show={doError.sideAreaDo}
-                      text="Required field"
+                      text={getNumericError(directObject.sideAreaDo)}
                     />
                   </div>
                 )}
@@ -434,7 +438,10 @@ export function DirectObjectInput({
                       kg
                     </span>
                   </div>
-                  <ErrorText show={doError.weightDo} text="Required field" />
+                  <ErrorText
+                    show={doError.weightDo}
+                    text={getNumericError(directObject.weightDo)}
+                  />
                 </div>
 
                 {/* Z (Height) Direct Object Input */}
@@ -459,7 +466,10 @@ export function DirectObjectInput({
                       mm
                     </span>
                   </div>
-                  <ErrorText show={doError.heightDo} text="Required field" />
+                  <ErrorText
+                    show={doError.heightDo}
+                    text={getNumericError(directObject.heightDo)}
+                  />
                 </div>
 
                 {/* nnC Direct Object Input */}
@@ -477,7 +487,10 @@ export function DirectObjectInput({
                     onWheel={(e) => e.target.blur()}
                     className={inputClass(doError.nncDo)}
                   />
-                  <ErrorText show={doError.nncDo} text="Required field" />
+                  <ErrorText
+                    show={doError.nncDo}
+                    text={getNumericError(directObject.nncDo)}
+                  />
                 </div>
 
                 {/* Quantity Direct Object Input */}
@@ -500,7 +513,10 @@ export function DirectObjectInput({
                       pcs
                     </span>
                   </div>
-                  <ErrorText show={doError.qtyDo} text="Required field" />
+                  <ErrorText
+                    show={doError.qtyDo}
+                    text={getNumericError(directObject.qtyDo)}
+                  />
                 </div>
 
                 {/* Fix Angle Direct Object Input */}

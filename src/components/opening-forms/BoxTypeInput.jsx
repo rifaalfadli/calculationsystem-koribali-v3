@@ -1,4 +1,5 @@
 import { RotateCcw, ChevronRight, Calculator } from "lucide-react";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function BoxTypeInput({
   opBoxType,
@@ -64,7 +65,10 @@ export function BoxTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.boxWidth} text="Required field" />
+                <ErrorText
+                  show={errors.boxWidth}
+                  text={getNumericError(opBoxType.boxWidth)}
+                />
               </div>
 
               {/* Opening Width */}
@@ -85,7 +89,10 @@ export function BoxTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.opWidth} text="Required field" />
+                <ErrorText
+                  show={errors.opWidth}
+                  text={getNumericError(opBoxType.opWidth)}
+                />
               </div>
 
               {/* Box Height */}
@@ -106,7 +113,10 @@ export function BoxTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.boxHeight} text="Required field" />
+                <ErrorText
+                  show={errors.boxHeight}
+                  text={getNumericError(opBoxType.boxHeight)}
+                />
               </div>
 
               {/* Opening Surface Height */}
@@ -131,7 +141,7 @@ export function BoxTypeInput({
                 </div>
                 <ErrorText
                   show={errors.opSurfaceHeight}
-                  text="Required field"
+                  text={getNumericError(opBoxType.opSurfaceHeight)}
                 />
               </div>
 
@@ -153,7 +163,10 @@ export function BoxTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.opLength} text="Required field" />
+                <ErrorText
+                  show={errors.opLength}
+                  text={getNumericError(opBoxType.opLength)}
+                />
               </div>
             </div>
           </div>

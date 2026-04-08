@@ -137,7 +137,7 @@ export default function CalculationSetup() {
     const result = Utils.conditionNext(handleIsConditionComplete());
 
     if (!result.isValid) {
-      showToast("Please complete all initial input fields.");
+      showToast("Please check the initial input fields.");
       if (result.errors?.condition) {
         setConditionErrors(Utils.getConditionErrors(localCondition));
       }

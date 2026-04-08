@@ -1,4 +1,5 @@
 import { RotateCcw, ChevronRight, Calculator } from "lucide-react";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function RTypeInput({
   opRType,
@@ -62,7 +63,10 @@ export function RTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.opWidth} text="Required field" />
+                <ErrorText
+                  show={errors.opWidth}
+                  text={getNumericError(opRType.opWidth)}
+                />
               </div>
 
               {/* Opening Surface Height */}
@@ -87,7 +91,7 @@ export function RTypeInput({
                 </div>
                 <ErrorText
                   show={errors.opSurfaceHeight}
-                  text="Required field"
+                  text={getNumericError(opRType.opSurfaceHeight)}
                 />
               </div>
 
@@ -109,7 +113,10 @@ export function RTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.opLength} text="Required field" />
+                <ErrorText
+                  show={errors.opLength}
+                  text={getNumericError(opRType.opLength)}
+                />
               </div>
             </div>
           </div>

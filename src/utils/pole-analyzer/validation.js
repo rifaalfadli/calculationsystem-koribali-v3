@@ -7,6 +7,24 @@ export const isEmpty = (value) => {
   return value.toString().trim() === "";
 };
 
+// FUNCTION: check if value is negative
+export const isNegative = (value) => {
+  if (value === null || value === undefined) return false;
+  if (value.toString().trim() === "") return false;
+
+  return Number(value) < 0;
+};
+
+// FUNCTION: check if a value is filled and non-negative
+export const isPositiveFilled = (value) => {
+  return !isEmpty(value) && !isNegative(value);
+};
+
+// FUNCTION: check if value is invalid (empty or negative)
+export const isInvalidNumber = (value) => {
+  return isEmpty(value) || isNegative(value);
+};
+
 // FUNCTION: helper to clear errors per field
 export const clearError = (updates, setErrors) => {
   setErrors((prev) => {
@@ -21,6 +39,13 @@ export const clearError = (updates, setErrors) => {
 
     return next;
   });
+};
+
+// FUNCTION: get error message for numeric input
+export const getNumericError = (value) => {
+  if (isEmpty(value)) return "Required field";
+  if (isNegative(value)) return "Value must be positive";
+  return "";
 };
 
 // ====================================================
@@ -49,19 +74,19 @@ export const getCoverErrors = (cover) => ({
 // ====================================================
 // FUNCTION: Check if condition information form is complete
 export const isConditionComplete = (condition) => {
-  return [
-    condition.designStandard,
-    condition.windSpeed,
-    condition.airDensity,
-    condition.method,
-  ].every((v) => v && v.trim() !== "");
+  return (
+    !isEmpty(condition.designStandard) &&
+    !isEmpty(condition.method) &&
+    isPositiveFilled(condition.windSpeed) &&
+    isPositiveFilled(condition.airDensity)
+  );
 };
 
 // FUNCTION: Create an error checker helper for the condition
 export const getConditionErrors = (condition) => ({
   designStandard: isEmpty(condition.designStandard),
-  windSpeed: isEmpty(condition.windSpeed),
-  airDensity: isEmpty(condition.airDensity),
+  windSpeed: isInvalidNumber(condition.windSpeed),
+  airDensity: isInvalidNumber(condition.airDensity),
   method: isEmpty(condition.method),
 });
 
@@ -70,15 +95,16 @@ export const getConditionErrors = (condition) => ({
 // ====================================================
 // FUNCTION: Check if Structural Design Pole information form is complete
 export const structuralDesignComplete = (structuralDesign) => {
-  return [structuralDesign.lowestStep, structuralDesign.overDesign].every(
-    (v) => !isEmpty(v),
+  return (
+    isPositiveFilled(structuralDesign.lowestStep) &&
+    isPositiveFilled(structuralDesign.overDesign)
   );
 };
 
 // FUNCTION: Create an error checker helper for the Structural Design Pole
 export const getStructuralDesignErrors = (structuralDesign) => ({
-  lowestStep: isEmpty(structuralDesign.lowestStep),
-  overDesign: isEmpty(structuralDesign.overDesign),
+  lowestStep: isInvalidNumber(structuralDesign.lowestStep),
+  overDesign: isInvalidNumber(structuralDesign.overDesign),
 });
 
 // ====================================================
@@ -98,23 +124,25 @@ export const stepPoleStandardComplete = (stepPoleStandard, condition) => {
   const isEmbedment = !condition.baseplateEnabled;
   const isUnderGL = stepPoleStandard.groundPosition === "underGL";
 
-  const fields = [
-    stepPoleStandard.upperThickness,
-    stepPoleStandard.upperLength,
-    stepPoleStandard.lowerThickness,
-    stepPoleStandard.lowerLength,
+  return [
+    !isEmpty(stepPoleStandard.upperThickness),
+    isPositiveFilled(stepPoleStandard.upperLength),
+    !isEmpty(stepPoleStandard.lowerThickness),
+    isPositiveFilled(stepPoleStandard.lowerLength),
 
     // ===== EMBEDMENT =====
-    ...(isEmbedment ? [stepPoleStandard.embedmentLength] : []),
+    ...(isEmbedment
+      ? [isPositiveFilled(stepPoleStandard.embedmentLength)]
+      : []),
 
     // ===== BASE =====
-    ...(isBase ? [stepPoleStandard.groundPosition] : []),
+    ...(isBase ? [!isEmpty(stepPoleStandard.groundPosition)] : []),
 
     // ===== UNDER GL ONLY =====
-    ...(isBase && isUnderGL ? [stepPoleStandard.heightDepth] : []),
-  ];
-
-  return fields.every((v) => v && v.toString().trim() !== "");
+    ...(isBase && isUnderGL
+      ? [isPositiveFilled(stepPoleStandard.heightDepth)]
+      : []),
+  ].every(Boolean);
 };
 
 // FUNCTION: Create an error checker helper for the Stepped Pole Type Standard
@@ -125,13 +153,13 @@ export const getStepPoleStandardErrors = (stepPoleStandard, condition) => {
 
   return {
     upperThickness: isEmpty(stepPoleStandard.upperThickness),
-    upperLength: isEmpty(stepPoleStandard.upperLength),
+    upperLength: isInvalidNumber(stepPoleStandard.upperLength),
     lowerThickness: isEmpty(stepPoleStandard.lowerThickness),
-    lowerLength: isEmpty(stepPoleStandard.lowerLength),
+    lowerLength: isInvalidNumber(stepPoleStandard.lowerLength),
 
     // ===== EMBEDMENT =====
     embedmentLength: isEmbedment
-      ? isEmpty(stepPoleStandard.embedmentLength)
+      ? isInvalidNumber(stepPoleStandard.embedmentLength)
       : false,
 
     // ===== BASE =====
@@ -139,7 +167,9 @@ export const getStepPoleStandardErrors = (stepPoleStandard, condition) => {
 
     // heightDepth cuma dicek kalau UNDER GL
     heightDepth:
-      isBase && isUnderGL ? isEmpty(stepPoleStandard.heightDepth) : false,
+      isBase && isUnderGL
+        ? isInvalidNumber(stepPoleStandard.heightDepth)
+        : false,
   };
 };
 
@@ -228,29 +258,32 @@ export const validatePole = (sections, structuralDesign) => {
 
 // FUNCTION: Check if a section/step pole is complete
 export const isSectionComplete = (section) => {
-  if (
-    section.name.trim() === "" ||
-    section.height.trim() === "" ||
-    section.quantity.trim() === ""
-  ) {
-    return false; // fallback
-  }
+  // ===== BASIC REQUIRED =====
+  const baseValid =
+    !isEmpty(section.name) &&
+    isPositiveFilled(section.height) &&
+    isPositiveFilled(section.quantity);
+
+  if (!baseValid) return false;
+
+  // ===== TYPE BASED =====
   if (section.poleType === "Taper") {
-    // Taper: all lower + upper fields required
     return (
-      section.diameterLower.trim() !== "" &&
-      section.diameterUpper.trim() !== "" &&
-      section.thicknessLower.trim() !== "" &&
-      section.thicknessUpper.trim() !== ""
-    );
-  } else if (section.poleType === "Straight") {
-    // Straight: only lower required
-    return (
-      section.diameterLower.trim() !== "" &&
-      section.thicknessLower.trim() !== ""
+      isPositiveFilled(section.diameterLower) &&
+      isPositiveFilled(section.diameterUpper) &&
+      isPositiveFilled(section.thicknessLower) &&
+      isPositiveFilled(section.thicknessUpper)
     );
   }
-  return false; // fallback
+
+  if (section.poleType === "Straight") {
+    return (
+      isPositiveFilled(section.diameterLower) &&
+      isPositiveFilled(section.thicknessLower)
+    );
+  }
+
+  return false;
 };
 
 // FUNCTION: Create an error checker helper for the section/step
@@ -260,8 +293,10 @@ export const getSectionsErrors = (sections) => {
   sections.forEach((section) => {
     const e = {
       name: isEmpty(section.name),
-      height: isEmpty(section.height),
-      quantity: isEmpty(section.quantity),
+
+      height: isInvalidNumber(section.height),
+      quantity: isInvalidNumber(section.quantity),
+
       diameterLower: false,
       diameterUpper: false,
       thicknessLower: false,
@@ -269,13 +304,13 @@ export const getSectionsErrors = (sections) => {
     };
 
     if (section.poleType === "Taper") {
-      e.diameterLower = isEmpty(section.diameterLower);
-      e.diameterUpper = isEmpty(section.diameterUpper);
-      e.thicknessLower = isEmpty(section.thicknessLower);
-      e.thicknessUpper = isEmpty(section.thicknessUpper);
+      e.diameterLower = isInvalidNumber(section.diameterLower);
+      e.diameterUpper = isInvalidNumber(section.diameterUpper);
+      e.thicknessLower = isInvalidNumber(section.thicknessLower);
+      e.thicknessUpper = isInvalidNumber(section.thicknessUpper);
     } else {
-      e.diameterLower = isEmpty(section.diameterLower);
-      e.thicknessLower = isEmpty(section.thicknessLower);
+      e.diameterLower = isInvalidNumber(section.diameterLower);
+      e.thicknessLower = isInvalidNumber(section.thicknessLower);
     }
 
     if (Object.values(e).some(Boolean)) {
@@ -315,22 +350,22 @@ export const clearSectionError = (sectionId, updates, setSectionsErrors) => {
 // ====================================================
 // FUNCTION: Check if a direct object is complete
 export const isDoComplete = (directObject) => {
-  // field wajib untuk all type
+  // ===== BASE REQUIRED =====
   const baseComplete =
-    directObject.nameDo.trim() !== "" &&
-    directObject.frontAreaDo.trim() !== "" &&
-    directObject.weightDo.trim() !== "" &&
-    directObject.heightDo.trim() !== "" &&
-    directObject.nncDo.trim() !== "" &&
-    directObject.qtyDo.trim() !== "";
+    !isEmpty(directObject.nameDo) &&
+    isPositiveFilled(directObject.frontAreaDo) &&
+    isPositiveFilled(directObject.weightDo) &&
+    isPositiveFilled(directObject.heightDo) &&
+    isPositiveFilled(directObject.nncDo) &&
+    isPositiveFilled(directObject.qtyDo);
 
   if (!baseComplete) return false;
 
-  // tambahan khusus directional
+  // ===== DIRECTIONAL ONLY =====
   if (directObject.typeOfDo === "directional") {
     return (
-      directObject.sideAreaDo.trim() !== "" &&
-      directObject.fixAngleDo.trim() !== ""
+      isPositiveFilled(directObject.sideAreaDo) &&
+      !isEmpty(directObject.fixAngleDo)
     );
   }
 
@@ -344,17 +379,19 @@ export const getDoErrors = (directObjects) => {
   directObjects.forEach((directObject) => {
     const e = {
       nameDo: isEmpty(directObject.nameDo),
-      frontAreaDo: isEmpty(directObject.frontAreaDo),
-      weightDo: isEmpty(directObject.weightDo),
-      heightDo: isEmpty(directObject.heightDo),
-      nncDo: isEmpty(directObject.nncDo),
-      qtyDo: isEmpty(directObject.qtyDo),
+
+      frontAreaDo: isInvalidNumber(directObject.frontAreaDo),
+      weightDo: isInvalidNumber(directObject.weightDo),
+      heightDo: isInvalidNumber(directObject.heightDo),
+      nncDo: isInvalidNumber(directObject.nncDo),
+      qtyDo: isInvalidNumber(directObject.qtyDo),
+
       sideAreaDo: false,
       fixAngleDo: false,
     };
 
     if (directObject.typeOfDo === "directional") {
-      e.sideAreaDo = isEmpty(directObject.sideAreaDo);
+      e.sideAreaDo = isInvalidNumber(directObject.sideAreaDo);
       e.fixAngleDo = isEmpty(directObject.fixAngleDo);
     }
 
@@ -395,17 +432,16 @@ export const clearDoError = (idDo, updates, setDoErrors) => {
 // ====================================================
 // FUNCTION: Check if a overhead wire is complete
 export const isOhwComplete = (overheadWire) => {
-  // field wajib untuk all type
   const baseComplete =
-    overheadWire.nameOhw.trim() !== "" &&
-    overheadWire.weightOhw.trim() !== "" &&
-    overheadWire.diameterOhw.trim() !== "" &&
-    overheadWire.fixheightOhw.trim() !== "" &&
-    overheadWire.spanOhw.trim() !== "" &&
-    overheadWire.saggingOhw.trim() !== "" &&
-    overheadWire.nncOhw.trim() !== "" &&
-    overheadWire.fixAngleOhw.trim() !== "" &&
-    overheadWire.verticalAngleOhw.trim() !== "";
+    !isEmpty(overheadWire.nameOhw) &&
+    isPositiveFilled(overheadWire.weightOhw) &&
+    isPositiveFilled(overheadWire.diameterOhw) &&
+    isPositiveFilled(overheadWire.fixheightOhw) &&
+    isPositiveFilled(overheadWire.spanOhw) &&
+    isPositiveFilled(overheadWire.saggingOhw) &&
+    isPositiveFilled(overheadWire.nncOhw) &&
+    !isEmpty(overheadWire.fixAngleOhw) &&
+    !isEmpty(overheadWire.verticalAngleOhw);
 
   if (!baseComplete) return false;
 
@@ -419,12 +455,13 @@ export const getOhwErrors = (overheadWires) => {
   overheadWires.forEach((overheadWire) => {
     const e = {
       nameOhw: isEmpty(overheadWire.nameOhw),
-      weightOhw: isEmpty(overheadWire.weightOhw),
-      diameterOhw: isEmpty(overheadWire.diameterOhw),
-      fixheightOhw: isEmpty(overheadWire.fixheightOhw),
-      spanOhw: isEmpty(overheadWire.spanOhw),
-      saggingOhw: isEmpty(overheadWire.saggingOhw),
-      nncOhw: isEmpty(overheadWire.nncOhw),
+
+      weightOhw: isInvalidNumber(overheadWire.weightOhw),
+      diameterOhw: isInvalidNumber(overheadWire.diameterOhw),
+      fixheightOhw: isInvalidNumber(overheadWire.fixheightOhw),
+      spanOhw: isInvalidNumber(overheadWire.spanOhw),
+      saggingOhw: isInvalidNumber(overheadWire.saggingOhw),
+      nncOhw: isInvalidNumber(overheadWire.nncOhw),
       fixAngleOhw: isEmpty(overheadWire.fixAngleOhw),
       verticalAngleOhw: isEmpty(overheadWire.verticalAngleOhw),
     };
@@ -464,20 +501,20 @@ export const clearOhwError = (idOhw, updates, setOhwErrors) => {
 // ====================================================
 // Function for Arm Input
 // ====================================================
-// FUNCTION: Check if a arm is complete
+// FUNCTION: Check if an arm is complete
 export const isArmComplete = (arm) => {
   const baseComplete =
-    arm.nameArm.trim() !== "" &&
-    arm.materialArm.trim() !== "" &&
-    arm.diameterArm.trim() !== "" &&
-    arm.thicknessArm.trim() !== "" &&
-    arm.lengthArm.trim() !== "" &&
-    arm.expLengthArm.trim() !== "" &&
-    arm.heightArm.trim() !== "" &&
-    arm.hDistanceArm.trim() !== "" &&
-    arm.fixAngleArm.trim() !== "" &&
-    arm.nncArm.trim() !== "" &&
-    arm.qtyArm.trim() !== "";
+    !isEmpty(arm.nameArm) &&
+    !isEmpty(arm.materialArm) &&
+    isPositiveFilled(arm.diameterArm) &&
+    isPositiveFilled(arm.thicknessArm) &&
+    isPositiveFilled(arm.lengthArm) &&
+    isPositiveFilled(arm.expLengthArm) &&
+    isPositiveFilled(arm.heightArm) &&
+    isPositiveFilled(arm.hDistanceArm) &&
+    !isEmpty(arm.fixAngleArm) &&
+    isPositiveFilled(arm.nncArm) &&
+    isPositiveFilled(arm.qtyArm);
 
   if (!baseComplete) return false;
 
@@ -496,15 +533,16 @@ export const getArmsErrors = (arms) => {
     const e = {
       nameArm: isEmpty(arm.nameArm),
       materialArm: isEmpty(arm.materialArm),
-      diameterArm: isEmpty(arm.diameterArm),
-      thicknessArm: isEmpty(arm.thicknessArm),
-      lengthArm: isEmpty(arm.lengthArm),
-      expLengthArm: isEmpty(arm.expLengthArm),
-      heightArm: isEmpty(arm.heightArm),
-      hDistanceArm: isEmpty(arm.hDistanceArm),
+
+      diameterArm: isInvalidNumber(arm.diameterArm),
+      thicknessArm: isInvalidNumber(arm.thicknessArm),
+      lengthArm: isInvalidNumber(arm.lengthArm),
+      expLengthArm: isInvalidNumber(arm.expLengthArm),
+      heightArm: isInvalidNumber(arm.heightArm),
+      hDistanceArm: isInvalidNumber(arm.hDistanceArm),
       fixAngleArm: isEmpty(arm.fixAngleArm),
-      nncArm: isEmpty(arm.nncArm),
-      qtyArm: isEmpty(arm.qtyArm),
+      nncArm: isInvalidNumber(arm.nncArm),
+      qtyArm: isInvalidNumber(arm.qtyArm),
     };
 
     if (Object.values(e).some(Boolean)) {
@@ -544,21 +582,21 @@ export const clearArmError = (armId, updates, setArmsErrors) => {
 // ====================================================
 // FUNCTION: Check if a arm object is complete
 export const isAoComplete = (armObject) => {
-  // field wajib untuk all type
+  // ===== BASE REQUIRED =====
   const baseComplete =
-    armObject.nameAo.trim() !== "" &&
-    armObject.frontAreaAo.trim() !== "" &&
-    armObject.weightAo.trim() !== "" &&
-    armObject.heightAo.trim() !== "" &&
-    armObject.nncAo.trim() !== "" &&
-    armObject.qtyAo.trim() !== "";
+    !isEmpty(armObject.nameAo) &&
+    isPositiveFilled(armObject.frontAreaAo) &&
+    isPositiveFilled(armObject.weightAo) &&
+    isPositiveFilled(armObject.heightAo) &&
+    isPositiveFilled(armObject.nncAo) &&
+    isPositiveFilled(armObject.qtyAo);
 
   if (!baseComplete) return false;
 
-  // tambahan khusus directional
+  // ===== DIRECTIONAL ONLY =====
   if (armObject.typeOfAo === "directional") {
     return (
-      armObject.sideAreaAo.trim() !== "" && armObject.fixAngleAo.trim() !== ""
+      isPositiveFilled(armObject.sideAreaAo) && !isEmpty(armObject.fixAngleAo)
     );
   }
 
@@ -573,17 +611,19 @@ export const getAoErrors = (arms) => {
     arm.armObjects?.forEach((ao) => {
       const e = {
         nameAo: isEmpty(ao.nameAo),
-        frontAreaAo: isEmpty(ao.frontAreaAo),
-        weightAo: isEmpty(ao.weightAo),
-        heightAo: isEmpty(ao.heightAo),
-        nncAo: isEmpty(ao.nncAo),
-        qtyAo: isEmpty(ao.qtyAo),
+
+        frontAreaAo: isInvalidNumber(ao.frontAreaAo),
+        weightAo: isInvalidNumber(ao.weightAo),
+        heightAo: isInvalidNumber(ao.heightAo),
+        nncAo: isInvalidNumber(ao.nncAo),
+        qtyAo: isInvalidNumber(ao.qtyAo),
+
         sideAreaAo: false,
         fixAngleAo: false,
       };
 
       if (ao.typeOfAo === "directional") {
-        e.sideAreaAo = isEmpty(ao.sideAreaAo);
+        e.sideAreaAo = isInvalidNumber(ao.sideAreaAo);
         e.fixAngleAo = isEmpty(ao.fixAngleAo);
       }
 
@@ -631,30 +671,30 @@ export const opBoxTypeComplete = (opBoxType) => {
     opBoxType.boxHeight,
     opBoxType.opSurfaceHeight,
     opBoxType.opLength,
-  ].every((v) => !isEmpty(v));
+  ].every(isPositiveFilled);
 };
 
 // FUNCTION: Create an error checker helper for the OP box type
 export const getOpBoxTypeErrors = (opBoxType) => ({
-  boxWidth: isEmpty(opBoxType.boxWidth),
-  opWidth: isEmpty(opBoxType.opWidth),
-  boxHeight: isEmpty(opBoxType.boxHeight),
-  opSurfaceHeight: isEmpty(opBoxType.opSurfaceHeight),
-  opLength: isEmpty(opBoxType.opLength),
+  boxWidth: isInvalidNumber(opBoxType.boxWidth),
+  opWidth: isInvalidNumber(opBoxType.opWidth),
+  boxHeight: isInvalidNumber(opBoxType.boxHeight),
+  opSurfaceHeight: isInvalidNumber(opBoxType.opSurfaceHeight),
+  opLength: isInvalidNumber(opBoxType.opLength),
 });
 
 // FUNCTION: Check if OP r type information form is complete
 export const opRTypeComplete = (opRType) => {
   return [opRType.opWidth, opRType.opSurfaceHeight, opRType.opLength].every(
-    (v) => !isEmpty(v),
+    isPositiveFilled,
   );
 };
 
 // FUNCTION: Create an error checker helper for the OP r type
 export const getOpRTypeErrors = (opRType) => ({
-  opWidth: isEmpty(opRType.opWidth),
-  opSurfaceHeight: isEmpty(opRType.opSurfaceHeight),
-  opLength: isEmpty(opRType.opLength),
+  opWidth: isInvalidNumber(opRType.opWidth),
+  opSurfaceHeight: isInvalidNumber(opRType.opSurfaceHeight),
+  opLength: isInvalidNumber(opRType.opLength),
 });
 
 // ====================================================
@@ -676,29 +716,30 @@ export const fourRibTypeComplete = (fourRibType) => {
     fourRibType.tr,
     fourRibType.lrs,
     fourRibType.lk,
-  ].every((v) => !isEmpty(v));
+  ].every(isPositiveFilled);
 };
 
 // FUNCTION: Create an error checker helper for the 4 rib type
 export const getFourRibTypeErrors = (fourRibType) => ({
-  bl1: isEmpty(fourRibType.bl1),
-  bl2: isEmpty(fourRibType.bl2),
-  ap1: isEmpty(fourRibType.ap1),
-  ap2: isEmpty(fourRibType.ap2),
-  dab: isEmpty(fourRibType.dab),
-  nab: isEmpty(fourRibType.nab),
-  nabTensionSide: isEmpty(fourRibType.nabTensionSide),
-  tb: isEmpty(fourRibType.tb),
-  hr: isEmpty(fourRibType.hr),
-  lr: isEmpty(fourRibType.lr),
-  tr: isEmpty(fourRibType.tr),
-  lrs: isEmpty(fourRibType.lrs),
-  lk: isEmpty(fourRibType.lk),
+  bl1: isInvalidNumber(fourRibType.bl1),
+  bl2: isInvalidNumber(fourRibType.bl2),
+  ap1: isInvalidNumber(fourRibType.ap1),
+  ap2: isInvalidNumber(fourRibType.ap2),
+  dab: isInvalidNumber(fourRibType.dab),
+  nab: isInvalidNumber(fourRibType.nab),
+  nabTensionSide: isInvalidNumber(fourRibType.nabTensionSide),
+  tb: isInvalidNumber(fourRibType.tb),
+  hr: isInvalidNumber(fourRibType.hr),
+  lr: isInvalidNumber(fourRibType.lr),
+  tr: isInvalidNumber(fourRibType.tr),
+  lrs: isInvalidNumber(fourRibType.lrs),
+  lk: isInvalidNumber(fourRibType.lk),
 });
 
 // FUNCTION: Check if 8 Rib type information form is complete
 export const eightRibTypeComplete = (eightRibType) => {
-  return [
+  // ===== NUMERIC FIELDS =====
+  const numericFields = [
     eightRibType.bl1,
     eightRibType.bl2,
     eightRibType.ap1,
@@ -706,32 +747,36 @@ export const eightRibTypeComplete = (eightRibType) => {
     eightRibType.dab,
     eightRibType.nab,
     eightRibType.nabTensionSide,
-    eightRibType.ribAngle,
     eightRibType.tb,
     eightRibType.hr,
     eightRibType.lr,
     eightRibType.tr,
     eightRibType.lrs,
     eightRibType.lk,
-  ].every((v) => !isEmpty(v));
+  ];
+
+  // ===== SPECIAL FIELD =====
+  const ribAngleValid = !isEmpty(eightRibType.ribAngle);
+
+  return numericFields.every(isPositiveFilled) && ribAngleValid;
 };
 
 // FUNCTION: Create an error checker helper for the 8 rib type
 export const getEightRibTypeErrors = (eightRibType) => ({
-  bl1: isEmpty(eightRibType.bl1),
-  bl2: isEmpty(eightRibType.bl2),
-  ap1: isEmpty(eightRibType.ap1),
-  ap2: isEmpty(eightRibType.ap2),
-  dab: isEmpty(eightRibType.dab),
-  nab: isEmpty(eightRibType.nab),
-  nabTensionSide: isEmpty(eightRibType.nabTensionSide),
+  bl1: isInvalidNumber(eightRibType.bl1),
+  bl2: isInvalidNumber(eightRibType.bl2),
+  ap1: isInvalidNumber(eightRibType.ap1),
+  ap2: isInvalidNumber(eightRibType.ap2),
+  dab: isInvalidNumber(eightRibType.dab),
+  nab: isInvalidNumber(eightRibType.nab),
+  nabTensionSide: isInvalidNumber(eightRibType.nabTensionSide),
   ribAngle: isEmpty(eightRibType.ribAngle),
-  tb: isEmpty(eightRibType.tb),
-  hr: isEmpty(eightRibType.hr),
-  lr: isEmpty(eightRibType.lr),
-  tr: isEmpty(eightRibType.tr),
-  lrs: isEmpty(eightRibType.lrs),
-  lk: isEmpty(eightRibType.lk),
+  tb: isInvalidNumber(eightRibType.tb),
+  hr: isInvalidNumber(eightRibType.hr),
+  lr: isInvalidNumber(eightRibType.lr),
+  tr: isInvalidNumber(eightRibType.tr),
+  lrs: isInvalidNumber(eightRibType.lrs),
+  lk: isInvalidNumber(eightRibType.lk),
 });
 
 // ====================================================
@@ -747,18 +792,18 @@ export const sqrCaissonTypeComplete = (sqrCaissonType) => {
     sqrCaissonType.yValue,
     sqrCaissonType.ycValue,
     sqrCaissonType.alphaValue,
-  ].every((v) => !isEmpty(v));
+  ].every(isPositiveFilled);
 };
 
 // FUNCTION: Create an error checker helper for the square caisson type
 export const getSqrCaissonTypeErrors = (sqrCaissonType) => ({
-  width2a: isEmpty(sqrCaissonType.width2a),
-  width2b: isEmpty(sqrCaissonType.width2b),
-  embedmentDepth: isEmpty(sqrCaissonType.embedmentDepth),
-  nValue: isEmpty(sqrCaissonType.nValue),
-  yValue: isEmpty(sqrCaissonType.yValue),
-  ycValue: isEmpty(sqrCaissonType.ycValue),
-  alphaValue: isEmpty(sqrCaissonType.alphaValue),
+  width2a: isInvalidNumber(sqrCaissonType.width2a),
+  width2b: isInvalidNumber(sqrCaissonType.width2b),
+  embedmentDepth: isInvalidNumber(sqrCaissonType.embedmentDepth),
+  nValue: isInvalidNumber(sqrCaissonType.nValue),
+  yValue: isInvalidNumber(sqrCaissonType.yValue),
+  ycValue: isInvalidNumber(sqrCaissonType.ycValue),
+  alphaValue: isInvalidNumber(sqrCaissonType.alphaValue),
 });
 
 // FUNCTION: Check if round caisson type information form is complete
@@ -771,16 +816,16 @@ export const roundCaissonTypeComplete = (roundCaissonType) => {
     roundCaissonType.yValue,
     roundCaissonType.ycValue,
     roundCaissonType.alphaValue,
-  ].every((v) => !isEmpty(v));
+  ].every(isPositiveFilled);
 };
 
 // FUNCTION: Create an error checker helper for the round caisson type
 export const getRoundCaissonTypeErrors = (roundCaissonType) => ({
-  width2a: isEmpty(roundCaissonType.width2a),
-  width2b: isEmpty(roundCaissonType.width2b),
-  embedmentDepth: isEmpty(roundCaissonType.embedmentDepth),
-  nValue: isEmpty(roundCaissonType.nValue),
-  yValue: isEmpty(roundCaissonType.yValue),
-  ycValue: isEmpty(roundCaissonType.ycValue),
-  alphaValue: isEmpty(roundCaissonType.alphaValue),
+  width2a: isInvalidNumber(roundCaissonType.width2a),
+  width2b: isInvalidNumber(roundCaissonType.width2b),
+  embedmentDepth: isInvalidNumber(roundCaissonType.embedmentDepth),
+  nValue: isInvalidNumber(roundCaissonType.nValue),
+  yValue: isInvalidNumber(roundCaissonType.yValue),
+  ycValue: isInvalidNumber(roundCaissonType.ycValue),
+  alphaValue: isInvalidNumber(roundCaissonType.alphaValue),
 });

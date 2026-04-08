@@ -1,4 +1,5 @@
 import { RotateCcw, ChevronRight, Calculator } from "lucide-react";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function SquareCaissonTypeInput({
   sqrCaissonType,
@@ -66,7 +67,10 @@ export function SquareCaissonTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.width2a} text="Required field" />
+                <ErrorText
+                  show={errors.width2a}
+                  text={getNumericError(sqrCaissonType.width2a)}
+                />
               </div>
 
               {/* Foundation Width (2b) */}
@@ -87,7 +91,10 @@ export function SquareCaissonTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.width2b} text="Required field" />
+                <ErrorText
+                  show={errors.width2b}
+                  text={getNumericError(sqrCaissonType.width2b)}
+                />
               </div>
 
               {/* Embedment Depth (L) */}
@@ -110,7 +117,10 @@ export function SquareCaissonTypeInput({
                     mm
                   </span>
                 </div>
-                <ErrorText show={errors.embedmentDepth} text="Required field" />
+                <ErrorText
+                  show={errors.embedmentDepth}
+                  text={getNumericError(sqrCaissonType.embedmentDepth)}
+                />
               </div>
 
               {/* N Value */}
@@ -128,7 +138,10 @@ export function SquareCaissonTypeInput({
                     className={`${inputClass(errors.nValue)}`}
                   />
                 </div>
-                <ErrorText show={errors.nValue} text="Required field" />
+                <ErrorText
+                  show={errors.nValue}
+                  text={getNumericError(sqrCaissonType.nValue)}
+                />
               </div>
 
               {/* γ */}
@@ -149,7 +162,10 @@ export function SquareCaissonTypeInput({
                     kN/m3
                   </span>
                 </div>
-                <ErrorText show={errors.yValue} text="Required field" />
+                <ErrorText
+                  show={errors.yValue}
+                  text={getNumericError(sqrCaissonType.yValue)}
+                />
               </div>
 
               {/* γc */}
@@ -170,7 +186,10 @@ export function SquareCaissonTypeInput({
                     kN/m3
                   </span>
                 </div>
-                <ErrorText show={errors.ycValue} text="Required field" />
+                <ErrorText
+                  show={errors.ycValue}
+                  text={getNumericError(sqrCaissonType.ycValue)}
+                />
               </div>
 
               {/* α */}
@@ -188,7 +207,10 @@ export function SquareCaissonTypeInput({
                     className={`${inputClass(errors.alphaValue)} `}
                   />
                 </div>
-                <ErrorText show={errors.alphaValue} text="Required field" />
+                <ErrorText
+                  show={errors.alphaValue}
+                  text={getNumericError(sqrCaissonType.alphaValue)}
+                />
               </div>
             </div>
           </div>

@@ -7,6 +7,7 @@ import {
   CheckCircle,
   Circle,
 } from "lucide-react";
+import { getNumericError } from "../../utils/pole-analyzer";
 
 export function ArmObjectInput({
   armObjects = [],
@@ -379,7 +380,10 @@ export function ArmObjectInput({
                       m<sup>2</sup>
                     </span>
                   </div>
-                  <ErrorText show={aoError.frontAreaAo} text="Required field" />
+                  <ErrorText
+                    show={aoError.frontAreaAo}
+                    text={getNumericError(armObject.frontAreaAo)}
+                  />
                 </div>
 
                 {/* Side Area Arm Object Input */}
@@ -407,7 +411,7 @@ export function ArmObjectInput({
                     </div>
                     <ErrorText
                       show={aoError.sideAreaAo}
-                      text="Required field"
+                      text={getNumericError(armObject.sideAreaAo)}
                     />
                   </div>
                 )}
@@ -434,7 +438,10 @@ export function ArmObjectInput({
                       kg
                     </span>
                   </div>
-                  <ErrorText show={aoError.weightAo} text="Required field" />
+                  <ErrorText
+                    show={aoError.weightAo}
+                    text={getNumericError(armObject.weightAo)}
+                  />
                 </div>
 
                 {/* H-distance Arm Object Input */}
@@ -459,7 +466,10 @@ export function ArmObjectInput({
                       mm
                     </span>
                   </div>
-                  <ErrorText show={aoError.heightAo} text="Required field" />
+                  <ErrorText
+                    show={aoError.heightAo}
+                    text={getNumericError(armObject.heightAo)}
+                  />
                 </div>
 
                 {/* Fix Angle Arm Object Input */}
@@ -506,7 +516,10 @@ export function ArmObjectInput({
                     onWheel={(e) => e.target.blur()}
                     className={inputClass(aoError.nncAo)}
                   />
-                  <ErrorText show={aoError.nncAo} text="Required field" />
+                  <ErrorText
+                    show={aoError.nncAo}
+                    text={getNumericError(armObject.nncAo)}
+                  />
                 </div>
 
                 {/* Quantity Arm Object Input */}
@@ -529,7 +542,10 @@ export function ArmObjectInput({
                       pcs
                     </span>
                   </div>
-                  <ErrorText show={aoError.qtyAo} text="Required field" />
+                  <ErrorText
+                    show={aoError.qtyAo}
+                    text={getNumericError(armObject.qtyAo)}
+                  />
                 </div>
               </div>
             </div>
