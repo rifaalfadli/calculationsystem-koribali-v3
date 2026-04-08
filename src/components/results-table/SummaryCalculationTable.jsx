@@ -7,7 +7,7 @@ export function StepLoadSummaryTable({ results }) {
       {results.map((_, stepIndex) => {
         const rows = getRowsForStepFull(stepIndex, results);
         return (
-          <div key={stepIndex} className="space-y-4">
+          <div key={stepIndex}>
             {/* HEADER */}
             <div className="bg-gradient-to-r from-[#0d3b66] to-[#0d3b66] px-5 py-4 shadow-sm hp:px-4 hp:py-3">
               <div className="flex items-center gap-3 hp:gap-2">
@@ -22,11 +22,12 @@ export function StepLoadSummaryTable({ results }) {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 mb-2">
-              <div className="w-1.5 h-4 bg-[#0d3b66] rounded-sm"></div>
-              <h4 className="text-sm font-medium text-[#0d3b66]">
+            <div className="flex items-center mt-6 mb-4">
+              <div className="flex-1 h-[1px] bg-gray-200"></div>
+              <h4 className="mx-4 px-3 py-1.5 text-xs font-semibold text-[#0d3b66] bg-[#0d3b66]/10 rounded-md whitespace-nowrap">
                 Direct Wind Condition A
               </h4>
+              <div className="flex-1 h-[1px] bg-gray-200"></div>
             </div>
             {/* TABLE */}
             <div className="overflow-x-auto">
@@ -75,11 +76,12 @@ export function StepLoadSummaryTable({ results }) {
               </table>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 mb-2">
-              <div className="w-1.5 h-4 bg-[#0d3b66] rounded-sm"></div>
-              <h4 className="text-sm font-medium text-[#0d3b66]">
+            <div className="flex items-center mt-6 mb-4">
+              <div className="flex-1 h-[1px] bg-gray-200"></div>
+              <h4 className="mx-4 px-3 py-1.5 text-xs font-semibold text-[#0d3b66] bg-[#0d3b66]/10 rounded-md whitespace-nowrap">
                 Direct Wind Condition B
               </h4>
+              <div className="flex-1 h-[1px] bg-gray-200"></div>
             </div>
             {/* TABLE */}
             <div className="overflow-x-auto">
@@ -128,11 +130,12 @@ export function StepLoadSummaryTable({ results }) {
               </table>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 mb-2">
-              <div className="w-1.5 h-4 bg-[#0d3b66] rounded-sm"></div>
-              <h4 className="text-sm font-medium text-[#0d3b66]">
+            <div className="flex items-center mt-6 mb-4">
+              <div className="flex-1 h-[1px] bg-gray-200"></div>
+              <h4 className="mx-4 px-3 py-1.5 text-xs font-semibold text-[#0d3b66] bg-[#0d3b66]/10 rounded-md whitespace-nowrap">
                 Oblique Wind Condition
               </h4>
+              <div className="flex-1 h-[1px] bg-gray-200"></div>
             </div>
             {/* TABLE */}
             <div className="overflow-x-auto">

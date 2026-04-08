@@ -117,7 +117,7 @@ export function RTypeInput({
           {/* ================= IMAGE (1 ROW) ================= */}
           <div className="flex flex-col justify-center gap-6">
             {/* TOP VIEW */}
-            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex items-center justify-center">
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex items-center justify-center min-h-[218px] hover:shadow-sm transition">
               <img
                 src="/images/opR-top-view.png"
                 alt="Top View"
@@ -126,7 +126,7 @@ export function RTypeInput({
             </div>
 
             {/* SIDE VIEW */}
-            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex items-center justify-center">
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex items-center justify-center min-h-[218px] hover:shadow-sm transition">
               <img
                 src="/images/op-side-view.png"
                 alt="Side View"

@@ -206,7 +206,7 @@ export function FourRibTypeInput({
           </div>
 
           {/* IMAGE TOP VIEW */}
-          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex items-center justify-center h-full">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex items-center justify-center h-full hover:shadow-sm transition">
             <img
               src="/images/4rib-topview.png"
               alt="Baseplate 4 rib top view"
@@ -340,7 +340,7 @@ export function FourRibTypeInput({
           </div>
 
           {/* IMAGE SIDE VIEW */}
-          <div className="bg-gray-50 border rounded-2xl p-4 flex items-center justify-center h-full">
+          <div className="bg-gray-50 border rounded-2xl p-4 flex items-center justify-center h-full hover:shadow-sm transition">
             <img
               src="/images/4rib-sideview.png"
               className="max-h-[150px] object-contain"

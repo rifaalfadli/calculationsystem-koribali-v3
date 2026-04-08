@@ -161,7 +161,7 @@ export function BoxTypeInput({
           {/* ================= RIGHT : VISUAL ================= */}
           <div className="flex flex-col justify-center gap-6">
             {/* TOP VIEW */}
-            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 flex items-center justify-center hover:shadow-sm transition">
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 flex items-center justify-center min-h-[280px] hover:shadow-sm transition">
               <img
                 src="/images/opBox-top-view.png"
                 alt="Top View"
@@ -170,7 +170,7 @@ export function BoxTypeInput({
             </div>
 
             {/* SIDE VIEW */}
-            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 flex items-center justify-center hover:shadow-sm transition">
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 flex items-center justify-center min-h-[241.98px] hover:shadow-sm transition">
               <img
                 src="/images/op-side-view.png"
                 alt="Side View"

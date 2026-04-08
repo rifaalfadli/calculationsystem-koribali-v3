@@ -227,7 +227,7 @@ export function EightRibTypeInput({
           </div>
 
           {/* IMAGE TOP VIEW */}
-          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex items-center justify-center h-full">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex items-center justify-center h-full hover:shadow-sm transition">
             <img
               src="/images/8rib-topview.png"
               alt="Baseplate 8 rib top view"
@@ -361,7 +361,7 @@ export function EightRibTypeInput({
           </div>
 
           {/* IMAGE SIDE VIEW */}
-          <div className="bg-gray-50 border rounded-2xl p-4 flex items-center justify-center h-full">
+          <div className="bg-gray-50 border rounded-2xl p-4 flex items-center justify-center h-full hover:shadow-sm transition">
             <img
               src="/images/8rib-sideview.png"
               alt="Baseplate 8 rib side view"
