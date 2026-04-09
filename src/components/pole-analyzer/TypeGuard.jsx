@@ -1,14 +1,15 @@
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Outlet } from "react-router-dom";
 import { PROJECT_TYPES } from "../constants/projectTypes";
+import NotFoundPage from "../../pages/404";
 
-export default function TypeGuard({ children }) {
+export default function TypeGuard() {
   const { type } = useParams();
 
-  const allowedTypes = PROJECT_TYPES.map((item) => item.id);
+  const allowedTypes = new Set(PROJECT_TYPES.map((item) => item.id));
 
-  if (!allowedTypes.includes(type)) {
-    return <Navigate to="/404" replace />;
+  if (!allowedTypes.has(type)) {
+    return <NotFoundPage />;
   }
 
-  return children;
+  return <Outlet />;
 }

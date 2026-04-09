@@ -25,33 +25,23 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         {/* PROTECTED ROUTES */}
-        <Route
-          element={
-            <ProtectedRoute>
-              <Layout />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="/calculation" element={<Calculation />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<Layout />}>
+            <Route path="calculation">
+              <Route index element={<Calculation />} />
 
-          <Route
-            path="/calculation/:type"
-            element={
-              <TypeGuard>
-                <Outlet />
-              </TypeGuard>
-            }
-          >
-            <Route index element={<CalculationTypeSetup />} />
-            <Route path="pole" element={<PoleStructurePage />} />
-            <Route path="opening" element={<OpeningPage />} />
-            <Route path="baseplate" element={<BaseplatePage />} />
-            <Route path="foundation" element={<FoundationPage />} />
+              <Route path=":type" element={<TypeGuard />}>
+                <Route index element={<CalculationTypeSetup />} />
+                <Route path="pole" element={<PoleStructurePage />} />
+                <Route path="opening" element={<OpeningPage />} />
+                <Route path="baseplate" element={<BaseplatePage />} />
+                <Route path="foundation" element={<FoundationPage />} />
+              </Route>
+            </Route>
+
+            <Route path="report" element={<Report />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
-          <Route path="/report" element={<Report />} />
-
-          {/* 404 KHUSUS USER YANG SUDAH LOGIN */}
-          <Route path="*" element={<NotFoundPage />} />
         </Route>
 
         {/* ROOT */}

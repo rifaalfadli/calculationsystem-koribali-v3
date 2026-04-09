@@ -1,5 +1,5 @@
 // components/ProtectedRoute.js
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("user_session");
@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/entry" replace />;
   }
 
-  return children;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;
