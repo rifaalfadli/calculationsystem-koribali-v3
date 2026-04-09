@@ -177,23 +177,24 @@ export function ConditionInput({
         </div>
 
         {/* POLE INPUT TYPE */}
-        <div>
-          <h3 className="text-[#0d3b66] mb-4 flex items-center gap-2 text-sm font-medium hp:text-xs hp:gap-1">
-            <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
-            Select Pole Type
-          </h3>
-          <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {options.map((option) => {
-                const Icon = option.icon;
-                const isActive = condition.method === option.id;
+        {projectType === "lighting-pole" && (
+          <div>
+            <h3 className="text-[#0d3b66] mb-4 flex items-center gap-2 text-sm font-medium hp:text-xs hp:gap-1">
+              <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
+              Select Pole Type
+            </h3>
+            <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {options.map((option) => {
+                  const Icon = option.icon;
+                  const isActive = condition.method === option.id;
 
-                return (
-                  <button
-                    key={option.id}
-                    type="button"
-                    onClick={() => onUpdate({ method: option.id })}
-                    className={`
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => onUpdate({ method: option.id })}
+                      className={`
                       w-full text-left bg-transparent appearance-none
                       relative cursor-pointer rounded-lg border p-4
                       transition-all duration-200 focus:outline-none
@@ -204,50 +205,51 @@ export function ConditionInput({
                           : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                       }
                     `}
-                  >
-                    {/* Circle Indicator */}
-                    <div className="absolute top-4 right-4">
-                      {isActive ? (
-                        <CheckCircle size={21} className="text-blue-600" />
-                      ) : (
-                        <Circle size={21} className="text-slate-400" />
-                      )}
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div
-                        className={`
-                    p-3 rounded-lg transition-colors
-                    ${
-                      isActive
-                        ? "bg-blue-100 text-blue-600"
-                        : "bg-slate-100 text-slate-500"
-                    }
-                  `}
-                      >
-                        <Icon size={18} />
+                    >
+                      {/* Circle Indicator */}
+                      <div className="absolute top-4 right-4">
+                        {isActive ? (
+                          <CheckCircle size={21} className="text-blue-600" />
+                        ) : (
+                          <Circle size={21} className="text-slate-400" />
+                        )}
                       </div>
 
-                      <div>
-                        <p className="font-semibold text-[14px] text-slate-800">
-                          {option.title}
-                        </p>
-                        <p className="text-[12px] text-slate-500 mt-1">
-                          {option.desc}
-                        </p>
+                      <div className="flex items-start gap-4">
+                        <div
+                          className={`
+                            p-3 rounded-lg transition-colors
+                            ${
+                              isActive
+                                ? "bg-blue-100 text-blue-600"
+                                : "bg-slate-100 text-slate-500"
+                            }
+                          `}
+                        >
+                          <Icon size={18} />
+                        </div>
+
+                        <div>
+                          <p className="font-semibold text-[14px] text-slate-800">
+                            {option.title}
+                          </p>
+                          <p className="text-[12px] text-slate-500 mt-1">
+                            {option.desc}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </button>
-                );
-              })}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
+            {errors.method && (
+              <div className="mt-1 text-[11px] text-red-500">
+                *Please select a pole type
+              </div>
+            )}
           </div>
-          {errors.method && (
-            <div className="mt-1 text-[11px] text-red-500">
-              *Please select a pole type
-            </div>
-          )}
-        </div>
+        )}
 
         {/* ADDITIONAL COMPONENT */}
         <div>

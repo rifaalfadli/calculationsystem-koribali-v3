@@ -21,18 +21,20 @@ export default function CalculationSetup() {
   const savedType = sessionStorage.getItem("projectType");
 
   // STATE: Condition for calculation
+  const getDefaultCondition = (projectType) => ({
+    designStandard: "",
+    windSpeed: "",
+    airDensity: "",
+    method: projectType === "lighting-pole" ? "" : "custom",
+    openingEnabled: false,
+    baseplateEnabled: false,
+    foundationEnabled: false,
+  });
+
   const [condition, setCondition] = useProjectStorage(
     projectType,
     "condition",
-    {
-      designStandard: "",
-      windSpeed: "",
-      airDensity: "",
-      method: "",
-      openingEnabled: false,
-      baseplateEnabled: false,
-      foundationEnabled: false,
-    },
+    getDefaultCondition(projectType),
   );
 
   // Temporary draft state to prevent auto-persist before explicit submit (Finish)
