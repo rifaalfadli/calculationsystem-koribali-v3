@@ -820,7 +820,7 @@ export function PoleStructuralAnalyzer() {
       setStructuralDesignErrors(
         Utils.getStructuralDesignErrors(structuralDesign),
       );
-      showToast("Please complete Structural Design first.");
+      showToast("Please correct the errors in Structural Design fields.");
       return;
     }
 
@@ -839,7 +839,7 @@ export function PoleStructuralAnalyzer() {
       condition.method === "standard" &&
       (!finalSections || finalSections.length === 0)
     ) {
-      showToast("Selected standard configuration not found.");
+      showToast("Please complete all required standard selections.");
       return;
     }
 
@@ -969,6 +969,7 @@ export function PoleStructuralAnalyzer() {
       results,
       showToast,
       handleIsCoverComplete,
+      structuralDesign,
       handleStructuralDesignComplete,
       finalSections,
       handleIsSectionComplete,
@@ -1002,6 +1003,16 @@ export function PoleStructuralAnalyzer() {
         );
       }
 
+      if (
+        errors.stepPoleStandard &&
+        condition.method !== "custom" &&
+        poleTypeStandard.poleShape === "straight"
+      ) {
+        setStepPoleStandardErrors(
+          Utils.getStepPoleStandardErrors(stepPoleStandard, condition),
+        );
+      }
+
       // Check all pole section dimensions and material specifications
       if (errors.section && condition.method !== "standard") {
         setSectionsErrors(Utils.getSectionsErrors(sections));
@@ -1025,16 +1036,6 @@ export function PoleStructuralAnalyzer() {
       // Ensure all mounted equipment (AO) data is valid for the final report
       if (errors.armObject && condition.method !== "standard") {
         setAoErrors(Utils.getAoErrors(arms));
-      }
-
-      if (
-        errors.stepPoleStandard &&
-        condition.method !== "custom" &&
-        poleTypeStandard.poleShape === "straight"
-      ) {
-        setStepPoleStandardErrors(
-          Utils.getStepPoleStandardErrors(stepPoleStandard, condition),
-        );
       }
 
       return;

@@ -159,7 +159,7 @@ export default function BaseplatePage() {
 
     // VALIDASI TYPE DULU
     if (!bpType.type) {
-      showToast("Please select baseplate type first.");
+      showToast("Please select the baseplate type first.");
       setBpTypeErrors({ type: true });
       return;
     }
@@ -167,7 +167,9 @@ export default function BaseplatePage() {
     // VALIDASI BERDASARKAN TYPE
     if (bpType.type === "4rib") {
       if (!handleFourRibTypeComplete()) {
-        showToast("Please complete all 4 Rib Type fields.");
+        showToast(
+          "Please correct the errors 4 Rib Type Specifications fields.",
+        );
         setFourRibTypeErrors(Utils.getFourRibTypeErrors(fourRibType));
         return;
       }
@@ -175,7 +177,9 @@ export default function BaseplatePage() {
 
     if (bpType.type === "8rib") {
       if (!handleEightRibTypeComplete()) {
-        showToast("Please complete all 8 Rib Type fields.");
+        showToast(
+          "Please correct the errors 8 Rib Type Specifications fields.",
+        );
         setEightRibTypeErrors(Utils.getEightRibTypeErrors(eightRibType));
         return;
       }
@@ -234,7 +238,7 @@ export default function BaseplatePage() {
 
     // VALIDASI COVER
     if (!handleIsCoverComplete()) {
-      showToast("Please complete the Cover Information first.");
+      showToast("Please complete the Cover Information fields.");
       setCoverErrors(Utils.getCoverErrors(cover));
       return;
     }

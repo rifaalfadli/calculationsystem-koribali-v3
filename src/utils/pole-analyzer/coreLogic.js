@@ -44,11 +44,13 @@ export const handleCalculateResults = (
   // =========================
   // POLE VALIDATION (ONLY CUSTOM MODE)
   // =========================
+  let sectionIncomplete = false;
   if (condition.method !== "standard") {
     for (const section of sections || []) {
       if (!handleIsSectionComplete(section)) {
-        showToast("Please complete all Pole Specification fields.");
+        showToast("Please correct the errors in Pole Specification fields.");
         errors.section = true;
+        sectionIncomplete = true;
         break;
       }
     }
@@ -62,15 +64,17 @@ export const handleCalculateResults = (
     poleTypeStandard.poleShape === "straight"
   ) {
     if (!handleStepPoleStandardComplete(stepPoleStandard, condition)) {
-      showToast("Please complete all Stepped Pole Type Specification fields.");
+      showToast(
+        "Please correct the errors in Stepped Pole Type Specifications fields.",
+      );
       errors.stepPoleStandard = true;
     }
   }
 
   // POLE VALIDATION (custom error check)
-  const validatePoleError = validatePole(sections, structuralDesign);
+  if (!sectionIncomplete) {
+    const validatePoleError = validatePole(sections, structuralDesign);
 
-  if (condition.method !== "standard") {
     if (validatePoleError) {
       showToast(validatePoleError);
       errors.section = true;
@@ -84,7 +88,7 @@ export const handleCalculateResults = (
   if (condition.method !== "standard") {
     for (const directObject of directObjects || []) {
       if (!handleIsDoComplete(directObject)) {
-        showToast("Please complete all Direct Object fields.");
+        showToast("Please correct the errors in Direct Object fields.");
         errors.directObject = true;
         break;
       }
@@ -97,7 +101,7 @@ export const handleCalculateResults = (
   if (condition.method !== "standard") {
     for (const overheadWire of overheadWires || []) {
       if (!handleIsOhwComplete(overheadWire)) {
-        showToast("Please complete all Overhead Wire fields.");
+        showToast("Please correct the errors Overhead Wire fields.");
         errors.overheadWire = true;
         break;
       }
@@ -110,7 +114,7 @@ export const handleCalculateResults = (
   if (condition.method !== "standard") {
     for (const arm of arms || []) {
       if (!handleIsArmComplete(arm)) {
-        showToast("Please complete all Arm Specification fields.");
+        showToast("Please correct the errors Arm Specification fields.");
         errors.arm = true;
         break;
       }
@@ -126,7 +130,7 @@ export const handleCalculateResults = (
 
       for (const armObject of arm.armObjects || []) {
         if (!handleIsAoComplete(armObject)) {
-          showToast("Please complete all Arm Object fields.");
+          showToast("Please correct the errors Arm Object fields.");
           errors.armObject = true;
           break;
         }
@@ -168,6 +172,7 @@ export const makeReport = (
   results,
   showToast,
   handleIsCoverComplete,
+  structuralDesign,
   structuralDesignComplete,
   sections,
   handleIsSectionComplete,
@@ -199,26 +204,50 @@ export const makeReport = (
     errors.results = true;
   }
 
-  // CHECK 3: Cover
+  // CHECK 2: Cover
   if (!handleIsCoverComplete()) {
-    showToast("Please complete the Cover Information first.");
+    showToast("Please complete the Cover Information fields.");
     errors.cover = true;
   }
 
-  // CHECK 5: Structural Design
+  // CHECK 3: Structural Design
   if (!structuralDesignComplete()) {
-    showToast("Please complete all Pole Specification first.");
+    showToast("Please correct the errors in Structural Design fields.");
     errors.structuralDesign = true;
   }
 
-  // CHECK 6: Sections/Steps
+  // CHECK 4: Custom Pole
+  let sectionIncomplete = false;
   if (condition.method !== "standard") {
     for (const section of sections || []) {
       if (!handleIsSectionComplete(section)) {
-        showToast("Please complete all Pole Specification first.");
+        showToast("Please correct the errors in Pole Specifications fields.");
         errors.section = true;
+        sectionIncomplete = true;
         break;
       }
+    }
+  }
+
+  // CHECK 5: Validation Custom Pole
+  if (!sectionIncomplete) {
+    const validatePoleError = validatePole(sections, structuralDesign);
+
+    if (validatePoleError) {
+      showToast(validatePoleError);
+      errors.section = true;
+      return { isValid: false, errors };
+    }
+  }
+
+  // CHECK 6: Standard Pole (Stepped Pole Type)
+  if (
+    condition.method !== "custom" &&
+    poleTypeStandard.poleShape === "straight"
+  ) {
+    if (!handleStepPoleStandardComplete(stepPoleStandard, condition)) {
+      showToast("Please correct the errors in  Specifications fields.");
+      errors.stepPoleStandard = true;
     }
   }
 
@@ -226,7 +255,7 @@ export const makeReport = (
   if (condition.method !== "standard") {
     for (const directObject of directObjects || []) {
       if (!handleIsDoComplete(directObject)) {
-        showToast("Please complete all Direct Object first.");
+        showToast("Please correct the errors in Direct Object fields.");
         errors.directObject = true;
         break;
       }
@@ -237,7 +266,7 @@ export const makeReport = (
   if (condition.method !== "standard") {
     for (const overheadWire of overheadWires) {
       if (!handleIsOhwComplete(overheadWire)) {
-        showToast("Please complete all Overhead Wire first.");
+        showToast("Please correct the errors in Overhead Wire fields.");
         errors.overheadWire = true;
         break;
       }
@@ -248,7 +277,7 @@ export const makeReport = (
   if (condition.method !== "standard") {
     for (const arm of arms || []) {
       if (!handleIsArmComplete(arm)) {
-        showToast("Please complete all Arm Specification first.");
+        showToast("Please correct the errors in Arm Specifications fields.");
         errors.arm = true;
         break;
       }
@@ -262,24 +291,13 @@ export const makeReport = (
 
       for (const armObject of arm.armObjects || []) {
         if (!handleIsAoComplete(armObject)) {
-          showToast("Please complete all Arm Object first.");
+          showToast("Please correct the errors in Arm Object fields.");
           errors.armObject = true;
           break;
         }
       }
 
       if (errors.armObject) break;
-    }
-  }
-
-  // CHECK 11: Stepped Pole Standard
-  if (
-    condition.method !== "custom" &&
-    poleTypeStandard.poleShape === "straight"
-  ) {
-    if (!handleStepPoleStandardComplete(stepPoleStandard, condition)) {
-      showToast("Please complete all Stepped Pole Type first.");
-      errors.stepPoleStandard = true;
     }
   }
 
@@ -435,6 +453,7 @@ export const clearCalculationSession = (projectType) => {
     "showResultsBp",
     "calculatedFoundation",
     "showResultsFoundation",
+    "reportSnapshot",
   ];
 
   keys.forEach((key) => sessionStorage.removeItem(`${projectType}_${key}`));

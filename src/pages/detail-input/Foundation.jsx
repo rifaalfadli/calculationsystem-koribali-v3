@@ -162,7 +162,7 @@ export default function FoundationPage() {
 
     // VALIDASI TYPE DULU
     if (!foundationType.type) {
-      showToast("Please select foundation type first.");
+      showToast("Please select the foundation type first.");
       setFoundationTypeErrors({ type: true });
       return;
     }
@@ -170,7 +170,9 @@ export default function FoundationPage() {
     // VALIDASI BERDASARKAN TYPE
     if (foundationType.type === "square-caisson") {
       if (!handleSqrCaissonTypeComplete()) {
-        showToast("Please complete all Square Caisson Type fields.");
+        showToast(
+          "Please correct the errors Square Caisson Type Specifications fields.",
+        );
         setSqrCaissonTypeErrors(Utils.getSqrCaissonTypeErrors(sqrCaissonType));
         return;
       }
@@ -178,7 +180,9 @@ export default function FoundationPage() {
 
     if (foundationType.type === "round-caisson") {
       if (!handleRoundCaissonTypeComplete()) {
-        showToast("Please complete all Round Caisson Type fields.");
+        showToast(
+          "Please correct the errors Round Caisson Type Specifications fields.",
+        );
         setRoundCaissonTypeErrors(
           Utils.getRoundCaissonTypeErrors(roundCaissonType),
         );
@@ -242,7 +246,7 @@ export default function FoundationPage() {
 
     // VALIDASI COVER
     if (!handleIsCoverComplete()) {
-      showToast("Please complete the Cover Information first.");
+      showToast("Please complete the Cover Information fields.");
       setCoverErrors(Utils.getCoverErrors(cover));
       return;
     }

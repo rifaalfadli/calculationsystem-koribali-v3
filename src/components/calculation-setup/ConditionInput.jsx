@@ -242,6 +242,11 @@ export function ConditionInput({
               })}
             </div>
           </div>
+          {errors.method && (
+            <div className="mt-1 text-[11px] text-red-500">
+              *Please select a pole type
+            </div>
+          )}
         </div>
 
         {/* ADDITIONAL COMPONENT */}

@@ -152,7 +152,7 @@ export default function OpeningPage() {
 
     // VALIDASI TYPE DULU
     if (!opType.type) {
-      showToast("Please select opening type first.");
+      showToast("Please select the opening type first.");
       setOpTypeErrors({ type: true });
       return;
     }
@@ -160,7 +160,7 @@ export default function OpeningPage() {
     // VALIDASI BERDASARKAN TYPE
     if (opType.type === "box") {
       if (!handleOpBoxTypeComplete()) {
-        showToast("Please complete all Box Type fields.");
+        showToast("Please correct the errors Box Type Specifications fields.");
         setOpBoxTypeErrors(Utils.getOpBoxTypeErrors(opBoxType));
         return;
       }
@@ -168,7 +168,7 @@ export default function OpeningPage() {
 
     if (opType.type === "r") {
       if (!handleOpRTypeComplete()) {
-        showToast("Please complete all R Type fields.");
+        showToast("Please correct the errors R Type Specifications fields.");
         setOpRTypeErrors(Utils.getOpRTypeErrors(opRType));
         return;
       }
@@ -232,7 +232,7 @@ export default function OpeningPage() {
 
     // VALIDASI COVER
     if (!handleIsCoverComplete()) {
-      showToast("Please complete the Cover Information first.");
+      showToast("Please complete the Cover Information fields.");
       setCoverErrors(Utils.getCoverErrors(cover));
       return;
     }
