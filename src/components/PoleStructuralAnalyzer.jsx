@@ -1855,17 +1855,19 @@ export function PoleStructuralAnalyzer() {
       <Modal.ToastModal toast={toast} onClose={() => setToast(null)} />
 
       {/* Delete Confirmation Modal for Step Pole */}
-      <Modal.ConfirmDeletePoleModal
-        confirmDelete={confirmDelete}
+      <Modal.ConfirmDeleteModal
+        open={confirmDelete}
         onClose={() => setConfirmDelete(false)}
-        handleRemoveSection={() => handleRemoveSection(confirmDelete)}
+        onConfirm={() => handleRemoveSection(confirmDelete)}
+        word="pole"
       />
 
       {/* Delete Confirmation Modal for Direct Object */}
-      <Modal.ConfirmDeleteDoModal
-        confirmDelete={confirmDeleteDo}
+      <Modal.ConfirmDeleteModal
+        open={confirmDeleteDo}
         onClose={() => setConfirmDeleteDo(false)}
-        handleRemoveDo={() => handleRemoveDo(confirmDeleteDo)}
+        onConfirm={() => handleRemoveDo(confirmDeleteDo)}
+        word="object"
       />
 
       {/* Delete Confirmation Modal for Direct Object */}
@@ -1876,10 +1878,11 @@ export function PoleStructuralAnalyzer() {
       />
 
       {/* Delete Confirmation Modal for Overhead Wire */}
-      <Modal.ConfirmDeleteOhwModal
-        confirmDelete={confirmDeleteOhw}
+      <Modal.ConfirmDeleteModal
+        open={confirmDeleteOhw}
         onClose={() => setConfirmDeleteOhw(false)}
-        handleRemoveOhw={() => handleRemoveOhw(confirmDeleteOhw)}
+        onConfirm={() => handleRemoveOhw(confirmDeleteOhw)}
+        word="overhead wire"
       />
 
       {/* Delete Confirmation Modal for Overhead Wire */}
@@ -1890,17 +1893,19 @@ export function PoleStructuralAnalyzer() {
       />
 
       {/* Delete Confirmation Modal for Arm */}
-      <Modal.ConfirmDeleteArmModal
-        confirmDeleteArm={confirmDeleteArm}
+      <Modal.ConfirmDeleteModal
+        open={confirmDeleteArm}
         onClose={() => setConfirmDeleteArm(false)}
-        handleRemoveArm={() => handleRemoveArm(confirmDeleteArm)}
+        onConfirm={() => handleRemoveArm(confirmDeleteArm)}
+        word="arm"
       />
 
       {/* Delete Confirmation Modal for Arm Object */}
-      <Modal.ConfirmDeleteAoModal
-        confirmDelete={confirmDeleteAo}
+      <Modal.ConfirmDeleteModal
+        open={confirmDeleteAo}
         onClose={() => setConfirmDeleteAo(false)}
-        handleRemoveAo={() => handleRemoveAo(confirmDeleteAo)}
+        onConfirm={() => handleRemoveAo(confirmDeleteAo)}
+        word="object"
       />
 
       {/* Delete Confirmation Modal for Arm Object */}

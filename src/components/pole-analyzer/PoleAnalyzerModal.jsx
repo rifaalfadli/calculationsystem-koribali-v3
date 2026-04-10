@@ -104,7 +104,7 @@ export const CoverInputModal = ({
 };
 
 // ====================================================
-// DELETE ARM CONFIRMATION MODAL
+// CONFIRM SAVE DRAFT MODAL
 // ====================================================
 export const ConfirmSaveDraftModal = ({
   confirmSaveDraft,
@@ -316,59 +316,35 @@ export const ConfirmResetAllModal = ({
 };
 
 // ====================================================
-// DELETE STEP POLE CONFIRMATION MODAL
+// DELETE CONFIRMATION MODAL
 // ====================================================
-export const ConfirmDeletePoleModal = ({
-  confirmDelete,
-  onClose,
-  handleRemoveSection,
-}) => {
-  if (!confirmDelete) return null;
+export const ConfirmDeleteModal = ({ open, onClose, onConfirm, word = "" }) => {
+  if (!open) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
       <div
-        className="
-          w-full max-w-xs
-          bg-white border border-gray-200
-          rounded-xl shadow-xl
-          p-4
-          sm:max-w-md sm:p-8 sm:rounded-2xl
-        "
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        className="w-full max-w-xs sm:max-w-md bg-white border border-gray-200 rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-8"
       >
         {/* Icon */}
-        <div
-          className="
-            mx-auto mb-3
-            flex items-center justify-center
-            w-10 h-10 sm:w-16 sm:h-16
-            bg-red-100 rounded-full
-          "
-        >
+        <div className="mx-auto mb-3 flex items-center justify-center w-10 h-10 sm:w-16 sm:h-16 bg-red-100 rounded-full">
           <AlertCircle className="w-5 h-5 sm:w-8 sm:h-8 text-red-500" />
         </div>
 
         {/* Title */}
         <h2
-          className="
-            text-center font-bold
-            text-sm sm:text-base
-            text-gray-900
-            mb-1 sm:mb-2
-          "
+          id="modal-title"
+          className="text-center font-bold text-sm sm:text-base text-gray-900 mb-1 sm:mb-2"
         >
-          Delete Step?
+          Delete {word}?
         </h2>
 
         {/* Description */}
-        <p
-          className="
-            text-center text-gray-600
-            text-xs sm:text-sm
-            mb-4 sm:mb-6
-            leading-relaxed
-          "
-        >
-          Are you sure you want to delete this step? This action cannot be
+        <p className="text-center text-gray-600 text-xs sm:text-sm mb-4 sm:mb-6">
+          Are you sure you want to delete this {word}? This action cannot be
           undone.
         </p>
 
@@ -376,126 +352,17 @@ export const ConfirmDeletePoleModal = ({
         <div className="flex gap-2 sm:gap-3">
           <button
             onClick={onClose}
-            className="
-              flex-1
-              py-2 sm:py-3 font-bold
-              text-xs sm:text-sm
-              bg-slate-100 text-slate-600
-              rounded-md sm:rounded-lg
-              hover:bg-slate-200 transition
-            "
+            className="flex-1 py-2 sm:py-3 font-bold text-xs sm:text-sm bg-slate-100 text-slate-600 rounded-md sm:rounded-lg hover:bg-slate-200"
           >
             Cancel
           </button>
 
           <button
-            onClick={() => {
-              handleRemoveSection();
+            onClick={async () => {
+              await onConfirm();
               onClose();
             }}
-            className="
-              flex-1
-              py-2 sm:py-3 font-bold
-              text-xs sm:text-sm
-              bg-red-500 text-white
-              rounded-md sm:rounded-lg
-              hover:bg-red-600 transition
-            "
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ====================================================
-// DELETE DIRECT OBJECT CONFIRMATION MODAL
-// ====================================================
-export const ConfirmDeleteDoModal = ({
-  confirmDelete,
-  onClose,
-  handleRemoveDo,
-}) => {
-  if (!confirmDelete) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-      <div
-        className="
-          w-full max-w-xs
-          bg-white border border-gray-200
-          rounded-xl shadow-xl
-          p-4
-          sm:max-w-md sm:p-8 sm:rounded-2xl
-        "
-      >
-        {/* Icon */}
-        <div
-          className="
-            mx-auto mb-3
-            flex items-center justify-center
-            w-10 h-10 sm:w-16 sm:h-16
-            bg-red-100 rounded-full
-          "
-        >
-          <AlertCircle className="w-5 h-5 sm:w-8 sm:h-8 text-red-500" />
-        </div>
-
-        {/* Title */}
-        <h2
-          className="
-            text-center font-bold
-            text-sm sm:text-base
-            text-gray-900
-            mb-1 sm:mb-2
-          "
-        >
-          Delete Object?
-        </h2>
-
-        {/* Description */}
-        <p
-          className="
-            text-center text-gray-600
-            text-xs sm:text-sm
-            mb-4 sm:mb-6
-            leading-relaxed
-          "
-        >
-          Are you sure you want to delete this object? This action cannot be
-          undone.
-        </p>
-
-        {/* Buttons */}
-        <div className="flex gap-2 sm:gap-3">
-          <button
-            onClick={onClose}
-            className="
-              flex-1
-              py-2 sm:py-3 font-bold
-              text-xs sm:text-sm
-              bg-slate-100 text-slate-600
-              rounded-md sm:rounded-lg
-              hover:bg-slate-200 transition
-            "
-          >
-            Cancel
-          </button>
-
-          <button
-            onClick={() => {
-              handleRemoveDo();
-              onClose();
-            }}
-            className="
-              flex-1
-              py-2 sm:py-3 font-bold
-              text-xs sm:text-sm
-              bg-red-500 text-white
-              rounded-md sm:rounded-lg
-              hover:bg-red-600 transition
-            "
+            className="flex-1 py-2 sm:py-3 font-bold text-xs sm:text-sm bg-red-500 text-white rounded-md sm:rounded-lg hover:bg-red-600"
           >
             Delete
           </button>
@@ -582,101 +449,6 @@ export const ConfirmReduceDoModal = ({
 
           <button
             onClick={confirmReduceDirectObjects}
-            className="
-              flex-1
-              py-2 sm:py-3 font-bold
-              text-xs sm:text-sm
-              bg-red-500 text-white
-              rounded-md sm:rounded-lg
-              hover:bg-red-600 transition
-            "
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ====================================================
-// DELETE OVERHEAD WIRE CONFIRMATION MODAL
-// ====================================================
-export const ConfirmDeleteOhwModal = ({
-  confirmDelete,
-  onClose,
-  handleRemoveOhw,
-}) => {
-  if (!confirmDelete) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-      <div
-        className="
-          w-full max-w-xs
-          bg-white border border-gray-200
-          rounded-xl shadow-xl
-          p-4
-          sm:max-w-md sm:p-8 sm:rounded-2xl
-        "
-      >
-        {/* Icon */}
-        <div
-          className="
-            mx-auto mb-3
-            flex items-center justify-center
-            w-10 h-10 sm:w-16 sm:h-16
-            bg-red-100 rounded-full
-          "
-        >
-          <AlertCircle className="w-5 h-5 sm:w-8 sm:h-8 text-red-500" />
-        </div>
-
-        {/* Title */}
-        <h2
-          className="
-            text-center font-bold
-            text-sm sm:text-base
-            text-gray-900
-            mb-1 sm:mb-2
-          "
-        >
-          Delete Overhead Wire?
-        </h2>
-
-        {/* Description */}
-        <p
-          className="
-            text-center text-gray-600
-            text-xs sm:text-sm
-            mb-4 sm:mb-6
-            leading-relaxed
-          "
-        >
-          Are you sure you want to delete this overhead wire? This action cannot
-          be undone.
-        </p>
-
-        {/* Buttons */}
-        <div className="flex gap-2 sm:gap-3">
-          <button
-            onClick={onClose}
-            className="
-              flex-1
-              py-2 sm:py-3 font-bold
-              text-xs sm:text-sm
-              bg-slate-100 text-slate-600
-              rounded-md sm:rounded-lg
-              hover:bg-slate-200 transition
-            "
-          >
-            Cancel
-          </button>
-
-          <button
-            onClick={() => {
-              handleRemoveOhw();
-              onClose();
-            }}
             className="
               flex-1
               py-2 sm:py-3 font-bold
@@ -789,196 +561,6 @@ export const ConfirmReduceOhwModal = ({
 };
 
 // ====================================================
-// DELETE ARM CONFIRMATION MODAL
-// ====================================================
-export const ConfirmDeleteArmModal = ({
-  confirmDeleteArm,
-  onClose,
-  handleRemoveArm,
-}) => {
-  if (!confirmDeleteArm) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-      <div
-        className="
-          w-full max-w-xs
-          bg-white border border-gray-200
-          rounded-xl shadow-xl
-          p-4
-          sm:max-w-md sm:p-8 sm:rounded-2xl
-        "
-      >
-        {/* Icon */}
-        <div
-          className="
-            mx-auto mb-3
-            flex items-center justify-center
-            w-10 h-10 sm:w-16 sm:h-16
-            bg-red-100 rounded-full
-          "
-        >
-          <AlertCircle className="w-5 h-5 sm:w-8 sm:h-8 text-red-500" />
-        </div>
-
-        {/* Title */}
-        <h2
-          className="
-            text-center font-bold
-            text-sm sm:text-base
-            text-gray-900
-            mb-1 sm:mb-2
-          "
-        >
-          Delete Arm?
-        </h2>
-
-        {/* Description */}
-        <p
-          className="
-            text-center text-gray-600
-            text-xs sm:text-sm
-            mb-4 sm:mb-6
-            leading-relaxed
-          "
-        >
-          Are you sure you want to delete this arm? This action cannot be
-          undone.
-        </p>
-
-        {/* Buttons */}
-        <div className="flex gap-2 sm:gap-3">
-          <button
-            onClick={onClose}
-            className="
-              flex-1
-              py-2 sm:py-3 font-bold
-              text-xs sm:text-sm
-              bg-slate-100 text-slate-600
-              rounded-md sm:rounded-lg
-              hover:bg-slate-200 transition
-            "
-          >
-            Cancel
-          </button>
-
-          <button
-            onClick={() => {
-              handleRemoveArm();
-              onClose();
-            }}
-            className="
-              flex-1
-              py-2 sm:py-3 font-bold
-              text-xs sm:text-sm
-              bg-red-500 text-white
-              rounded-md sm:rounded-lg
-              hover:bg-red-600 transition
-            "
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ====================================================
-// DELETE ARM OBJECT CONFIRMATION MODAL
-// ====================================================
-export const ConfirmDeleteAoModal = ({
-  confirmDelete,
-  onClose,
-  handleRemoveAo,
-}) => {
-  if (!confirmDelete) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-      <div
-        className="
-          w-full max-w-xs
-          bg-white border border-gray-200
-          rounded-xl shadow-xl
-          p-4
-          sm:max-w-md sm:p-8 sm:rounded-2xl
-        "
-      >
-        {/* Icon */}
-        <div
-          className="
-            mx-auto mb-3
-            flex items-center justify-center
-            w-10 h-10 sm:w-16 sm:h-16
-            bg-red-100 rounded-full
-          "
-        >
-          <AlertCircle className="w-5 h-5 sm:w-8 sm:h-8 text-red-500" />
-        </div>
-
-        {/* Title */}
-        <h2
-          className="
-            text-center font-bold
-            text-sm sm:text-base
-            text-gray-900
-            mb-1 sm:mb-2
-          "
-        >
-          Delete Object?
-        </h2>
-
-        {/* Description */}
-        <p
-          className="
-            text-center text-gray-600
-            text-xs sm:text-sm
-            mb-4 sm:mb-6
-            leading-relaxed
-          "
-        >
-          Are you sure you want to delete this object? This action cannot be
-          undone.
-        </p>
-
-        {/* Buttons */}
-        <div className="flex gap-2 sm:gap-3">
-          <button
-            onClick={onClose}
-            className="
-              flex-1
-              py-2 sm:py-3 font-bold
-              text-xs sm:text-sm
-              bg-slate-100 text-slate-600
-              rounded-md sm:rounded-lg
-              hover:bg-slate-200 transition
-            "
-          >
-            Cancel
-          </button>
-
-          <button
-            onClick={() => {
-              handleRemoveAo();
-              onClose();
-            }}
-            className="
-              flex-1
-              py-2 sm:py-3 font-bold
-              text-xs sm:text-sm
-              bg-red-500 text-white
-              rounded-md sm:rounded-lg
-              hover:bg-red-600 transition
-            "
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ====================================================
 // REDUCE ARM OBJECT CONFIRMATION MODAL
 // ====================================================
 export const ConfirmReduceAoModal = ({
@@ -1065,6 +647,65 @@ export const ConfirmReduceAoModal = ({
             "
           >
             Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const ConfirmReduceModal = ({
+  open,
+  from,
+  to,
+  onClose,
+  onConfirm,
+  title = "",
+  label = "items",
+}) => {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        className="w-full max-w-xs sm:max-w-md bg-white border border-gray-200 rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-8"
+      >
+        {/* Icon */}
+        <div className="mx-auto mb-3 flex items-center justify-center w-10 h-10 sm:w-16 sm:h-16 bg-red-100 rounded-full">
+          <AlertCircle className="w-5 h-5 sm:w-8 sm:h-8 text-red-500" />
+        </div>
+
+        {/* Title */}
+        <h2
+          id="modal-title"
+          className="text-center font-bold text-sm sm:text-base text-gray-900 mb-1 sm:mb-2"
+        >
+          {title}
+        </h2>
+
+        {/* Description */}
+        <p className="text-center text-gray-600 text-xs sm:text-sm mb-4 sm:mb-6">
+          You are about to reduce {label} from <strong>{from}</strong> to{" "}
+          <strong>{to}</strong>.
+        </p>
+
+        {/* Buttons */}
+        <div className="flex gap-2 sm:gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 py-2 sm:py-3 font-bold text-xs sm:text-sm bg-slate-100 text-slate-600 rounded-md sm:rounded-lg hover:bg-slate-200"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={onConfirm}
+            className="flex-1 py-2 sm:py-3 font-bold text-xs sm:text-sm bg-red-500 text-white rounded-md sm:rounded-lg hover:bg-red-600"
+          >
+            Confirm
           </button>
         </div>
       </div>
