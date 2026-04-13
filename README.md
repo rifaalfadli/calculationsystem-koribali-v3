@@ -25,7 +25,7 @@ A web-based structural analysis system designed to calculate mechanical loads, m
 
 This project follows a strict **Separation of Concerns** between Logic and UI:
 
-- `src/components/pole-analyzer/`: UI Components (Input Forms, Result Tables, Modals).
+- `src/components/pole-analyzer/`: UI Components (Input Forms, Result Tables, Modals, Reports).
 - `src/utils/pole-analyzer/`: Core Logic (Mechanical calculations, Validation, State handlers).
 - `src/pages/`: Main application entry points.
 

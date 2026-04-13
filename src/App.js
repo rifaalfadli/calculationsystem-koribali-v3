@@ -1,5 +1,5 @@
 // App.js
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Calculation from "./pages/Calculation";
 import CalculationTypeSetup from "./pages/CalculationType";
 import Report from "./pages/Report";
