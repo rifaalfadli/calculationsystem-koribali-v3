@@ -1859,7 +1859,7 @@ export function PoleStructuralAnalyzer() {
         open={confirmDelete}
         onClose={() => setConfirmDelete(false)}
         onConfirm={() => handleRemoveSection(confirmDelete)}
-        word="pole"
+        itemName="pole"
       />
 
       {/* Delete Confirmation Modal for Direct Object */}
@@ -1867,14 +1867,15 @@ export function PoleStructuralAnalyzer() {
         open={confirmDeleteDo}
         onClose={() => setConfirmDeleteDo(false)}
         onConfirm={() => handleRemoveDo(confirmDeleteDo)}
-        word="object"
+        itemName="object"
       />
 
       {/* Delete Confirmation Modal for Direct Object */}
-      <Modal.ConfirmReduceDoModal
-        confirmReduceDo={confirmReduceDo}
-        cancelReduceDirectObjects={cancelReduceDirectObjects}
-        confirmReduceDirectObjects={confirmReduceDirectObjects}
+      <Modal.ConfirmReduceModal
+        open={confirmReduceDo}
+        onClose={cancelReduceDirectObjects}
+        onConfirm={confirmReduceDirectObjects}
+        itemName="direct objects"
       />
 
       {/* Delete Confirmation Modal for Overhead Wire */}
@@ -1882,14 +1883,15 @@ export function PoleStructuralAnalyzer() {
         open={confirmDeleteOhw}
         onClose={() => setConfirmDeleteOhw(false)}
         onConfirm={() => handleRemoveOhw(confirmDeleteOhw)}
-        word="overhead wire"
+        itemName="overhead wire"
       />
 
       {/* Delete Confirmation Modal for Overhead Wire */}
-      <Modal.ConfirmReduceOhwModal
-        confirmReduceOhw={confirmReduceOhw}
-        cancelReduceOverheadWires={cancelReduceOverheadWires}
-        confirmReduceOverheadWires={confirmReduceOverheadWires}
+      <Modal.ConfirmReduceModal
+        open={confirmReduceOhw}
+        onClose={cancelReduceOverheadWires}
+        onConfirm={confirmReduceOverheadWires}
+        itemName="overhead wires"
       />
 
       {/* Delete Confirmation Modal for Arm */}
@@ -1897,7 +1899,7 @@ export function PoleStructuralAnalyzer() {
         open={confirmDeleteArm}
         onClose={() => setConfirmDeleteArm(false)}
         onConfirm={() => handleRemoveArm(confirmDeleteArm)}
-        word="arm"
+        itemName="arm"
       />
 
       {/* Delete Confirmation Modal for Arm Object */}
@@ -1905,14 +1907,15 @@ export function PoleStructuralAnalyzer() {
         open={confirmDeleteAo}
         onClose={() => setConfirmDeleteAo(false)}
         onConfirm={() => handleRemoveAo(confirmDeleteAo)}
-        word="object"
+        itemName="object"
       />
 
       {/* Delete Confirmation Modal for Arm Object */}
-      <Modal.ConfirmReduceAoModal
-        confirmReduceAo={confirmReduceAo}
-        cancelReduceArmObjects={cancelReduceArmObjects}
-        confirmReduceArmObjects={confirmReduceArmObjects}
+      <Modal.ConfirmReduceModal
+        open={confirmReduceAo}
+        onClose={cancelReduceArmObjects}
+        onConfirm={confirmReduceArmObjects}
+        itemName="arm objects"
       />
     </div>
   );

@@ -1,229 +1,179 @@
 import { RotateCcw, ChevronRight, Calculator } from "lucide-react";
 import { getNumericError } from "../../utils/pole-analyzer";
 
+/**
+ * Field mapping (engineering reference):
+ * bl1 = Baseplate width (East-West)
+ * bl2 = Baseplate width (North-South)
+ * ap1 = Anchor pitch (East-West)
+ * ap2 = Anchor pitch (North-South)
+ * dab = Diameter of anchor bolt
+ * nab = Number of anchor bolts
+ * nabTensionSide = Number of anchor bolts on tension side
+ * tb = Baseplate thickness
+ * hr = Rib plate height
+ * lr = Rib plate length
+ * tr = Rib plate thickness
+ * lrs = Rib scallop length
+ * lk = Weld leg length
+ */
+
+/**
+ * Reusable Input Field Component
+ * - Handles label, unit, error, and styling
+ */
+const InputField = ({
+  label,
+  value,
+  onChange,
+  error,
+  unit = "mm",
+  colSpan = "",
+}) => {
+  return (
+    <div className={`relative ${colSpan}`}>
+      <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
+        {label}
+      </label>
+
+      <div className="relative">
+        <input
+          type="number"
+          min={0}
+          value={value}
+          onChange={onChange}
+          onWheel={(e) => e.target.blur()}
+          className={`${getInputClass(error)} pr-12`}
+        />
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm hp:text-xs">
+          {unit}
+        </span>
+      </div>
+
+      <ErrorText show={error} text={getNumericError(value)} />
+    </div>
+  );
+};
+
+/**
+ * Input styling helper
+ */
+const getInputClass = (hasError) => `
+  w-full px-4 py-2.5 rounded-lg outline-none transition-all text-sm border
+  ${
+    hasError
+      ? "border-red-500 bg-[#fff5f5] ring-1 ring-red-200 focus:ring-red-200"
+      : "border-gray-300 bg-white focus:border-[#3399cc] focus:ring-[#3399cc]"
+  }
+  hp:py-2 hp:px-3 hp:rounded-md hp:text-xs
+`;
+
+/**
+ * Inline error text (reusable)
+ */
+const ErrorText = ({ show, text }) => {
+  if (!show) return null;
+
+  return (
+    <div className="absolute left-0 -bottom-5 text-[11px] text-red-500 hp:text-[9px] hp:-bottom-4">
+      *{text}
+    </div>
+  );
+};
+
 export function FourRibTypeInput({
-  fourRibType,
-  onUpdate,
+  fourRibType, // object of all input values
+  onUpdate, // function to update state (partial update)
   errors,
   onCalculate,
   onNext,
   isCalculated,
   buttonLabel,
 }) {
-  // Reset all Opening Box Type fields
+  /**
+   * Reset all fields to initial empty state
+   */
   const handleReset = () => {
-    onUpdate({
-      bl1: "",
-      bl2: "",
-      ap1: "",
-      ap2: "",
-      dab: "",
-      nab: "",
-      nabTensionSide: "",
-      tb: "",
-      hr: "",
-      lr: "",
-      tr: "",
-      lrs: "",
-      lk: "",
-    });
+    const emptyState = Object.keys(fourRibType).reduce((acc, key) => {
+      acc[key] = "";
+      return acc;
+    }, {});
+    onUpdate(emptyState);
   };
 
-  // Function to helper class input
-  const inputClass = (hasError) =>
-    `w-full px-4 py-2.5 rounded-lg outline-none transition-all text-sm border
-    ${
-      hasError
-        ? "border border-red-500 bg-[#fff5f5] ring-1 ring-red-200 focus:border-red-500 focus:ring-1 focus:ring-red-200"
-        : "border-gray-300 bg-white focus:border-[#3399cc] focus:ring-1 focus:ring-[#3399cc]"
-    } hp:py-2 hp:px-3 hp:rounded-md hp:text-xs`;
-
-  // Function to helper text error
-  const ErrorText = ({ show, text }) =>
-    show ? (
-      <div className="absolute left-0 -bottom-5 flex items-center gap-1 text-[11px] text-red-500 hp:text-[9px] hp:-bottom-4">
-        <span>*{text}</span>
-      </div>
-    ) : null;
+  /**
+   * Helper to bind input change
+   */
+  const handleChange = (field) => (e) => {
+    onUpdate({ [field]: e.target.value });
+  };
 
   return (
     <div className="bg-white rounded-b-2xl shadow-sm border border-gray-200 hp:rounded-b-xl">
       <div className="p-6 shadow-sm space-y-6 hp:space-y-4 hp:p-4">
-        {/* GRID 2 KOLOM */}
+        {/* ===== GRID LAYOUT ===== */}
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6">
-          {/* ================= TOP VIEW ================= */}
-          <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
-            {/* INPUT */}
+          {/* ===== TOP VIEW INPUT ===== */}
+          <div className="p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
             <div className="grid grid-cols-2 gap-6">
-              {/* Width of the Baseplate in the EW direction (BL1) */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Width of the Baseplate in the EW direction (BL1)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.bl1}
-                    onChange={(e) => onUpdate({ bl1: e.target.value })}
-                    onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.bl1)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
-                    mm
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.bl1}
-                  text={getNumericError(fourRibType.bl1)}
-                />
-              </div>
+              {/* FIELD : Width of the Baseplate in the EW direction (BL1) */}
+              <InputField
+                label="Baseplate Width (EW) (BL1)"
+                value={fourRibType.bl1}
+                onChange={handleChange("bl1")}
+                error={errors.bl1}
+              />
 
-              {/* Width of the Baseplate in the NS direction (BL2) */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Width of the Baseplate in the NS direction (BL2)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.bl2}
-                    onChange={(e) => onUpdate({ bl2: e.target.value })}
-                    onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.bl2)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
-                    mm
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.bl2}
-                  text={getNumericError(fourRibType.bl2)}
-                />
-              </div>
+              {/* FIELD : Width of the Baseplate in the NS direction (BL2) */}
+              <InputField
+                label="Baseplate Width (NS) (BL2)"
+                value={fourRibType.bl2}
+                onChange={handleChange("bl2")}
+                error={errors.bl2}
+              />
 
-              {/* Anchor pitch in the EW direction (Ap1) */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Anchor pitch in the EW direction (Ap1)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.ap1}
-                    onChange={(e) => onUpdate({ ap1: e.target.value })}
-                    onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.ap1)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
-                    mm
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.ap1}
-                  text={getNumericError(fourRibType.ap1)}
-                />
-              </div>
+              {/* FIELD : Anchor pitch in the EW direction (Ap1) */}
+              <InputField
+                label="Anchor Pitch (EW) (Ap1)"
+                value={fourRibType.ap1}
+                onChange={handleChange("ap1")}
+                error={errors.ap1}
+              />
 
-              {/* Anchor pitch in the NS direction (Ap2) */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Anchor pitch in the NS direction (Ap2)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.ap2}
-                    onChange={(e) => onUpdate({ ap2: e.target.value })}
-                    onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.ap2)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
-                    mm
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.ap2}
-                  text={getNumericError(fourRibType.ap2)}
-                />
-              </div>
+              {/* FIELD : Anchor pitch in the NS direction (Ap2) */}
+              <InputField
+                label="Anchor Pitch (NS) (Ap2)"
+                value={fourRibType.ap2}
+                onChange={handleChange("ap2")}
+                error={errors.ap2}
+              />
 
-              {/* Diameter of Anchor Bolt */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Diameter of Anchor Bolt
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.dab}
-                    onChange={(e) => onUpdate({ dab: e.target.value })}
-                    onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.dab)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
-                    mm
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.dab}
-                  text={getNumericError(fourRibType.dab)}
-                />
-              </div>
+              {/* FIELD : Diameter of Anchor Bolt */}
+              <InputField
+                label="Anchor Bolt Diameter"
+                value={fourRibType.dab}
+                onChange={handleChange("dab")}
+                error={errors.dab}
+              />
 
-              {/* Number of anchor bolts (n) */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Number of anchor bolts (n)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.nab}
-                    onChange={(e) => onUpdate({ nab: e.target.value })}
-                    onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.nab)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
-                    pcs
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.nab}
-                  text={getNumericError(fourRibType.nab)}
-                />
-              </div>
+              {/* FIELD : Number of anchor bolts (n) */}
+              <InputField
+                label="Number of Anchor Bolts (n)"
+                value={fourRibType.nab}
+                onChange={handleChange("nab")}
+                error={errors.nab}
+                unit="pcs"
+              />
 
-              {/* Number of anchor bolts on the tension side (n') */}
-              <div className="col-span-2 relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Number of anchor bolts on the tension side (n')
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.nabTensionSide}
-                    onChange={(e) =>
-                      onUpdate({ nabTensionSide: e.target.value })
-                    }
-                    onWheel={(e) => e.target.blur()}
-                    className={`${inputClass(errors.nabTensionSide)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-black-400 hp:text-xs">
-                    pcs
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.nabTensionSide}
-                  text={getNumericError(fourRibType.nabTensionSide)}
-                />
-              </div>
+              {/* FIELD : Number of anchor bolts on the tension side (n') */}
+              <InputField
+                label="Number of Anchor Bolts on Tension Side (n')"
+                value={fourRibType.nabTensionSide}
+                onChange={handleChange("nabTensionSide")}
+                error={errors.nabTensionSide}
+                unit="pcs"
+                colSpan="col-span-2"
+              />
             </div>
           </div>
 
@@ -231,151 +181,61 @@ export function FourRibTypeInput({
           <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex items-center justify-center h-full hover:shadow-sm transition">
             <img
               src="/images/4rib-topview.png"
-              alt="Baseplate 4 rib top view"
+              alt="4 rib baseplate top view"
               className="max-h-[250px] object-contain"
             />
           </div>
 
-          {/* ================= SIDE VIEW ================= */}
-          <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
+          {/* ===== SIDE VIEW INPUT ===== */}
+          <div className="p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
             <div className="grid grid-cols-2 gap-6">
-              {/* Thickness of the Baseplate (Tb) */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Thickness of the Baseplate (Tb)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.tb}
-                    onChange={(e) => onUpdate({ tb: e.target.value })}
-                    className={`${inputClass(errors.tb)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm">
-                    mm
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.tb}
-                  text={getNumericError(fourRibType.tb)}
-                />
-              </div>
+              {/* FIELD : Thickness of the Baseplate (Tb) */}
+              <InputField
+                label="Baseplate Thickness (Tb)"
+                value={fourRibType.tb}
+                onChange={handleChange("tb")}
+                error={errors.tb}
+              />
 
-              {/* Height of the Rib Plate (Hr) */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Height of the Rib Plate (Hr)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.hr}
-                    onChange={(e) => onUpdate({ hr: e.target.value })}
-                    className={`${inputClass(errors.hr)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm">
-                    mm
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.hr}
-                  text={getNumericError(fourRibType.hr)}
-                />
-              </div>
+              {/* FIELD : Height of the Rib Plate (Hr) */}
+              <InputField
+                label="Rib Plate Height (Hr)"
+                value={fourRibType.hr}
+                onChange={handleChange("hr")}
+                error={errors.hr}
+              />
 
-              {/* Rib Plate scallop (Lrs) */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Rib Plate scallop (Lrs)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.lrs}
-                    onChange={(e) => onUpdate({ lrs: e.target.value })}
-                    className={`${inputClass(errors.lrs)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm">
-                    mm
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.lrs}
-                  text={getNumericError(fourRibType.lrs)}
-                />
-              </div>
+              {/* FIELD : Rib Plate scallop (Lrs) */}
+              <InputField
+                label="Rib Plate Scallop (Lrs)"
+                value={fourRibType.lrs}
+                onChange={handleChange("lrs")}
+                error={errors.lrs}
+              />
 
-              {/* Weld leg length (Lk) */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Weld leg length (Lk)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.lk}
-                    onChange={(e) => onUpdate({ lk: e.target.value })}
-                    className={`${inputClass(errors.lk)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm">
-                    mm
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.lk}
-                  text={getNumericError(fourRibType.lk)}
-                />
-              </div>
+              {/* FIELD : Weld leg length (Lk) */}
+              <InputField
+                label="Weld Leg Length (Lk)"
+                value={fourRibType.lk}
+                onChange={handleChange("lk")}
+                error={errors.lk}
+              />
 
-              {/* Length of the Rib Plate (Lr) */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Length of the Rib Plate (Lr)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.lr}
-                    onChange={(e) => onUpdate({ lr: e.target.value })}
-                    className={`${inputClass(errors.lr)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm">
-                    mm
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.lr}
-                  text={getNumericError(fourRibType.lr)}
-                />
-              </div>
+              {/* FIELD : Length of the Rib Plate (Lr) */}
+              <InputField
+                label="Rib Plate Length (Lr)"
+                value={fourRibType.lr}
+                onChange={handleChange("lr")}
+                error={errors.lr}
+              />
 
-              {/* Thickness of the Rib Plate (Tr) */}
-              <div className="relative">
-                <label className="block text-sm text-gray-700 mb-3 hp:text-xs hp:mb-1">
-                  Thickness of the Rib Plate (Tr)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={0}
-                    value={fourRibType.tr}
-                    onChange={(e) => onUpdate({ tr: e.target.value })}
-                    className={`${inputClass(errors.tr)} pr-12`}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm">
-                    mm
-                  </span>
-                </div>
-                <ErrorText
-                  show={errors.tr}
-                  text={getNumericError(fourRibType.tr)}
-                />
-              </div>
+              {/* FIELD : Thickness of the Rib Plate (Tr) */}
+              <InputField
+                label="Rib Plate Thickness (Tr)"
+                value={fourRibType.tr}
+                onChange={handleChange("tr")}
+                error={errors.tr}
+              />
             </div>
           </div>
 
@@ -383,28 +243,25 @@ export function FourRibTypeInput({
           <div className="bg-gray-50 border rounded-2xl p-4 flex items-center justify-center h-full hover:shadow-sm transition">
             <img
               src="/images/4rib-sideview.png"
+              alt="4 rib baseplate side view"
               className="max-h-[150px] object-contain"
-              alt="Baseplate 4 rib side view"
             />
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="mt-6 border-t border-gray-200"></div>
-
-        {/* FOOTER: LEFT (Reset Button) & RIGHT (Next Input) */}
-        <div className="flex justify-between items-center pt-6 hp:pt-4">
-          {/* LEFT */}
+        {/* ===== FOOTER ACTIONS ===== */}
+        <div className="flex justify-between items-center mt-6 pt-6 hp:pt-4 border-t border-gray-200">
+          {/* RESET */}
           <button
             onClick={handleReset}
-            className="flex items-center gap-2 px-7 py-2.5 bg-[#eef2f6] text-[#0d3b66] text-sm
-            border-2 border-[#d0d7e2] rounded-lg hover:bg-[#e2e8f0] transition-colors font-medium hp:text-xs hp:px-[22px] hp:py-[10px]"
+            className="flex items-center gap-2 px-7 hp:px-[22px] py-2.5 hp:py-[10px] bg-[#eef2f6] text-[#0d3b66]
+            border-2 border-[#d0d7e2] rounded-lg hover:bg-[#e2e8f0] transition-colors text-sm hp:text-xs font-medium"
           >
             <RotateCcw className="w-5 h-5 hp:w-4 hp:h-4" />
             Reset
           </button>
 
-          {/* RIGHT GROUP */}
+          {/* ACTION BUTTONS */}
           <div className="flex items-center gap-3">
             {/* CALCULATE */}
             <button
