@@ -292,7 +292,7 @@ export default function BaseplatePage() {
         <div className="min-h-screen bg-gray-50 border border-gray-250">
           <HeaderCalculationPage />
 
-          <div className="mx-6 2040:mx-[300px] pt-1 pb-8 hp:mx-2">
+          <div className="mx-6 2040:mx-[250px] pt-1 pb-8 hp:mx-2">
             {/* ============================================================
               FORM BASEPLATE  TYPE (Bagian baseplate perhitungan)
             ============================================================ */}

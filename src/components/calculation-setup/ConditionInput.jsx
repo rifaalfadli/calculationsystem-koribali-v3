@@ -195,14 +195,14 @@ export function ConditionInput({
                       type="button"
                       onClick={() => onUpdate({ method: option.id })}
                       className={`
-                      w-full text-left bg-transparent appearance-none
-                      relative cursor-pointer rounded-lg border p-4
-                      transition-all duration-200 focus:outline-none
+                      w-full text-left
+                      relative rounded-lg border p-4
+                      transition-all duration-200 
 
                       ${
                         isActive
-                          ? "border-blue-500 bg-blue-50 ring-1 ring-blue-200"
-                          : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                          ? "border-blue-500 bg-blue-50 text-blue-600 shadow-sm"
+                          : "border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50"
                       }
                     `}
                     >
@@ -267,7 +267,7 @@ export function ConditionInput({
                     openingEnabled: !condition.openingEnabled,
                   })
                 }
-                className={`cursor-pointer relative overflow-hidden rounded-xl border-2 p-5 transition-all duration-300 hover:scale-[1.01] active:scale-[0.98]
+                className={`cursor-pointer relative overflow-hidden rounded-lg border-2 p-5 transition-all duration-300 hover:scale-[1.01] active:scale-[0.98]
                 ${
                   condition.openingEnabled
                     ? "border-blue-500 bg-white shadow-sm ring-1 ring-blue-50"
@@ -320,7 +320,7 @@ export function ConditionInput({
                     baseplateEnabled: !condition.baseplateEnabled,
                   })
                 }
-                className={`cursor-pointer relative overflow-hidden rounded-xl border-2 p-5 transition-all duration-300 hover:scale-[1.01] active:scale-[0.98]
+                className={`cursor-pointer relative overflow-hidden rounded-lg border-2 p-5 transition-all duration-300 hover:scale-[1.01] active:scale-[0.98]
                 ${
                   condition.baseplateEnabled
                     ? "border-blue-500 bg-white shadow-sm ring-1 ring-blue-50"
@@ -375,7 +375,7 @@ export function ConditionInput({
                     foundationEnabled: !condition.foundationEnabled,
                   })
                 }
-                className={`cursor-pointer relative overflow-hidden rounded-xl border-2 p-5 transition-all duration-300 hover:scale-[1.01] active:scale-[0.98]
+                className={`cursor-pointer relative overflow-hidden rounded-lg border-2 p-5 transition-all duration-300 hover:scale-[1.01] active:scale-[0.98]
                 ${
                   condition.foundationEnabled
                     ? "border-blue-500 bg-white shadow-sm ring-1 ring-blue-50"
