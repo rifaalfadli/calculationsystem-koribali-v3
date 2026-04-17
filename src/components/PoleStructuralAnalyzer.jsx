@@ -64,7 +64,7 @@ export function PoleStructuralAnalyzer() {
   const [structuralDesign, setStructuralDesign] = useProjectStorage(
     projectType,
     "structuralDesign",
-    { lowestStep: "", overDesign: "" },
+    { lowestStep: "0", lowestStepMode: "onGL", overDesign: "1" },
   );
   const [structuralDesignErrors, setStructuralDesignErrors] = useState({});
 
@@ -118,8 +118,8 @@ export function PoleStructuralAnalyzer() {
       lowerThickness: "",
       lowerLength: "",
       embedmentLength: "",
-      groundPosition: "",
-      heightDepth: "",
+      groundPosition: "onGL",
+      heightDepth: "0",
     },
   );
   const [stepPoleStandardErrors, setStepPoleStandardErrors] = useState({});
@@ -353,12 +353,24 @@ export function PoleStructuralAnalyzer() {
   // ------------------------ Function for structural design pole input ------------------------
   // FUNCTION: Update structural design data
   const structuralDesignUpdate = (updates) => {
+    let nextUpdates = { ...updates };
+
+    // HANDLE MODE CHANGE
+    if ("lowestStepMode" in updates) {
+      if (updates.lowestStepMode === "onGL") {
+        nextUpdates.lowestStep = 0;
+      } else {
+        nextUpdates.lowestStep = "";
+      }
+    }
+
     Utils.updateStructuralDesign(
       structuralDesign,
-      updates,
+      nextUpdates,
       setStructuralDesign,
     );
-    Utils.clearError(updates, setStructuralDesignErrors);
+
+    Utils.clearError(nextUpdates, setStructuralDesignErrors);
   };
 
   // FUNCTION: Check if structural design form is complete
@@ -383,13 +395,24 @@ export function PoleStructuralAnalyzer() {
 
   // FUNCTION: State updater function and persistence handler Stepped Pole Standard
   const handleUpdateStepPoleStandard = (updates) => {
+    let nextUpdates = { ...updates };
+
+    // HANDLE MODE CHANGE
+    if ("groundPosition" in updates) {
+      if (updates.groundPosition === "onGL") {
+        nextUpdates.heightDepth = 0;
+      } else {
+        nextUpdates.heightDepth = "";
+      }
+    }
+
     Utils.updateStepPoleStandard(
       stepPoleStandard,
-      updates,
+      nextUpdates,
       setStepPoleStandard,
     );
 
-    Utils.clearError(updates, setStepPoleStandardErrors);
+    Utils.clearError(nextUpdates, setStepPoleStandardErrors);
   };
 
   // FUNCTION: Check if stepPoleStandard form is complete
@@ -816,7 +839,7 @@ export function PoleStructuralAnalyzer() {
     // =========================
     const isStructuralValid = handleStructuralDesignComplete();
 
-    if (!isStructuralValid) {
+    if (condition.method !== "standard" && !isStructuralValid) {
       setStructuralDesignErrors(
         Utils.getStructuralDesignErrors(structuralDesign),
       );
@@ -1125,24 +1148,6 @@ export function PoleStructuralAnalyzer() {
           }`}
         >
           <div className="bg-white rounded-b-2xl shadow-sm border border-gray-200 hp:rounded-b-xl">
-            {/* Structural Design Form */}
-            <div className="border-b border-gray-200 px-6 pt-6 pb-7 hp:px-4 hp:pt-4">
-              <div className="flex items-center justify-between mb-4 hp:mb-2">
-                <div>
-                  <h2 className="text-[#0d3b66] font-medium flex items-center text-sm gap-2 hp:text-xs hp:font-medium">
-                    <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
-                    Structural Design
-                  </h2>
-                </div>
-              </div>
-
-              <StructuralDesign
-                structuralDesign={structuralDesign}
-                onUpdate={structuralDesignUpdate}
-                errors={structuralDesignErrors}
-              />
-            </div>
-
             {projectType === "lighting-pole" &&
               condition.method === "standard" && (
                 <>
@@ -1172,6 +1177,23 @@ export function PoleStructuralAnalyzer() {
 
             {isCustomPoleMode && (
               <>
+                {/* Structural Design Form */}
+                <div className="border-b border-gray-200 px-6 pt-6 pb-7 hp:px-4 hp:pt-4">
+                  <div className="flex items-center justify-between mb-4 hp:mb-2">
+                    <div>
+                      <h2 className="text-[#0d3b66] font-medium flex items-center text-sm gap-2 hp:text-xs hp:font-medium">
+                        <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
+                        Structural Design
+                      </h2>
+                    </div>
+                  </div>
+
+                  <StructuralDesign
+                    structuralDesign={structuralDesign}
+                    onUpdate={structuralDesignUpdate}
+                    errors={structuralDesignErrors}
+                  />
+                </div>
                 {/* Step Pole Form */}
                 <div className="px-6 pt-6 hp:p-4">
                   {/* HEADER ADD SECTION */}

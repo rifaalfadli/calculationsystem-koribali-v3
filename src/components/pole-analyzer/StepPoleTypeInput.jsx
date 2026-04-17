@@ -2,6 +2,10 @@ import React from "react";
 import { RotateCcw } from "lucide-react";
 import { getNumericError } from "../../utils/pole-analyzer";
 
+// IMPORT 2 IMAGE
+const onGlImg = "/images/on-gl.svg";
+const underGlImg = "/images/under-gl.svg";
+
 export function StepPoleTypeInput({
   stepPoleStandard,
   onUpdate,
@@ -64,12 +68,24 @@ export function StepPoleTypeInput({
 
   const { upper: upperOptions, lower: lowerOptions } = getThicknessOptions();
 
+  // =========================
+  // IMAGE MAPPING
+  // =========================
+  const imageMap = {
+    onGL: onGlImg,
+    underGL: underGlImg,
+  };
+
+  const currentImage = imageMap[stepPoleStandard.groundPosition] || onGlImg;
+
+  const isOnGL = stepPoleStandard.groundPosition === "onGL";
+
   // Function to helper class input
   const inputClass = (hasError) =>
-    `w-full px-4 py-2.5 rounded-lg outline-none transition-all border text-sm pr-14 min-h-[42px]
+    `px-4 py-2.5 rounded-lg outline-none transition-all border text-sm pr-14 min-h-[42px]
   ${
     hasError
-      ? "border border-red-500 bg-[#fff5f5] ring-1 ring-red-200 focus:border-red-500 focus:ring-1 focus:ring-red-200"
+      ? "border border-red-500 bg-[#fff5f5] ring-1 ring-red-200"
       : "border-gray-300 bg-white focus:border-[#3399cc] focus:ring-1 focus:ring-[#3399cc]"
   } hp:pl-2 hp:py-2  hp:rounded-md hp:text-xs`;
 
@@ -185,7 +201,7 @@ export function StepPoleTypeInput({
                             lowerThickness: "",
                           })
                         }
-                        className={`${inputClass(errors.combination)} min-h-[42px]`}
+                        className={`${inputClass(errors.combination)} w-full min-h-[42px]`}
                       >
                         <option value="" disabled>
                           Select Combination
@@ -232,7 +248,7 @@ export function StepPoleTypeInput({
                             }
                             className={`${inputClass(
                               errors.upperThickness,
-                            )} min-h-[42px]`}
+                            )} min-h-[42px] w-full `}
                           >
                             <option value="" disabled>
                               Select Thickness
@@ -274,7 +290,7 @@ export function StepPoleTypeInput({
                               onUpdate({ upperLength: e.target.value })
                             }
                             onWheel={(e) => e.target.blur()}
-                            className={inputClass(errors.upperLength)}
+                            className={`${inputClass(errors.upperLength)} w-full`}
                           />
                           <span className="absolute right-4 text-sm top-1/2 -translate-y-1/2 text-black-400 hp:text-xs">
                             mm
@@ -304,7 +320,7 @@ export function StepPoleTypeInput({
                             }
                             className={`${inputClass(
                               errors.lowerThickness,
-                            )} min-h-[42px]`}
+                            )} w-full min-h-[42px]`}
                           >
                             <option value="" disabled>
                               Select Thickness
@@ -346,7 +362,7 @@ export function StepPoleTypeInput({
                               onUpdate({ lowerLength: e.target.value })
                             }
                             onWheel={(e) => e.target.blur()}
-                            className={inputClass(errors.lowerLength)}
+                            className={`${inputClass(errors.lowerLength)} w-full`}
                           />
                           <span className="absolute right-4 text-sm top-1/2 -translate-y-1/2 text-black-400 hp:text-xs">
                             mm
@@ -396,7 +412,7 @@ export function StepPoleTypeInput({
                           })
                         }
                         onWheel={(e) => e.target.blur()}
-                        className={inputClass(errors.embedmentLength)}
+                        className={`${inputClass(errors.embedmentLength)} w-full`}
                       />
 
                       <span className="absolute right-4 text-black-400 text-sm top-1/2 -translate-y-1/2 hp:text-xs">
@@ -414,14 +430,14 @@ export function StepPoleTypeInput({
 
               {/* ===== BASEPLATE MODE ===== */}
               {condition.baseplateEnabled && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-1">
                   {/* ================= Ground Position ================= */}
                   <div>
                     <h4 className="block text-sm text-gray-700 mb-3">
-                      Ground Position
+                      Select Ground Position
                     </h4>
 
-                    <div className="space-y-3">
+                    <div className="flex gap-3 mb-4">
                       {[
                         { id: "onGL", label: "On GL" },
                         { id: "underGL", label: "Under GL" },
@@ -437,7 +453,7 @@ export function StepPoleTypeInput({
                                 groundPosition: item.id,
                               });
                             }}
-                            className={`w-full cursor-pointer rounded-lg border px-4 py-2.5 transition-all flex items-center gap-3
+                            className={`w-48 cursor-pointer rounded-lg border px-4 py-2.5 transition-all flex items-center gap-3
                         ${
                           active
                             ? "border-blue-500 bg-blue-50"
@@ -464,38 +480,52 @@ export function StepPoleTypeInput({
                   </div>
 
                   {/* ================= Height ================= */}
-                  {stepPoleStandard.groundPosition === "underGL" && (
-                    <div>
-                      <label className="block text-sm text-gray-700 mb-3">
-                        Height Depth
-                      </label>
+                  {/* IMAGE AREA */}
+                  <div className="flex justify-center gap-5 items-center bg-gray-50 border rounded-lg p-4 h-72 2040:h-80 overflow-hidden">
+                    {stepPoleStandard.groundPosition && (
+                      <div className="flex flex-col justify-end pb-6 h-full">
+                        <div className="flex flex-col">
+                          {/* LABEL */}
+                          <span className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
+                            Height Depth
+                          </span>
+                          {/* INPUT */}
+                          <div className="relative">
+                            <input
+                              type="number"
+                              value={stepPoleStandard.heightDepth}
+                              placeholder="Input Height"
+                              disabled={isOnGL}
+                              onChange={(e) =>
+                                !isOnGL &&
+                                onUpdate({ heightDepth: e.target.value })
+                              }
+                              onWheel={(e) => e.target.blur()}
+                              className={`${inputClass(errors.heightDepth)} w-[200px] pr-[40px] ${
+                                isOnGL ? "bg-gray-100 text-gray-400" : ""
+                              }`}
+                            />
 
-                      <div className="relative">
-                        <input
-                          type="number"
-                          min={0}
-                          placeholder="Input Length"
-                          value={stepPoleStandard.heightDepth}
-                          onChange={(e) =>
-                            onUpdate({
-                              heightDepth: e.target.value,
-                            })
-                          }
-                          onWheel={(e) => e.target.blur()}
-                          className={inputClass(errors.heightDepth)}
-                        />
-
-                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm">
-                          mm
-                        </span>
-
-                        <ErrorText
-                          show={errors.heightDepth}
-                          text={getNumericError(stepPoleStandard.heightDepth)}
-                        />
+                            {/* UNIT */}
+                            <span className="absolute right-4 text-sm top-1/2 -translate-y-1/2 text-black-400 hp:text-xs">
+                              mm
+                            </span>
+                          </div>
+                          <ErrorText
+                            show={errors.heightDepth}
+                            text={getNumericError(stepPoleStandard.heightDepth)}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                    {/* IMAGE */}
+                    <img
+                      key={currentImage}
+                      src={currentImage}
+                      alt="pole"
+                      className="h-full object-contain transition-all duration-300"
+                    />
+                  </div>
                 </div>
               )}
             </div>

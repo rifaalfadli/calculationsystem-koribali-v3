@@ -211,9 +211,11 @@ export const makeReport = (
   }
 
   // CHECK 3: Structural Design
-  if (!structuralDesignComplete()) {
-    showToast("Please correct the errors in Structural Design fields.");
-    errors.structuralDesign = true;
+  if (condition.method !== "standard") {
+    if (!structuralDesignComplete()) {
+      showToast("Please correct the errors in Structural Design fields.");
+      errors.structuralDesign = true;
+    }
   }
 
   // CHECK 4: Custom Pole

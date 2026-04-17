@@ -96,14 +96,14 @@ export const getConditionErrors = (condition) => ({
 // FUNCTION: Check if Structural Design Pole information form is complete
 export const structuralDesignComplete = (structuralDesign) => {
   return (
-    isPositiveFilled(structuralDesign.lowestStep) &&
+    !isEmpty(structuralDesign.lowestStep) &&
     isPositiveFilled(structuralDesign.overDesign)
   );
 };
 
 // FUNCTION: Create an error checker helper for the Structural Design Pole
 export const getStructuralDesignErrors = (structuralDesign) => ({
-  lowestStep: isInvalidNumber(structuralDesign.lowestStep),
+  lowestStep: isEmpty(structuralDesign.lowestStep),
   overDesign: isInvalidNumber(structuralDesign.overDesign),
 });
 
@@ -131,17 +131,13 @@ export const stepPoleStandardComplete = (stepPoleStandard, condition) => {
     isPositiveFilled(stepPoleStandard.lowerLength),
 
     // ===== EMBEDMENT =====
-    ...(isEmbedment
-      ? [isPositiveFilled(stepPoleStandard.embedmentLength)]
-      : []),
+    ...(isEmbedment ? [!isEmpty(stepPoleStandard.embedmentLength)] : []),
 
     // ===== BASE =====
     ...(isBase ? [!isEmpty(stepPoleStandard.groundPosition)] : []),
 
     // ===== UNDER GL ONLY =====
-    ...(isBase && isUnderGL
-      ? [isPositiveFilled(stepPoleStandard.heightDepth)]
-      : []),
+    ...(isBase && isUnderGL ? [!isEmpty(stepPoleStandard.heightDepth)] : []),
   ].every(Boolean);
 };
 

@@ -1,6 +1,10 @@
 import React from "react";
 import { RotateCcw } from "lucide-react";
 
+// IMPORT 2 IMAGE
+const onGlImg = "/images/on-gl.svg";
+const underGlImg = "/images/under-gl.svg";
+
 export function PoleBasicForm({ poleBasic, onUpdate }) {
   const poleTypes = [
     { id: "IS", label: "Type-I (IS)" },
@@ -57,6 +61,18 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
     underGL: [],
   };
 
+  // =========================
+  // IMAGE MAPPING
+  // =========================
+  const imageMap = {
+    onGL: onGlImg,
+    underGL: underGlImg,
+  };
+
+  const currentImage = imageMap[poleBasic.groundPosition] || onGlImg;
+
+  const isDisabled = !poleBasic.poleType;
+
   return (
     <div className="bg-white px-6 pb-6 rounded-b-2xl hp:rounded-b-xl">
       {/* ================= Select Pole Type ================= */}
@@ -110,14 +126,19 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
 
         {/* Outer Container */}
         <div className="border border-slate-200 rounded-xl p-6 bg-white shadow-sm">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-1">
             {/* ================= Ground Position ================= */}
             <div>
               <h4 className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
-                Ground Position
+                Select Ground Position{" "}
+                {isDisabled && (
+                  <span className="text-gray-400 font-normal">
+                    (select pole standard first)
+                  </span>
+                )}
               </h4>
 
-              <div className="space-y-3">
+              <div className="flex gap-3 mb-4">
                 {[
                   { id: "onGL", label: "On GL" },
                   { id: "underGL", label: "Under GL" },
@@ -127,32 +148,43 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
                   return (
                     <button
                       key={item.id}
+                      disabled={isDisabled}
                       onClick={() => {
+                        if (isDisabled) return;
+
                         onUpdate({
                           groundPosition: item.id,
                           height: "",
                         });
                       }}
-                      className={`w-full cursor-pointer rounded-lg border px-4 py-2.5 transition-all flex items-center gap-3
-                        ${
-                          active
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
-                        }
+                      className={`w-48 rounded-lg border px-4 py-2.5 transition-all flex items-center gap-3
+
+                      ${
+                        isDisabled
+                          ? "bg-gray-100 text-gray-400 border-gray-200"
+                          : active
+                            ? "border-blue-500 bg-blue-50 cursor-pointer"
+                            : "border-slate-200 hover:border-slate-300 hover:bg-slate-50 cursor-pointer"
+                      }
                       `}
                     >
                       <div
                         className={`w-4 h-4 rounded-full border-2 flex items-center justify-center
-                          ${active ? "border-blue-500" : "border-gray-400"}
+                          ${
+                            isDisabled
+                              ? "border-gray-300"
+                              : active
+                                ? "border-blue-500"
+                                : "border-gray-400"
+                          }
                         `}
                       >
-                        {active && (
+                        {active && !isDisabled && (
                           <div className="w-2 h-2 rounded-full bg-blue-500" />
                         )}
                       </div>
-                      <span className="text-sm font-medium text-slate-700">
-                        {item.label}
-                      </span>
+
+                      <span className="text-sm font-medium">{item.label}</span>
                     </button>
                   );
                 })}
@@ -160,34 +192,49 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
             </div>
 
             {/* ================= Height ================= */}
-            <div>
-              <h4 className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
-                Height of Structure
-              </h4>
+            {/* IMAGE AREA */}
+            <div className="flex justify-center gap-5 items-center bg-gray-50 border rounded-lg p-4 h-72 2040:h-80 overflow-hidden">
+              <div className="flex flex-col justify-end pb-6 h-full">
+                <div className="flex flex-col">
+                  {/* LABEL */}
+                  <span className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
+                    Height of Structure
+                  </span>
 
-              {poleBasic.groundPosition ? (
-                <select
-                  value={poleBasic.height}
-                  onChange={(e) => onUpdate({ height: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm min-h-[42px] focus:border-blue-500 outline-none transition-all bg-white hp:p-2 hp:rounded-md hp:text-xs"
-                >
-                  <option value="" disabled>
-                    Select Height
-                  </option>
+                  {poleBasic.groundPosition ? (
+                    <select
+                      value={poleBasic.height}
+                      onChange={(e) => onUpdate({ height: e.target.value })}
+                      className="w-[200px] px-4 py-2.5 border border-gray-300 rounded-lg text-sm min-h-[42px] focus:border-blue-500 outline-none transition-all bg-white hp:p-2 hp:rounded-md hp:text-xs"
+                    >
+                      <option value="" disabled>
+                        Select Height
+                      </option>
 
-                  {currentHeightOptions[poleBasic.groundPosition]?.map((h) => (
-                    <option key={h.id} value={h.id}>
-                      {h.label}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <div className="border border-slate-200 rounded-lg px-5 bg-slate-50 min-h-[42px] flex items-center">
-                  <p className="text-sm text-slate-400">
-                    Select ground position first
-                  </p>
+                      {currentHeightOptions[poleBasic.groundPosition]?.map(
+                        (h) => (
+                          <option key={h.id} value={h.id}>
+                            {h.label}
+                          </option>
+                        ),
+                      )}
+                    </select>
+                  ) : (
+                    <div className="border border-slate-200 rounded-lg bg-slate-50 min-h-[42px] w-[200px] flex items-center justify-center px-2">
+                      <p className="text-sm text-slate-400 text-center">
+                        Select ground position first
+                      </p>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
+              {/* IMAGE */}
+              <img
+                key={currentImage}
+                src={currentImage}
+                alt="pole"
+                className="h-full object-contain transition-all duration-300"
+              />
             </div>
           </div>
         </div>

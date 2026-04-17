@@ -16,6 +16,10 @@ export default function CalculationSetup() {
 
   // VALID TYPE dari constants
   const VALID_TYPES = PROJECT_TYPES.map((item) => item.id);
+  const STANDARD_DEFAULTS = {
+    v60: { windSpeed: "60", airDensity: "1.23" },
+    jil: { windSpeed: "60", airDensity: "1.23" },
+  };
 
   // ambil dari session
   const savedType = sessionStorage.getItem("projectType");
@@ -118,8 +122,24 @@ export default function CalculationSetup() {
 
   // FUNCTION: Update condition data
   const handleConditionUpdate = (updates) => {
-    Utils.updateCondition(localCondition, updates, setLocalCondition);
-    Utils.clearError(updates, setConditionErrors);
+    let nextUpdates = { ...updates };
+
+    // AUTO FILL LOGIC
+    if (updates.designStandard) {
+      if (STANDARD_DEFAULTS[updates.designStandard]) {
+        nextUpdates = {
+          ...nextUpdates,
+          ...STANDARD_DEFAULTS[updates.designStandard],
+        };
+      } else {
+        // reset kalau bukan auto standard
+        nextUpdates.windSpeed = "";
+        nextUpdates.airDensity = "";
+      }
+    }
+
+    Utils.updateCondition(localCondition, nextUpdates, setLocalCondition);
+    Utils.clearError(nextUpdates, setConditionErrors);
   };
 
   // FUNCTION: Check if condition information form is complete

@@ -44,7 +44,6 @@ export function ConditionInput({
     ],
 
     "lighting-pole": [
-      { value: "v60", label: "V60" },
       { value: "jil", label: "JIL" },
       { value: "haiden", label: "Haiden" },
     ],
@@ -271,7 +270,7 @@ export function ConditionInput({
                 ${
                   condition.openingEnabled
                     ? "border-blue-500 bg-white shadow-sm ring-1 ring-blue-50"
-                    : "border-slate-100 bg-slate-50/50 hover:border-slate-200"
+                    : "border-slate-100 bg-slate-50/50 hover:border-slate-300 hover:bg-slate-50"
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -324,7 +323,7 @@ export function ConditionInput({
                 ${
                   condition.baseplateEnabled
                     ? "border-blue-500 bg-white shadow-sm ring-1 ring-blue-50"
-                    : "border-slate-100 bg-slate-50/50 hover:border-slate-200"
+                    : "border-slate-100 bg-slate-50/50 hover:border-slate-300 hover:bg-slate-50"
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -379,7 +378,7 @@ export function ConditionInput({
                 ${
                   condition.foundationEnabled
                     ? "border-blue-500 bg-white shadow-sm ring-1 ring-blue-50"
-                    : "border-slate-100 bg-slate-50/50 hover:border-slate-200"
+                    : "border-slate-100 bg-slate-50/50 hover:border-slate-300 hover:bg-slate-50"
                 }`}
               >
                 <div className="flex items-center justify-between">
