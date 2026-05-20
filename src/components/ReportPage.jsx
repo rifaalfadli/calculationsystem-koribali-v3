@@ -147,11 +147,6 @@ export function ReportPage() {
               No report generated yet
             </h1>
 
-            {/* Subtitle */}
-            <h2 className="text-xl text-slate-600 mb-4 font-semibold">
-              No calculation reports available
-            </h2>
-
             {/* Description */}
             <p className="text-sm text-slate-400 mb-8 leading-relaxed">
               Complete a calculation and fill in the cover details
@@ -176,11 +171,6 @@ export function ReportPage() {
                 Go to Calculation
               </button>
             </div>
-
-            {/* Hint */}
-            <p className="text-xs text-slate-600">
-              Start your first calculation to generate reports
-            </p>
           </div>
         </div>
       </div>
