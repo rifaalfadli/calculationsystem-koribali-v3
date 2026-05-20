@@ -266,7 +266,7 @@ export function ConditionInput({
                     openingEnabled: !condition.openingEnabled,
                   })
                 }
-                className={`cursor-pointer relative overflow-hidden rounded-lg border-2 p-5 transition-all duration-300 hover:scale-[1.01] active:scale-[0.98]
+                className={`cursor-pointer relative overflow-hidden rounded-lg border-2 p-5 transition-all duration-300 
                 ${
                   condition.openingEnabled
                     ? "border-blue-500 bg-white shadow-sm ring-1 ring-blue-50"
@@ -319,7 +319,7 @@ export function ConditionInput({
                     baseplateEnabled: !condition.baseplateEnabled,
                   })
                 }
-                className={`cursor-pointer relative overflow-hidden rounded-lg border-2 p-5 transition-all duration-300 hover:scale-[1.01] active:scale-[0.98]
+                className={`cursor-pointer relative overflow-hidden rounded-lg border-2 p-5 transition-all duration-300 
                 ${
                   condition.baseplateEnabled
                     ? "border-blue-500 bg-white shadow-sm ring-1 ring-blue-50"
@@ -338,7 +338,7 @@ export function ConditionInput({
                       <p
                         className={`text-sm font-medium ${condition.baseplateEnabled ? "text-slate-900" : "text-slate-500"}`}
                       >
-                        Basepalte
+                        Baseplate
                       </p>
                     </div>
                   </div>
@@ -374,7 +374,7 @@ export function ConditionInput({
                     foundationEnabled: !condition.foundationEnabled,
                   })
                 }
-                className={`cursor-pointer relative overflow-hidden rounded-lg border-2 p-5 transition-all duration-300 hover:scale-[1.01] active:scale-[0.98]
+                className={`cursor-pointer relative overflow-hidden rounded-lg border-2 p-5 transition-all duration-300 
                 ${
                   condition.foundationEnabled
                     ? "border-blue-500 bg-white shadow-sm ring-1 ring-blue-50"

@@ -164,7 +164,7 @@ export function OverheadWireInput({
       {/* ACTIVE OHW INPUT */}
       {overheadWires.map((overheadWire, index) => {
         const ohwError = errors?.[overheadWire.idOhw] || {};
-        const isLast = index === overheadWire.length - 1;
+        const isLast = index === overheadWires.length - 1;
         const hasMultiple = overheadWires.length > 1;
 
         return (
@@ -196,7 +196,7 @@ export function OverheadWireInput({
 
                 <div>
                   <h4 className="text-base text-[#0d3b66] text-sm font-medium leading-snug hp:text-xs">
-                    Overhide Wire{" "}
+                    Overhead Wire{" "}
                     {overheadWire.nameOhw && `: ${overheadWire.nameOhw}`}
                   </h4>
                 </div>

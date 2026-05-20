@@ -1264,7 +1264,7 @@ export function PoleStructuralAnalyzer() {
                                 {index + 1}
                               </span>
                               <span className="hp:hidden">
-                                {isActive ? `Step ${index + 1}` : index + 1}
+                                Step {index + 1}
                               </span>
                             </span>
                           </button>
@@ -1284,12 +1284,11 @@ export function PoleStructuralAnalyzer() {
                       {/* Header section title */}
                       <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-200 hp:mb-4 hp:pb-4">
                         <div className="flex items-center gap-3 hp:gap-2">
-                          <div className="w-9 h-9 text-sm rounded-lg bg-gradient-to-br from-[#0d3b66] to-[#3399cc] flex items-center justify-center text-white hp:w-8 hp:h-8">
-                            {sections.findIndex((s) => s.id === activeTab) + 1}
-                          </div>
                           <div>
-                            <h4 className="text-[#0d3b66] text-sm font-medium hp:text-xs">
-                              Step Pole
+                            <h4 className="text-[#0d3b66] text-sm font-semibold hp:text-xs">
+                              Step Pole{" "}
+                              {sections.findIndex((s) => s.id === activeTab) +
+                                1}
                               {activeSection.name && ` : ${activeSection.name}`}
                             </h4>
                             <p className="text-xs text-gray-500 hp:text-[10px]">
@@ -1633,9 +1632,7 @@ export function PoleStructuralAnalyzer() {
                               <span className="hidden hp:inline">
                                 {index + 1}
                               </span>
-                              <span className="hp:hidden">
-                                {isActiveArm ? `Arm ${index + 1}` : index + 1}
-                              </span>
+                              <span className="hp:hidden">Arm {index + 1}</span>
                             </span>
                           </button>
                         </div>
@@ -1654,13 +1651,12 @@ export function PoleStructuralAnalyzer() {
                       {/* Header section title */}
                       <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-200 hp:mb-4 hp:pb-4">
                         <div className="flex items-center gap-3 hp:gap-2">
-                          <div className="w-9 h-9 text-sm rounded-lg bg-gradient-to-br from-[#0d3b66] to-[#3399cc] flex items-center justify-center text-white hp:w-8 hp:h-8">
-                            {arms.findIndex((s) => s.idArm === activeTabArm) +
-                              1}
-                          </div>
+                          <div className="w-1 h-8 rounded-full bg-gradient-to-b from-[#3399cc] to-[#3399cc] flex-shrink-0 hp:h-7" />
                           <div>
-                            <h4 className="text-[#0d3b66] text-sm font-medium hp:text-xs">
-                              Arm
+                            <h4 className="text-[#0d3b66] text-sm font-semibold hp:text-xs">
+                              Arm{" "}
+                              {arms.findIndex((s) => s.idArm === activeTabArm) +
+                                1}
                               {activeArm.nameArm && ` : ${activeArm.nameArm}`}
                             </h4>
                             {/* <p className="text-xs text-gray-500 hp:text-[10px]">

@@ -42,8 +42,31 @@ export function BoxTypeInput({
     <div className="bg-white rounded-b-2xl shadow-sm border border-gray-200 hp:rounded-b-xl">
       <div className="p-6 shadow-sm space-y-6 hp:space-y-4 hp:p-4">
         {/* GRID 2 KOLOM */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
           {/* ================= LEFT : INPUT ================= */}
+
+          {/* ================= RIGHT : VISUAL ================= */}
+
+          {/* TOP VIEW */}
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 flex items-center justify-center min-h-[280px] hover:shadow-sm transition">
+            <div className="">
+              <img
+                src="/images/op-boxtype-topview.svg"
+                alt="Top View"
+                className="max-h-[350px] object-contain"
+              />
+            </div>
+          </div>
+
+          {/* SIDE VIEW */}
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 flex items-center justify-center min-h-[241.98px] hover:shadow-sm transition">
+            <img
+              src="/images/op-side-view.svg"
+              alt="Side View"
+              className="max-h-[350px] object-contain"
+            />
+          </div>
+
           <div className="bg-white p-5 rounded-xl border border-gray-200 hp:px-4 hp:py-5 hp:rounded-lg">
             {/* STACK INPUT (VERTICAL) */}
             <div className="flex flex-col gap-5">
@@ -168,27 +191,6 @@ export function BoxTypeInput({
                   text={getNumericError(opBoxType.opLength)}
                 />
               </div>
-            </div>
-          </div>
-
-          {/* ================= RIGHT : VISUAL ================= */}
-          <div className="flex flex-col justify-center gap-6">
-            {/* TOP VIEW */}
-            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 flex items-center justify-center min-h-[280px] hover:shadow-sm transition">
-              <img
-                src="/images/opBox-top-view.png"
-                alt="Top View"
-                className="max-h-44 object-contain"
-              />
-            </div>
-
-            {/* SIDE VIEW */}
-            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 flex items-center justify-center min-h-[241.98px] hover:shadow-sm transition">
-              <img
-                src="/images/op-side-view.png"
-                alt="Side View"
-                className="max-h-44 object-contain"
-              />
             </div>
           </div>
         </div>

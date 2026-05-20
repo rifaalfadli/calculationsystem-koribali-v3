@@ -1,9 +1,46 @@
 import React from "react";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, Box } from "lucide-react";
 
-// IMPORT 2 IMAGE
-const onGlImg = "/images/on-gl.svg";
-const underGlImg = "/images/under-gl.svg";
+// === IMAGES (12 cases: 6 pole types × 2 ground positions) ===
+const DIAGRAM_IMAGE_MAP = {
+  IS: {
+    onGL: "/images/IS-Type-OnGL.svg",
+    underGL: "/images/IS-Type-UnderGL.svg",
+  },
+  IA: {
+    onGL: "/images/IA-Type-OnGL.svg",
+    underGL: "/images/IA-Type-UnderGL.svg",
+  },
+  LS: {
+    onGL: "/images/LS-Type-OnGL.svg",
+    underGL: "/images/LS-Type-UnderGL.svg",
+  },
+  LA: {
+    onGL: "/images/LA-Type-OnGL.svg",
+    underGL: "/images/LA-Type-UnderGL.svg",
+  },
+  TS: {
+    onGL: "/images/TS-Type-OnGL.svg",
+    underGL: "/images/TS-Type-UnderGL.svg",
+  },
+  TA: {
+    onGL: "/images/TA-Type-OnGL.svg",
+    underGL: "/images/TA-Type-UnderGL.svg",
+  },
+};
+
+const SectionTitle = ({ children }) => (
+  <h3 className="text-[#0d3b66] mb-4 flex items-center gap-2 text-sm font-medium hp:text-xs hp:gap-1">
+    <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4" />
+    {children}
+  </h3>
+);
+
+const EMPTY_POLE_BASIC = {
+  poleType: "",
+  groundPosition: "",
+  height: "",
+};
 
 export function PoleBasicForm({ poleBasic, onUpdate }) {
   const poleTypes = [
@@ -15,7 +52,6 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
     { id: "TA", label: "Type-T (TA)" },
   ];
 
-  // ================= Height Options Semua Pole Types =================
   const HEIGHT_TYPE_S = {
     onGL: [
       { id: "8", label: "8.0" },
@@ -46,7 +82,6 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
     ],
   };
 
-  // ================= Mapping Pole Type =================
   const heightOptionsByType = {
     IS: HEIGHT_TYPE_S,
     LS: HEIGHT_TYPE_S,
@@ -55,58 +90,57 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
     LA: HEIGHT_TYPE_A,
     IA: HEIGHT_TYPE_A,
   };
-  // ================= Ambil opsi height berdasarkan poleType yang dipilih =================
-  const currentHeightOptions = heightOptionsByType[poleBasic.poleType] || {
+
+  const currentHeightOptions = heightOptionsByType[poleBasic.poleType] ?? {
     onGL: [],
     underGL: [],
   };
 
-  // =========================
-  // IMAGE MAPPING
-  // =========================
-  const imageMap = {
-    onGL: onGlImg,
-    underGL: underGlImg,
-  };
+  const currentImage =
+    poleBasic.poleType && poleBasic.groundPosition
+      ? (DIAGRAM_IMAGE_MAP[poleBasic.poleType]?.[poleBasic.groundPosition] ??
+        null)
+      : null;
 
-  const currentImage = imageMap[poleBasic.groundPosition] || onGlImg;
-
-  const isDisabled = !poleBasic.poleType;
+  const isGroundDisabled = !poleBasic.poleType;
+  const showDiagram = !!currentImage;
 
   return (
     <div className="bg-white px-6 pb-6 rounded-b-2xl hp:rounded-b-xl">
-      {/* ================= Select Pole Type ================= */}
-      <div className="mb-6">
-        {/* Section Title */}
-        <h3 className="text-[#0d3b66] mb-4 flex items-center gap-2 text-sm font-medium hp:text-xs hp:gap-1">
-          <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
-          Select Pole Standard
-        </h3>
+      {/* ── Section title ── */}
+      <div className="mb-4">
+        <SectionTitle>Pole Standard Configuration</SectionTitle>
+      </div>
 
-        {/* Container */}
-        <div className="border border-slate-200 rounded-xl p-6 bg-white shadow-sm">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-[1fr_2fr] gap-4 hp:gap-3">
+        {/* ── LEFT: Pole Type ── */}
+        <div className="border border-slate-200 rounded-xl bg-white shadow-sm overflow-hidden flex flex-col">
+          <div className="px-4 py-3 border-b border-slate-100 bg-slate-50 flex-shrink-0">
+            <p className="text-sm font-medium text-slate-500">
+              Select Pole Standard
+            </p>
+          </div>
+
+          <div className="p-4 flex flex-col gap-2 flex-1">
             {poleTypes.map((type) => {
-              const active = poleBasic.poleType === type.id;
-
+              const isActive = poleBasic.poleType === type.id;
               return (
                 <button
                   key={type.id}
                   type="button"
-                  onClick={() => {
+                  onClick={() =>
                     onUpdate({
                       poleType: type.id,
                       groundPosition: "",
                       height: "",
-                    });
-                  }}
-                  className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition-all
+                    })
+                  }
+                  className={`w-full rounded-lg border px-4 py-2.5 text-sm font-medium transition-all text-left
                     ${
-                      active
+                      isActive
                         ? "border-blue-500 bg-blue-50 text-blue-600 shadow-sm"
-                        : "border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50"
-                    }
-                  `}
+                        : "border-slate-200 text-slate-700 hover:border-blue-300 hover:bg-blue-50/40 hover:text-blue-600"
+                    }`}
                 >
                   {type.label}
                 </button>
@@ -114,144 +148,150 @@ export function PoleBasicForm({ poleBasic, onUpdate }) {
             })}
           </div>
         </div>
-      </div>
 
-      {/* ================= Ground Position + Height ================= */}
-      <div className="mb-6">
-        {/* Section Title */}
-        <h3 className="text-[#0d3b66] mb-4 flex items-center gap-2 text-sm font-medium hp:text-xs hp:gap-1">
-          <div className="w-1 h-5 bg-[#3399cc] rounded-full hp:h-4"></div>
-          Ground Configuration
-        </h3>
+        {/* ── RIGHT: Ground Position + Diagram ── */}
+        <div className="border border-slate-200 rounded-xl bg-white shadow-sm overflow-hidden flex flex-col">
+          {/* ── Ground position header ── */}
+          <div className="px-4 py-3 border-b border-slate-100 bg-slate-50 flex items-center gap-4 flex-shrink-0">
+            <p className="text-sm font-medium text-slate-500 flex-shrink-0">
+              Ground Position
+            </p>
 
-        {/* Outer Container */}
-        <div className="border border-slate-200 rounded-xl p-6 bg-white shadow-sm">
-          <div className="grid md:grid-cols-1">
-            {/* ================= Ground Position ================= */}
-            <div>
-              <h4 className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
-                Select Ground Position{" "}
-                {isDisabled && (
-                  <span className="text-gray-400 font-normal">
-                    (select pole standard first)
-                  </span>
-                )}
-              </h4>
+            <div className="flex gap-2">
+              {[
+                { id: "onGL", label: "On GL" },
+                { id: "underGL", label: "Under GL" },
+              ].map((item) => {
+                const isActive = poleBasic.groundPosition === item.id;
 
-              <div className="flex gap-3 mb-4">
-                {[
-                  { id: "onGL", label: "On GL" },
-                  { id: "underGL", label: "Under GL" },
-                ].map((item) => {
-                  const active = poleBasic.groundPosition === item.id;
-
-                  return (
-                    <button
-                      key={item.id}
-                      disabled={isDisabled}
-                      onClick={() => {
-                        if (isDisabled) return;
-
-                        onUpdate({
-                          groundPosition: item.id,
-                          height: "",
-                        });
-                      }}
-                      className={`w-48 rounded-lg border px-4 py-2.5 transition-all flex items-center gap-3
-
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    disabled={isGroundDisabled}
+                    onClick={() => {
+                      if (isGroundDisabled) return;
+                      onUpdate({ groundPosition: item.id, height: "" });
+                    }}
+                    className={`
+                      flex items-center gap-2
+                      rounded-lg border px-4 py-2 text-sm font-medium
+                      transition-all duration-150 select-none
                       ${
-                        isDisabled
-                          ? "bg-gray-100 text-gray-400 border-gray-200"
-                          : active
-                            ? "border-blue-500 bg-blue-50 cursor-pointer"
-                            : "border-slate-200 hover:border-slate-300 hover:bg-slate-50 cursor-pointer"
+                        isGroundDisabled
+                          ? "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed opacity-60"
+                          : isActive
+                            ? "border-blue-500 bg-blue-50 text-blue-600 shadow-sm cursor-pointer"
+                            : "border-slate-200 text-slate-600 cursor-pointer hover:border-blue-300 hover:bg-blue-50/40 hover:text-blue-600 active:scale-[0.97]"
                       }
+                    `}
+                  >
+                    {/* Radio circle */}
+                    <span
+                      className={`
+                        w-3.5 h-3.5 rounded-full border-2 flex-shrink-0
+                        flex items-center justify-center transition-colors
+                        ${
+                          isGroundDisabled
+                            ? "border-slate-300"
+                            : isActive
+                              ? "border-blue-500"
+                              : "border-slate-400"
+                        }
                       `}
                     >
-                      <div
-                        className={`w-4 h-4 rounded-full border-2 flex items-center justify-center
-                          ${
-                            isDisabled
-                              ? "border-gray-300"
-                              : active
-                                ? "border-blue-500"
-                                : "border-gray-400"
-                          }
-                        `}
-                      >
-                        {active && !isDisabled && (
-                          <div className="w-2 h-2 rounded-full bg-blue-500" />
-                        )}
-                      </div>
-
-                      <span className="text-sm font-medium">{item.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+                      {isActive && !isGroundDisabled && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                      )}
+                    </span>
+                    {item.label}
+                  </button>
+                );
+              })}
             </div>
 
-            {/* ================= Height ================= */}
-            {/* IMAGE AREA */}
-            <div className="flex justify-center gap-5 items-center bg-gray-50 border rounded-lg p-4 h-72 2040:h-80 overflow-hidden">
-              <div className="flex flex-col justify-end pb-6 h-full">
-                <div className="flex flex-col">
-                  {/* LABEL */}
-                  <span className="block text-gray-700 text-sm mb-3 hp:text-xs hp:mb-1">
+            {isGroundDisabled && (
+              <span className="text-sm text-slate-400 italic">
+                Select a pole standard first
+              </span>
+            )}
+          </div>
+
+          {/* ── Diagram area ── */}
+          <div
+            className={`
+              relative flex items-center justify-center overflow-hidden
+              transition-colors duration-300
+              h-[620px] 2040:h-[670px]
+              ${showDiagram ? "bg-slate-50" : "bg-white"}
+            `}
+          >
+            {showDiagram ? (
+              <div className="flex items-center justify-center gap-6 w-full h-full px-8">
+                {/* Kiri: Height input */}
+                <div className="flex-shrink-0 w-[200px]">
+                  <span className="block text-gray-600 text-sm font-medium mb-2 hp:text-[10px]">
                     Height of Structure
                   </span>
+                  <select
+                    value={poleBasic.height}
+                    onChange={(e) => onUpdate({ height: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm min-h-[38px] focus:border-[#1D4ED8] outline-none transition-all bg-white hp:text-xs"
+                  >
+                    <option value="" disabled>
+                      Select Height
+                    </option>
+                    {currentHeightOptions[poleBasic.groundPosition]?.map(
+                      (h) => (
+                        <option key={h.id} value={h.id}>
+                          {h.label}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                </div>
 
-                  {poleBasic.groundPosition ? (
-                    <select
-                      value={poleBasic.height}
-                      onChange={(e) => onUpdate({ height: e.target.value })}
-                      className="w-[200px] px-4 py-2.5 border border-gray-300 rounded-lg text-sm min-h-[42px] focus:border-blue-500 outline-none transition-all bg-white hp:p-2 hp:rounded-md hp:text-xs"
-                    >
-                      <option value="" disabled>
-                        Select Height
-                      </option>
-
-                      {currentHeightOptions[poleBasic.groundPosition]?.map(
-                        (h) => (
-                          <option key={h.id} value={h.id}>
-                            {h.label}
-                          </option>
-                        ),
-                      )}
-                    </select>
-                  ) : (
-                    <div className="border border-slate-200 rounded-lg bg-slate-50 min-h-[42px] w-[200px] flex items-center justify-center px-2">
-                      <p className="text-sm text-slate-400 text-center">
-                        Select ground position first
-                      </p>
-                    </div>
-                  )}
+                {/* Kanan: Diagram image */}
+                <div className="flex-shrink-0 h-full flex items-center">
+                  <img
+                    key={currentImage}
+                    src={currentImage}
+                    alt={`${poleBasic.poleType} ${
+                      poleBasic.groundPosition === "onGL" ? "On GL" : "Under GL"
+                    } diagram`}
+                    style={{ height: "560px" }}
+                    className="w-auto object-contain transition-opacity duration-300"
+                  />
                 </div>
               </div>
-              {/* IMAGE */}
-              <img
-                key={currentImage}
-                src={currentImage}
-                alt="pole"
-                className="h-full object-contain transition-all duration-300"
-              />
-            </div>
+            ) : (
+              /* ── Empty state ── */
+              <div className="flex flex-col items-center justify-center gap-3 text-center px-8 py-10">
+                <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center shadow-sm">
+                  <Box className="w-6 h-6 text-gray-400" />
+                </div>
+                <p className="text-base font-medium text-slate-500">
+                  {isGroundDisabled
+                    ? "No pole standard selected"
+                    : "No ground position selected"}
+                </p>
+                <p className="text-sm text-slate-400 leading-relaxed max-w-[300px]">
+                  {isGroundDisabled
+                    ? "Select a pole standard, then choose a ground position to unlock the diagram and height input."
+                    : "Choose a ground position to view the diagram and fill in the height of structure."}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
-      {/* ================= Buttons ================= */}
-      <div className="flex justify-between pt-6 border-t mt-8">
+
+      {/* ── Footer: Reset ── */}
+      <div className="flex justify-between pt-5 border-t mt-6">
         <button
           type="button"
-          onClick={() =>
-            onUpdate({
-              poleType: "",
-              groundPosition: "",
-              height: "",
-            })
-          }
-          className="flex items-center text-sm gap-2 px-7 py-2.5 bg-[#eef2f6] text-[#0d3b66]
-          border-2 border-[#d0d7e2] rounded-lg hover:bg-[#e2e8f0] transition-colors font-medium hp:text-xs hp:px-[22px] hp:py-[8px]"
+          onClick={() => onUpdate(EMPTY_POLE_BASIC)}
+          className="flex items-center text-sm gap-2 px-7 py-2.5 bg-[#eef2f6] text-[#0d3b66] border-2 border-[#d0d7e2] rounded-lg hover:bg-[#e2e8f0] transition-colors font-medium hp:text-xs hp:px-[22px] hp:py-[8px]"
         >
           <RotateCcw className="w-5 h-5 hp:w-4 hp:h-4" />
           Reset

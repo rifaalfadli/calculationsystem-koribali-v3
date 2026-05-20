@@ -174,7 +174,7 @@ export default function CalculationSetup() {
       setConfirmDisable(disabledComponents);
       return;
     }
-    // kalau tidak ada perubahan → langsung lanjut
+    // kalau tidak ada perubahan => langsung lanjut
     proceedFinish();
   };
 
