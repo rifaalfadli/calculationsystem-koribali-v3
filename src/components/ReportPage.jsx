@@ -9,7 +9,6 @@ import {
   ArrowLeft,
   Download,
   Trash2,
-  FileText,
   AlertCircle,
   Calculator,
 } from "lucide-react";
